@@ -1,0 +1,60 @@
+#!/usr/bin/env node
+process.title = 'coffeekraken-remote-stack-client';
+const __clientServer = require(__dirname + '/../client/client');
+const __fs = require('fs');
+const __merge = require('lodash/merge');
+const app = require('commander');
+
+(function() {
+
+	app
+		.version('0.0.1')
+		.option('-p --port [port]', 'Port on which to start the server', /^\S+$/i)
+		.option('-c --config [config]', 'Configuration file to load', /^\S+$/i)
+		.parse(process.argv);
+
+	// extend config
+	const defaultConfig = require(__dirname + '/../remote-stack-client.config');
+	let config = {};
+	if (app.config) {
+		app.config = __path.resolve(app.config);
+		if ( ! __fs.existsSync(app.config)) {
+			throw 'Remote queue client : the configuration file "' + app.config + '" does not exist...';
+		}
+		// load the config file
+		config = require(app.config);
+	} else {
+		if (__fs.existsSync(process.env.PWD + '/remote-stack-client.config.js')) {
+			config = require(process.env.PWD + '/remote-stack-client.config.js');
+		}
+	}
+	const finalConfig = __merge({}, defaultConfig, config);
+
+	for(let key in app._events) {
+		if (app[key] !== undefined) {
+			if (typeof(app[key]) === 'function') {
+				finalConfig[key] = app[key]();
+			} else {
+				finalConfig[key] = app[key];
+			}
+		}
+	}
+
+	if ( ! finalConfig.port) {
+		console.error('Remote queue client : you have to specify at least a port to run the server on...');
+		return;
+	}
+
+	console.log(`Remote queue client : ...starting on port ${finalConfig.port}...`);
+
+	// launch the server
+	__clientServer(finalConfig);
+
+})();
+
+// clear the process properly
+process.on( 'SIGINT', function() {
+	console.log('Remote queue client : stopped');
+	// some other closing procedures go here
+	process.exit( );
+});

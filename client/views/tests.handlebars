@@ -1,0 +1,33 @@
+<div id="testsApp">
+
+
+
+	<div v-if="rooms.length">
+
+		<section class="tests__room m-b" v-for="room in rooms">
+			<h1 class="h2">
+				<% room.name %> <button v-on:click="join(room)">Join</button>
+			</h1>
+
+			<ul class="tests__room-clients">
+				<li v-for="client in room.clients">
+					<% client.username %>
+				</li>
+			</ul>
+
+		</section>
+	</div>
+
+	<div v-if=" ! rooms.length">
+		<section id="announce">
+			<form name="announce" v-on:submit="announce">
+				<input type="text" name="username" placeholder="John Doe" v-model="username" />
+				<input type="submit" value="Enter!" />
+			</form>
+		</section>
+
+	</div>
+
+</div>
+
+

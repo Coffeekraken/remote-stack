@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>{{title}}</title>
+	{{#if packageJson.description}}
+		<meta name="description" content="{{packageJson.description}}" />
+	{{/if}}
+	{{#if packageJson.keywords}}
+		<meta name="keywords" content="{{packageJson.keywords}}" />
+	{{/if}}
+	{{#if packageJson.repository}}
+		<link rel="canonical" href="{{packageJson.repository.url}}" />
+	{{/if}}
+	<link rel="stylesheet" href="/assets/css/style.css" />
+</head>
+<body>
+
+	<main>
+		 {{{body}}}
+	</main>
+
+	<script src="/assets/js/tests.js"></script>
+
+</body>
+</html>
