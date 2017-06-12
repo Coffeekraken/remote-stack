@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _socket = require('socket.io-client');
@@ -13,6 +15,14 @@ var _socket2 = _interopRequireDefault(_socket);
 var _settings = require('./settings');
 
 var _settings2 = _interopRequireDefault(_settings);
+
+var _uniqid = require('uniqid');
+
+var _uniqid2 = _interopRequireDefault(_uniqid);
+
+var _merge2 = require('lodash/merge');
+
+var _merge3 = _interopRequireDefault(_merge2);
 
 var _eventEmitter = require('event-emitter');
 
@@ -30,43 +40,131 @@ var Room = function () {
 
 		this._id = null;
 		this._name = null;
-		this._clients = [];
-		this._activeClients = [];
+		this._clients = {};
+		this._activeClients = {};
 		this._queue = [];
+		this._joined = false;
+		this._leaveCb = null;
+		this._leavePromiseResolve = null;
+		this._leavePromiseReject = null;
+		this._joinPromiseResolve = null;
+		this._joinPromiseReject = null;
+		this._processedMsg = {};
 		this._socket = null;
 
 		// save the socket
 		this._socket = socket;
 		// save the room name to join
-		this._saveData(data);
+		this.updateData(data);
 
 		// listen for new room data
 		this._socket.on('new-room-data.' + data.id, function (data) {
+			console.log('new data', data);
 			// new room data
-			console.log('new room data', data);
-			_this._saveData(data);
+			_this.updateData(data);
+		});
+
+		this._socket.on('left-room-' + data.id, function () {
+			if (!_this.id) return;
+			// resolve the promise
+			_this._leavePromiseResolve();
+			// let the app know that we have left the room
+			_this.emit('left', _this.id);
+		});
+
+		this._socket.on('joined-room-' + data.id, function () {
+			if (!_this.id) return;
+			// resolve the promise
+			_this._joinPromiseResolve();
+			// let the app know that we have left the room
+			_this.emit('joined', _this.id);
 		});
 	}
 
-	/**
-  * Leave this room
-  */
-
-
 	_createClass(Room, [{
+		key: 'say',
+		value: function say(something) {
+			if (!this.hasJoined()) {
+				throw 'You cannot say something in the room "' + this.id + '" cause you don\'t has joined it yet...';
+				return;
+			}
+
+			if ((typeof something === 'undefined' ? 'undefined' : _typeof(something)) === 'object') {
+				// something.toPeers = Object.keys(this.clients);
+				// const myIdIdx = something.toPeers.indexOf(this._socket.id || this._socket.socket.id);
+				// console.log('myIdIdx', myIdIdx);
+				// if (myIdIdx !== -1) {
+				// 	something.toPeers.splice(myIdIdx, 1);
+				// }
+				// console.log('send to', something.toPeers);
+				// something._uniqid = __uniqid();
+				something._roomId = this.id;
+			}
+
+			this._socket.emit('say', something);
+		}
+
+		/**
+   * Leave this room
+   */
+
+	}, {
 		key: 'leave',
 		value: function leave() {
 			var _this2 = this;
 
 			return new Promise(function (resolve, reject) {
-				_this2._socket.emit('leave', _this2.id, function (data) {
-					console.log('room leaved!!!', _this2);
-					// destroy the room locally
-					_this2.destroy();
 
-					// resolve the promise
-					resolve();
+				// check that we have joined the room before
+				if (!_this2.hasJoined()) {
+					reject('You cannot leave a the room "' + _this2.id + '" cause you have not joined it yet...');
+					return;
+				}
+
+				_this2._leavePromiseReject = reject;
+				_this2._leavePromiseResolve = resolve;
+
+				// this._socket.useSockets = true;
+				// this._socket.usePeerConnection = false;
+
+				_this2._socket.off('say');
+
+				_this2._socket.emit('leave', _this2.id);
+			});
+		}
+	}, {
+		key: 'join',
+		value: function join() {
+			var _this3 = this;
+
+			return new Promise(function (resolve, reject) {
+
+				// check that we have joined the room before
+				if (_this3.hasJoined()) {
+					reject('You cannot join a the room "' + _this3.id + '" cause you have already joined it...');
+					return;
+				}
+
+				_this3._joinPromiseReject = reject;
+				_this3._joinPromiseResolve = resolve;
+
+				_this3._socket.on('say', function (something) {
+
+					console.error('receive', something);
+
+					// if (something._roomId !== this.id) return;
+					// if (something._uniqid && this._processedMsg[something._uniqid]) return;
+					// this._processedMsg[something._uniqid] = true;
+
+					console.log(_this3);
+
+					console.warn('someone say', something);
 				});
+
+				_this3._socket.emit('join', _this3.id);
+
+				// this._socket.usePeerConnection = true;
+				// this._socket.useSockets = false;
 			});
 		}
 	}, {
@@ -80,10 +178,11 @@ var Room = function () {
 			delete this._activeClients;
 		}
 	}, {
-		key: '_saveData',
-		value: function _saveData(data) {
+		key: 'updateData',
+		value: function updateData(data) {
 			this._id = data.id;
 			this._name = data.name;
+			// _merge(this._clients, data.clients);
 			this._clients = data.clients;
 			this._activeClients = data.activeClients;
 			this._queue = data.queue;
@@ -119,6 +218,17 @@ var Room = function () {
    * @type 		{String}
    */
 
+	}, {
+		key: 'hasJoined',
+
+
+		/**
+   * Return if the current client has joined the room or not
+   * @return  	{Boolean} 		true if the client has joined the room, false if not
+   */
+		value: function hasJoined() {
+			return this.clients[this._socket.id || this._socket.socket.id] != null;
+		}
 	}, {
 		key: 'id',
 		get: function get() {

@@ -9,34 +9,16 @@ const __exec = require('child_process').spawnSync;
 const __jsdom = require('jsdom');
 const __semver = require('semver');
 const __urldecode = require('urldecode');
-const __socketIo = require('socket.io');
 
+const _size = require('lodash/size');
+
+const __server = require("http").createServer();
+const __socketIoP2p = require('socket.io-p2p-server');
+const __socketIoP2pServer = __socketIoP2p.Server;
+
+const io = require('socket.io')(__server);
 
 module.exports = function(config) {
-
-	// creating the app
-	const app = __express();
-
-	// handlebars
-	app.engine('handlebars', __expressHandlebars({
-		layoutsDir : __dirname + '/views/layouts',
-		defaultLayout : 'main'
-	}));
-	app.set('views',__dirname + '/views');
-	app.set('view engine', 'handlebars');
-
-	// parser body
-	app.use(__bodyParser.json());
-	app.use(__bodyParser.urlencoded({ extended: true }));
-
-	// cors
-	app.use(__cors());
-
-	// attach config to request
-	app.use((req, res, next) => {
-		req.config = Object.assign({}, config);
-		next();
-	});
 
 	// store the clients
 	const clients = {};
@@ -50,10 +32,14 @@ module.exports = function(config) {
 		room.queue = [];
 	});
 
+
+
 	// start demo server
-	const io = __socketIo.listen(app.listen(config.port, function () {
+	__server.listen(config.port, function () {
 		console.log('Remote queue server : ✓ running on port ' + config.port + '!');
-	}));
+	});
+
+	// io.use(__socketIoP2pServer);
 
 	io.on('connection', function (socket) {
 
@@ -97,12 +83,12 @@ module.exports = function(config) {
 			socket.emit('announced', data);
 
 			// emit available rooms
-			socket.emit('rooms', rooms);
+			socket.emit('available-rooms', rooms);
 
 		});
 
 		// join a room
-		socket.on('join', function(roomId, fn) {
+		socket.on('join', function(roomId) {
 
 			console.log(`Remote stack server : user "${socket.id}" has asked to join the room "${roomId}"`);
 
@@ -118,23 +104,37 @@ module.exports = function(config) {
 			socket.join(roomId, (response) => {
 				console.log(`Remote stack server : user "${socket.id}" has joined the room "${roomId}"`);
 
-				// add the user to the room
+					// add the user to the room
 				const room = rooms[roomId];
 				if ( ! room.clients[socket.id]) {
 					room.clients[socket.id] = clients[socket.id];
 				}
 
+				// socket.emit('numClients', _size(room.clients));
+
 				// callback fn
-				fn(room);
-				socket.emit('joined', room);
+				socket.emit(`joined-room-${roomId}`, room);
 
 				// notify all the room clients of new room data
-				io.to(roomId).emit(`new-room-data.${roomId}`, rooms[roomId]);
+				io.emit(`new-room-data.${roomId}`, rooms[roomId]);
+
 			});
+
+		});
+
+		socket.on('say', function(something) {
+			console.log(`Remote stack server : client "${socket.id}" say "${JSON.stringify(something)}" to the room "${something._roomId}`);
+
+			if (something._roomId) {
+				socket.broadcast.to(something._roomId).emit('say', something);
+			} else {
+				socket.broadcast.emit('say', something);
+			}
+
 		});
 
 		// leave a room
-		socket.on('leave', function(roomId, fn) {
+		socket.on('leave', function(roomId) {
 
 			console.log(`Remote stack server : user "${socket.id}" has asked to leave the room "${roomId}"`);
 
@@ -160,11 +160,10 @@ module.exports = function(config) {
 				}
 
 				// callback fn
-				fn(room);
-				socket.emit('left', room);
+				socket.emit(`left-room-${roomId}`);
 
 				// notify all the room clients of new room data
-				io.to(roomId).emit(`new-room-data.${roomId}`, rooms[roomId]);
+				io.emit(`new-room-data.${roomId}`, rooms[roomId]);
 			});
 		});
 	});

@@ -8,9 +8,13 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _socket = require('socket.io-client');
+var _socket = require('socket.io-p2p');
 
 var _socket2 = _interopRequireDefault(_socket);
+
+var _socket3 = require('socket.io-client');
+
+var _socket4 = _interopRequireDefault(_socket3);
 
 var _settings = require('./settings');
 
@@ -23,6 +27,10 @@ var _eventEmitter2 = _interopRequireDefault(_eventEmitter);
 var _room = require('./room');
 
 var _room2 = _interopRequireDefault(_room);
+
+var _merge2 = require('lodash/merge');
+
+var _merge3 = _interopRequireDefault(_merge2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -39,8 +47,9 @@ var Client = function () {
 		this._socket = null;
 		this._id = null;
 		this._joinedRooms = {};
-		this._rooms = {};
+		this._availableRooms = {};
 		this._announced = false;
+		this._cbs = {};
 		this.log = {
 			success: function success(message) {
 				console.log('%c Remote stack client : ' + message, 'color: green');
@@ -63,15 +72,22 @@ var Client = function () {
 			var _this = this;
 
 			return new Promise(function (resolve) {
-				_this._socket = (0, _socket2.default)(_this._settings.host + _this._settings.port ? ':' + _this._settings.port : '');
-				_this._socket.on('connect', function () {
+				_this._socket = (0, _socket4.default)(_this._settings.host + _this._settings.port ? ':' + _this._settings.port : '');
+				// this._p2p = new __socketIoP2p(this._socket, {
+				// 	autoUpgrade : false,
+				// 	peerOpts: {
+				// 		numClients: 300000
+				// 	}
+				// });
+				_this._p2p = _this._socket;
+				_this._p2p.on('connect', function () {
 					// save the client id
 					_this._id = _this._socket.id;
 
 					// announce the client
 					_this._socket.emit('announce', _this.data);
 				});
-				_this._socket.on('announced', function (data) {
+				_this._p2p.on('announced', function (data) {
 					// update client state
 					_this._announced = true;
 					// the client has been annouced correctly
@@ -83,64 +99,69 @@ var Client = function () {
 					console.log(_this);
 				});
 				// listen for rooms
-				_this._socket.on('rooms', function (rooms) {
+				_this._p2p.on('available-rooms', function (rooms) {
+
+					// remove the rooms that have dissapeard
+					Object.keys(_this._availableRooms).forEach(function (roomId) {
+						if (!rooms[roomId]) {
+							_this._availableRooms[roomId] && _this._availableRooms[roomId].destroy();
+							delete _this._availableRooms[roomId];
+						}
+					});
 
 					// save the rooms
-					_this._rooms = rooms;
+					Object.keys(rooms).forEach(function (roomId) {
+						if (_this._availableRooms[roomId]) {
+							_this._availableRooms[roomId].updateData(rooms[roomId]);
+						} else {
+							_this._availableRooms[roomId] = new _room2.default(rooms[roomId], _this._p2p);
+
+							// listen when the room has been left
+							_this._availableRooms[roomId].on('left', function (roomId) {
+								_this._p2p.usePeerConnection = false;
+								_this._p2p.useSockets = true;
+								delete _this._joinedRooms[roomId];
+							});
+						}
+					});
+
+					console.log('new rooms', _this._availableRooms);
 
 					// emit new rooms
-					_this.emit('rooms', rooms);
+					_this.emit('available-rooms', _this._availableRooms);
+				});
+
+				// listen for joined room
+				_this._p2p.on('joined', function (room) {
+
+					_this._cbs[room.id] && _this._cbs[room.id](room);
+
+					console.log('joined', room);
 				});
 			});
 		}
 	}, {
 		key: 'join',
 		value: function join(roomId) {
-			var _this2 = this;
+			// join a room
+			if (this._joinedRooms[roomId]) {
+				reject('You cannot join the room "' + roomId + '" cause this client has already joined it...');
+				return;
+			}
 
-			return new Promise(function (resolve, reject) {
-
-				// join a room
-				if (_this2._joinedRooms[roomId]) {
-					reject('You cannot join the room "' + roomId + '" cause this client has already joined it...');
-					return;
-				}
-
-				// if not annouced
-				if (!_this2.isAnnounced()) {
-					reject('You need to announce the client first with the "Client.announce" method...');
-					return;
-				}
-				_this2._socket.emit('join', roomId, function (data) {
-
-					// create a new room instance
-					var room = new _room2.default(data, _this2._socket);
-
-					// save the rooms in the client
-					_this2._joinedRooms[roomId] = room;
-
-					// resolve the promise
-					_this2.emit('joined', room);
-					resolve(room);
-				});
-			});
+			// if not annouced
+			if (!this.isAnnounced()) {
+				reject('You need to announce the client first with the "Client.announce" method...');
+				return;
+			}
+			// join the room
+			return this._availableRooms[roomId].join();
 		}
 	}, {
 		key: 'leave',
 		value: function leave(roomId) {
-			var _this3 = this;
-
-			// left a room
-			if (!this._joinedRooms[roomId]) throw 'You cannot left the room "' + roomId + '" cause this client has not joined it yet...';
 			// left the room
-			var promise = this._joinedRooms[roomId].leave();
-			// update the rooms of the client
-			promise.then(function () {
-				// remove the room from the client rooms stack
-				delete _this3._joinedRooms[roomId];
-			});
-			// return the promise
-			return promise;
+			return this._joinedRooms[roomId].leave();
 		}
 
 		/**

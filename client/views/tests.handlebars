@@ -1,24 +1,27 @@
 <div id="testsApp">
 
+	<input type="text" v-model="toPeer"></input>
 
+	<div>
 
-	<div v-if="rooms.length">
-
-		<section class="tests__room m-b" v-for="room in rooms">
+		<section class="tests__room m-b" v-for="(room, key) in availableRooms">
 			<h1 class="h2">
-				<% room.name %> <button v-on:click="join(room)">Join</button>
+				<% room.name %>
+				<div class="pull-right">
+					<button v-on:click="join(room)">Join</button> <button v-on:click="leave(room)">Leave</button> <button v-on:click="hi(room)">Say hi</button>
+				</div>
 			</h1>
 
 			<ul class="tests__room-clients">
-				<li v-for="client in room.clients">
-					<% client.username %>
+				<li class="tests__room-client" v-for="(client, key) in room.clients" v-on:click="click(room, client)">
+					<% client.username.substr(0,1) %>
 				</li>
 			</ul>
 
 		</section>
 	</div>
 
-	<div v-if=" ! rooms.length">
+	<div>
 		<section id="announce">
 			<form name="announce" v-on:submit="announce">
 				<input type="text" name="username" placeholder="John Doe" v-model="username" />

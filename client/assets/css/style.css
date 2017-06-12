@@ -1063,6 +1063,42 @@ body { color: #848e91; -webkit-font-smoothing: antialiased; -moz-osx-font-smooth
 /** Layout All the layout level specific styling. */
 /** Pages All the pages level specific styling. */
 /** Pages All the pages level specific styling. */
+.tests { background: #f2f2f2; }
+
+.tests__room { padding: 50px; background: white; margin: 20px; }
+
+.tests__room .h2 { display: block; margin-bottom: 20px; font-size: 30px; }
+
+.tests__room button { background: #f2bc2b; border: none; padding: 5px 10px; color: white; outline: none; }
+
+.tests__room button:hover { background-color: #dca40e; }
+
+.tests__room-clients { margin: 0 -10px; }
+
+.tests__room-client { display: inline-block; width: 50px; height: 50px; border-radius: 50%; background: red; margin: 0 10px; text-align: center; line-height: 50px; font-size: 20px; color: white; text-transform: uppercase; font-weight: bold; }
+
+.tests__room-client:nth-child(0) { background-color: red; }
+
+.tests__room-client:nth-child(1) { background-color: #ff9900; }
+
+.tests__room-client:nth-child(2) { background-color: #ccff00; }
+
+.tests__room-client:nth-child(3) { background-color: #33ff00; }
+
+.tests__room-client:nth-child(4) { background-color: #00ff66; }
+
+.tests__room-client:nth-child(5) { background-color: cyan; }
+
+.tests__room-client:nth-child(6) { background-color: #0066ff; }
+
+.tests__room-client:nth-child(7) { background-color: #3300ff; }
+
+.tests__room-client:nth-child(8) { background-color: #cc00ff; }
+
+.tests__room-client:nth-child(9) { background-color: #ff0099; }
+
+.tests__room-client:nth-child(10) { background-color: red; }
+
 /** Blocks All the blocks styling. A block can contain other blocks or objects and does not have to relay on his ancestors to be properly displayed. */
 /** Blocks All the blocks styling. A block can contain other blocks or objects and does not have to relay on his ancestors to be properly displayed. */
 /** Objects All the objects styling. An object response to the same rules has the blocks, unless they cannot contain any other objects or blocks. */

@@ -9,8 +9,10 @@ var app = new __Vue({
 	el: '#testsApp',
 	delimiters: ["<%","%>"],
 	data: {
+		client : {},
+		toPeer : null,
 		username : '',
-		rooms : []
+		availableRooms : []
 	},
 	methods : {
 		join : function(room) {
@@ -18,15 +20,31 @@ var app = new __Vue({
 			console.log('join room', room);
 
 			client.join(room.id).then((room) => {
-
-				// update the room
-				this.rooms.forEach((r) => {
-					if (r.id === room.id) {
-						r.clients = room.clients;
-					}
-				})
-
 				console.log('joinded the room', room);
+			});
+
+		},
+		click: function(room, client) {
+			console.log('clicked on', room, client);
+
+			room.say({
+				message : `user ${client.username} has clicked on the user ${client.id} in the room ${room.id}`
+			});
+
+		},
+		leave : function(room) {
+
+			console.log('leave room', room);
+
+			room.leave().then((room) => {
+				console.log('leaved the room', room);
+			});
+
+		},
+		hi : function(room) {
+
+			room.say({
+				message : 'hello world'
 			});
 
 		},
@@ -41,23 +59,12 @@ var app = new __Vue({
 			});
 
 			// listen for rooms
-			client.on('rooms', (rooms) => {
-
-				const roomsArray = [];
-				Object.keys(rooms).forEach((roomId) => {
-					roomsArray.push(rooms[roomId]);
-				})
-
-				console.warn('available rooms', roomsArray);
-
-				_this.rooms = roomsArray;
-
+			client.on('available-rooms', (rooms) => {
+				_this.availableRooms = rooms;
 			});
 
 			client.announce().then(() => {
-
 				console.log('client has been announced', client);
-
 			});
 		}
 	}
