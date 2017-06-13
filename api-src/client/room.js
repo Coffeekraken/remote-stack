@@ -43,40 +43,45 @@ class Room {
 		this._socket.on(`left-room-${data.id}`, () => {
 			if ( ! this.id) return;
 			// resolve the promise
-			this._leavePromiseResolve();
+			this._leavePromiseResolve(this);
 			// let the app know that we have left the room
-			this.emit('left', this.id);
+			this.emit('left', this);
 		});
 
 		this._socket.on(`joined-room-${data.id}`, () => {
 			if ( ! this.id) return;
 			// resolve the promise
-			this._joinPromiseResolve();
+			this._joinPromiseResolve(this);
 			// let the app know that we have left the room
-			this.emit('joined', this.id);
+			this.emit('joined', this);
 		});
 
 	}
 
-	say(something) {
+	sendToClients(something) {
 		if ( ! this.hasJoined()) {
-			throw(`You cannot say something in the room "${this.id}" cause you don't has joined it yet...`);
+			throw(`You cannot send something to client in the room "${this.id}" cause you don't has joined it yet...`);
 			return;
 		}
 
 		if (typeof(something) === 'object') {
-			// something.toPeers = Object.keys(this.clients);
-			// const myIdIdx = something.toPeers.indexOf(this._socket.id || this._socket.socket.id);
-			// console.log('myIdIdx', myIdIdx);
-			// if (myIdIdx !== -1) {
-			// 	something.toPeers.splice(myIdIdx, 1);
-			// }
-			// console.log('send to', something.toPeers);
-			// something._uniqid = __uniqid();
 			something._roomId = this.id;
 		}
 
-		this._socket.emit('say', something);
+		this._socket.emit('send-to-clients', something);
+	}
+
+	sendToApp(something) {
+		if ( ! this.hasJoined()) {
+			throw(`You cannot send something to app in the room "${this.id}" cause you don't has joined it yet...`);
+			return;
+		}
+
+		if (typeof(something) === 'object') {
+			something._roomId = this.id;
+		}
+
+		this._socket.emit('send-to-app', something);
 	}
 
 	/**
@@ -97,7 +102,7 @@ class Room {
 			// this._socket.useSockets = true;
 			// this._socket.usePeerConnection = false;
 
-			this._socket.off('say');
+			this._socket.off('receive-from-client');
 
 			this._socket.emit('leave', this.id);
 		});
@@ -115,17 +120,8 @@ class Room {
 			this._joinPromiseReject = reject;
 			this._joinPromiseResolve = resolve;
 
-			this._socket.on('say', (something) => {
-
-				console.error('receive', something);
-
-				// if (something._roomId !== this.id) return;
-				// if (something._uniqid && this._processedMsg[something._uniqid]) return;
-				// this._processedMsg[something._uniqid] = true;
-
-				console.log(this);
-
-				console.warn('someone say', something);
+			this._socket.on('receive-from-client', (something) => {
+				console.error('receive from client', something);
 			});
 
 			this._socket.emit('join', this.id);

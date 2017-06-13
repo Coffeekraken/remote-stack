@@ -49,7 +49,6 @@ var Client = function () {
 		this._joinedRooms = {};
 		this._availableRooms = {};
 		this._announced = false;
-		this._cbs = {};
 		this.log = {
 			success: function success(message) {
 				console.log('%c Remote stack client : ' + message, 'color: green');
@@ -73,21 +72,20 @@ var Client = function () {
 
 			return new Promise(function (resolve) {
 				_this._socket = (0, _socket4.default)(_this._settings.host + _this._settings.port ? ':' + _this._settings.port : '');
-				// this._p2p = new __socketIoP2p(this._socket, {
+				// this._socket = new __socketIoP2p(this._socket, {
 				// 	autoUpgrade : false,
 				// 	peerOpts: {
 				// 		numClients: 300000
 				// 	}
 				// });
-				_this._p2p = _this._socket;
-				_this._p2p.on('connect', function () {
+				_this._socket.on('connect', function () {
 					// save the client id
 					_this._id = _this._socket.id;
 
 					// announce the client
 					_this._socket.emit('announce', _this.data);
 				});
-				_this._p2p.on('announced', function (data) {
+				_this._socket.on('announced', function (data) {
 					// update client state
 					_this._announced = true;
 					// the client has been annouced correctly
@@ -96,10 +94,9 @@ var Client = function () {
 					_this.emit('announced', _this);
 					// log
 					_this.log.success('Successfuly announced');
-					console.log(_this);
 				});
 				// listen for rooms
-				_this._p2p.on('available-rooms', function (rooms) {
+				_this._socket.on('available-rooms', function (rooms) {
 
 					// remove the rooms that have dissapeard
 					Object.keys(_this._availableRooms).forEach(function (roomId) {
@@ -114,29 +111,24 @@ var Client = function () {
 						if (_this._availableRooms[roomId]) {
 							_this._availableRooms[roomId].updateData(rooms[roomId]);
 						} else {
-							_this._availableRooms[roomId] = new _room2.default(rooms[roomId], _this._p2p);
+							_this._availableRooms[roomId] = new _room2.default(rooms[roomId], _this._socket);
 
 							// listen when the room has been left
 							_this._availableRooms[roomId].on('left', function (roomId) {
-								_this._p2p.usePeerConnection = false;
-								_this._p2p.useSockets = true;
+								// this._socket.usePeerConnection = false;
+								// this._socket.useSockets = true;
 								delete _this._joinedRooms[roomId];
+								_this.emit('left', roomId);
+							});
+							_this._availableRooms[roomId].on('joined', function (roomId) {
+								_this._joinedRooms[roomId] = _this._availableRooms[roomId];
+								_this.emit('joined', roomId);
 							});
 						}
 					});
 
-					console.log('new rooms', _this._availableRooms);
-
 					// emit new rooms
 					_this.emit('available-rooms', _this._availableRooms);
-				});
-
-				// listen for joined room
-				_this._p2p.on('joined', function (room) {
-
-					_this._cbs[room.id] && _this._cbs[room.id](room);
-
-					console.log('joined', room);
 				});
 			});
 		}

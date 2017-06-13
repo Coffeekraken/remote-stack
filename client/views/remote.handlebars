@@ -1,0 +1,37 @@
+<div id="testsApp">
+
+	<div v-if="Object.keys(availableRooms).length">
+		<section class="tests__room m-b" v-for="(room, key) in availableRooms">
+			<h1 class="h2">
+				<% room.name %>
+				<div>
+					<button v-on:click="join(room)">Join</button>
+					<button v-on:click="leave(room)">Leave</button>
+					<!-- <button v-on:click="hi(room)">Say hi to clients</button>
+					<button v-on:click="hiApp(room)">Say hi to app</button> -->
+				</div>
+			</h1>
+
+			<div class="joystick" v-bind:for="key"></div>
+
+			<!-- <ul class="tests__room-clients">
+				<li class="tests__room-client" v-for="(client, key) in room.clients" v-on:click="click(room, client)">
+					<% client.username.substr(0,1) %>
+				</li>
+			</ul> -->
+		</section>
+	</div>
+
+	<div v-if=" ! Object.keys(availableRooms).length">
+		<section id="announce">
+			<form name="announce" v-on:submit="announce">
+				<input type="color" name="color" v-model="color" />
+				<input type="text" name="username" placeholder="John Doe" v-model="username" />
+				<input type="submit" value="Enter!" />
+			</form>
+		</section>
+	</div>
+
+</div>
+
+

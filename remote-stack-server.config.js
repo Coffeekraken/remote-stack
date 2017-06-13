@@ -9,10 +9,5 @@ module.exports = {
 		name : 'Television',
 		max : 10,
 		simnultaneous : 1
-	}, {
-		id : 'drone',
-		name : "Drone",
-		max : 20,
-		simnultaneous : 1
 	}]
 }

@@ -1065,6 +1065,8 @@ body { color: #848e91; -webkit-font-smoothing: antialiased; -moz-osx-font-smooth
 /** Pages All the pages level specific styling. */
 .tests { background: #f2f2f2; }
 
+.tests .joystick { width: 100%; height: 400px; background: #f2f2f2; position: relative; }
+
 .tests__room { padding: 50px; background: white; margin: 20px; }
 
 .tests__room .h2 { display: block; margin-bottom: 20px; font-size: 30px; }

@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 218);
+/******/ 	return __webpack_require__(__webpack_require__.s = 223);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -294,9 +294,9 @@ process.umask = function() { return 0; };
 
 
 
-var base64 = __webpack_require__(81)
-var ieee754 = __webpack_require__(114)
-var isArray = __webpack_require__(45)
+var base64 = __webpack_require__(79)
+var ieee754 = __webpack_require__(112)
+var isArray = __webpack_require__(42)
 
 exports.Buffer = Buffer
 exports.SlowBuffer = SlowBuffer
@@ -2344,7 +2344,7 @@ var util = __webpack_require__(9);
 util.inherits = __webpack_require__(4);
 /*</replacement>*/
 
-var Readable = __webpack_require__(63);
+var Readable = __webpack_require__(59);
 var Writable = __webpack_require__(33);
 
 util.inherits(Duplex, Readable);
@@ -2400,15 +2400,15 @@ function forEach(xs, f) {
  * Module dependencies.
  */
 
-var keys = __webpack_require__(93);
-var hasBinary = __webpack_require__(42);
-var sliceBuffer = __webpack_require__(77);
-var after = __webpack_require__(76);
-var utf8 = __webpack_require__(94);
+var keys = __webpack_require__(91);
+var hasBinary = __webpack_require__(39);
+var sliceBuffer = __webpack_require__(74);
+var after = __webpack_require__(73);
+var utf8 = __webpack_require__(92);
 
 var base64encoder;
 if (global && global.ArrayBuffer) {
-  base64encoder = __webpack_require__(80);
+  base64encoder = __webpack_require__(78);
 }
 
 /**
@@ -2466,7 +2466,7 @@ var err = { type: 'error', data: 'parser error' };
  * Create a blob api even for blob builder when vendor prefixes exist
  */
 
-var Blob = __webpack_require__(82);
+var Blob = __webpack_require__(80);
 
 /**
  * Encodes a packet.
@@ -3009,7 +3009,7 @@ exports.decodePayloadAsBinary = function (data, binaryType, callback) {
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var freeGlobal = __webpack_require__(50);
+var freeGlobal = __webpack_require__(47);
 
 /** Detect free variable `self`. */
 var freeSelf = typeof self == 'object' && self && self.Object === Object && self;
@@ -3219,7 +3219,7 @@ module.exports = function(a, b){
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(91);
+exports = module.exports = __webpack_require__(89);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -3405,11 +3405,11 @@ function localstorage() {
 /* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var listCacheClear = __webpack_require__(154),
-    listCacheDelete = __webpack_require__(155),
-    listCacheGet = __webpack_require__(156),
-    listCacheHas = __webpack_require__(157),
-    listCacheSet = __webpack_require__(158);
+var listCacheClear = __webpack_require__(152),
+    listCacheDelete = __webpack_require__(153),
+    listCacheGet = __webpack_require__(154),
+    listCacheHas = __webpack_require__(155),
+    listCacheSet = __webpack_require__(156);
 
 /**
  * Creates an list cache object.
@@ -3470,9 +3470,9 @@ module.exports = assocIndexOf;
 /* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(47),
-    getRawTag = __webpack_require__(143),
-    objectToString = __webpack_require__(166);
+var Symbol = __webpack_require__(44),
+    getRawTag = __webpack_require__(141),
+    objectToString = __webpack_require__(164);
 
 /** `Object#toString` result references. */
 var nullTag = '[object Null]',
@@ -3504,7 +3504,7 @@ module.exports = baseGetTag;
 /* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var isKeyable = __webpack_require__(152);
+var isKeyable = __webpack_require__(150);
 
 /**
  * Gets the data for `map`.
@@ -3632,7 +3632,7 @@ exports.decode = function(qs){
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(193);
+exports = module.exports = __webpack_require__(191);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -3969,7 +3969,7 @@ module.exports = function(obj, fn){
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(84);
+exports = module.exports = __webpack_require__(82);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -4317,7 +4317,7 @@ Transport.prototype.onClose = function () {
 
 /* WEBPACK VAR INJECTION */(function(global) {// browser shim for xmlhttprequest module
 
-var hasCORS = __webpack_require__(113);
+var hasCORS = __webpack_require__(111);
 
 module.exports = function (opts) {
   var xdomain = opts.xdomain;
@@ -4667,7 +4667,7 @@ function isUndefined(arg) {
 /* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var defineProperty = __webpack_require__(49);
+var defineProperty = __webpack_require__(46);
 
 /**
  * The base implementation of `assignValue` and `assignMergeValue` without
@@ -4698,8 +4698,8 @@ module.exports = baseAssignValue;
 /* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIsNative = __webpack_require__(126),
-    getValue = __webpack_require__(144);
+var baseIsNative = __webpack_require__(124),
+    getValue = __webpack_require__(142);
 
 /**
  * Gets the native function at `key` of `object`.
@@ -4722,7 +4722,7 @@ module.exports = getNative;
 /***/ (function(module, exports, __webpack_require__) {
 
 var isFunction = __webpack_require__(31),
-    isLength = __webpack_require__(58);
+    isLength = __webpack_require__(55);
 
 /**
  * Checks if `value` is array-like. A value is considered array-like if it's
@@ -4884,12 +4884,12 @@ util.inherits = __webpack_require__(4);
 
 /*<replacement>*/
 var internalUtil = {
-  deprecate: __webpack_require__(210)
+  deprecate: __webpack_require__(207)
 };
 /*</replacement>*/
 
 /*<replacement>*/
-var Stream = __webpack_require__(65);
+var Stream = __webpack_require__(61);
 /*</replacement>*/
 
 var Buffer = __webpack_require__(2).Buffer;
@@ -5399,19 +5399,19 @@ function CorkedRequest(state) {
     }
   };
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(208).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(206).setImmediate))
 
 /***/ }),
 /* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(63);
+exports = module.exports = __webpack_require__(59);
 exports.Stream = exports;
 exports.Readable = exports;
 exports.Writable = __webpack_require__(33);
 exports.Duplex = __webpack_require__(6);
-exports.Transform = __webpack_require__(64);
-exports.PassThrough = __webpack_require__(186);
+exports.Transform = __webpack_require__(60);
+exports.PassThrough = __webpack_require__(184);
 
 
 /***/ }),
@@ -5423,11 +5423,11 @@ exports.PassThrough = __webpack_require__(186);
  * Module dependencies.
  */
 
-var debug = __webpack_require__(203)('socket.io-parser');
+var debug = __webpack_require__(201)('socket.io-parser');
 var Emitter = __webpack_require__(3);
-var hasBin = __webpack_require__(42);
-var binary = __webpack_require__(202);
-var isBuf = __webpack_require__(71);
+var hasBin = __webpack_require__(39);
+var binary = __webpack_require__(200);
+var isBuf = __webpack_require__(67);
 
 /**
  * Protocol version.
@@ -5829,9 +5829,9 @@ function error() {
  * Module dependencies.
  */
 
-var url = __webpack_require__(192);
+var url = __webpack_require__(190);
 var parser = __webpack_require__(35);
-var Manager = __webpack_require__(66);
+var Manager = __webpack_require__(62);
 var debug = __webpack_require__(21)('socket.io-client');
 
 /**
@@ -5916,333 +5916,12 @@ exports.connect = lookup;
  * @api public
  */
 
-exports.Manager = __webpack_require__(66);
-exports.Socket = __webpack_require__(68);
+exports.Manager = __webpack_require__(62);
+exports.Socket = __webpack_require__(64);
 
 
 /***/ }),
 /* 37 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-
-var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
-	return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-} : function (obj) {
-	return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-};
-
-var _createClass = function () {
-	function defineProperties(target, props) {
-		for (var i = 0; i < props.length; i++) {
-			var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-		}
-	}return function (Constructor, protoProps, staticProps) {
-		if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-	};
-}();
-
-var _socket = __webpack_require__(36);
-
-var _socket2 = _interopRequireDefault(_socket);
-
-var _settings = __webpack_require__(38);
-
-var _settings2 = _interopRequireDefault(_settings);
-
-var _uniqid = __webpack_require__(209);
-
-var _uniqid2 = _interopRequireDefault(_uniqid);
-
-var _merge2 = __webpack_require__(61);
-
-var _merge3 = _interopRequireDefault(_merge2);
-
-var _eventEmitter = __webpack_require__(41);
-
-var _eventEmitter2 = _interopRequireDefault(_eventEmitter);
-
-function _interopRequireDefault(obj) {
-	return obj && obj.__esModule ? obj : { default: obj };
-}
-
-function _classCallCheck(instance, Constructor) {
-	if (!(instance instanceof Constructor)) {
-		throw new TypeError("Cannot call a class as a function");
-	}
-}
-
-var Room = function () {
-	function Room(data, socket) {
-		var _this = this;
-
-		_classCallCheck(this, Room);
-
-		this._id = null;
-		this._name = null;
-		this._clients = {};
-		this._activeClients = {};
-		this._queue = [];
-		this._joined = false;
-		this._leaveCb = null;
-		this._leavePromiseResolve = null;
-		this._leavePromiseReject = null;
-		this._joinPromiseResolve = null;
-		this._joinPromiseReject = null;
-		this._processedMsg = {};
-		this._socket = null;
-
-		// save the socket
-		this._socket = socket;
-		// save the room name to join
-		this.updateData(data);
-
-		// listen for new room data
-		this._socket.on('new-room-data.' + data.id, function (data) {
-			console.log('new data', data);
-			// new room data
-			_this.updateData(data);
-		});
-
-		this._socket.on('left-room-' + data.id, function () {
-			if (!_this.id) return;
-			// resolve the promise
-			_this._leavePromiseResolve();
-			// let the app know that we have left the room
-			_this.emit('left', _this.id);
-		});
-
-		this._socket.on('joined-room-' + data.id, function () {
-			if (!_this.id) return;
-			// resolve the promise
-			_this._joinPromiseResolve();
-			// let the app know that we have left the room
-			_this.emit('joined', _this.id);
-		});
-	}
-
-	_createClass(Room, [{
-		key: 'say',
-		value: function say(something) {
-			if (!this.hasJoined()) {
-				throw 'You cannot say something in the room "' + this.id + '" cause you don\'t has joined it yet...';
-				return;
-			}
-
-			if ((typeof something === 'undefined' ? 'undefined' : _typeof(something)) === 'object') {
-				// something.toPeers = Object.keys(this.clients);
-				// const myIdIdx = something.toPeers.indexOf(this._socket.id || this._socket.socket.id);
-				// console.log('myIdIdx', myIdIdx);
-				// if (myIdIdx !== -1) {
-				// 	something.toPeers.splice(myIdIdx, 1);
-				// }
-				// console.log('send to', something.toPeers);
-				// something._uniqid = __uniqid();
-				something._roomId = this.id;
-			}
-
-			this._socket.emit('say', something);
-		}
-
-		/**
-   * Leave this room
-   */
-
-	}, {
-		key: 'leave',
-		value: function leave() {
-			var _this2 = this;
-
-			return new Promise(function (resolve, reject) {
-
-				// check that we have joined the room before
-				if (!_this2.hasJoined()) {
-					reject('You cannot leave a the room "' + _this2.id + '" cause you have not joined it yet...');
-					return;
-				}
-
-				_this2._leavePromiseReject = reject;
-				_this2._leavePromiseResolve = resolve;
-
-				// this._socket.useSockets = true;
-				// this._socket.usePeerConnection = false;
-
-				_this2._socket.off('say');
-
-				_this2._socket.emit('leave', _this2.id);
-			});
-		}
-	}, {
-		key: 'join',
-		value: function join() {
-			var _this3 = this;
-
-			return new Promise(function (resolve, reject) {
-
-				// check that we have joined the room before
-				if (_this3.hasJoined()) {
-					reject('You cannot join a the room "' + _this3.id + '" cause you have already joined it...');
-					return;
-				}
-
-				_this3._joinPromiseReject = reject;
-				_this3._joinPromiseResolve = resolve;
-
-				_this3._socket.on('say', function (something) {
-
-					console.error('receive', something);
-
-					// if (something._roomId !== this.id) return;
-					// if (something._uniqid && this._processedMsg[something._uniqid]) return;
-					// this._processedMsg[something._uniqid] = true;
-
-					console.log(_this3);
-
-					console.warn('someone say', something);
-				});
-
-				_this3._socket.emit('join', _this3.id);
-
-				// this._socket.usePeerConnection = true;
-				// this._socket.useSockets = false;
-			});
-		}
-	}, {
-		key: 'destroy',
-		value: function destroy() {
-			// stop listening for this room datas
-			this._socket.off('new-room-data.' + this.id);
-			// remove some datas to clean memory
-			delete this._clients;
-			delete this._queue;
-			delete this._activeClients;
-		}
-	}, {
-		key: 'updateData',
-		value: function updateData(data) {
-			this._id = data.id;
-			this._name = data.name;
-			// _merge(this._clients, data.clients);
-			this._clients = data.clients;
-			this._activeClients = data.activeClients;
-			this._queue = data.queue;
-		}
-	}, {
-		key: '_onJoined',
-		value: function _onJoined() {
-			var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-			console.log('joined', data);
-			// emit an event
-			this.emit('joined', data);
-		}
-	}, {
-		key: '_onQueued',
-		value: function _onQueued() {
-			var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-			console.log('queued', data);
-			this.emit('queued', data);
-		}
-	}, {
-		key: '_onPicked',
-		value: function _onPicked() {
-			var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-			console.log('picked', data);
-			this.emit('picked', data);
-		}
-
-		/**
-   * The room id
-   * @type 		{String}
-   */
-
-	}, {
-		key: 'hasJoined',
-
-		/**
-   * Return if the current client has joined the room or not
-   * @return  	{Boolean} 		true if the client has joined the room, false if not
-   */
-		value: function hasJoined() {
-			return this.clients[this._socket.id || this._socket.socket.id] != null;
-		}
-	}, {
-		key: 'id',
-		get: function get() {
-			return this._id;
-		}
-
-		/**
-   * The room name
-   * @type 		{String}
-   */
-
-	}, {
-		key: 'name',
-		get: function get() {
-			return this._name;
-		}
-
-		/**
-   * The clients in the room
-   * @type  	{Array<Client>}
-   */
-
-	}, {
-		key: 'clients',
-		get: function get() {
-			return this._clients;
-		}
-
-		/**
-   * The active clients
-   * @type  	{Array<Client>}
-   */
-
-	}, {
-		key: 'activeClients',
-		get: function get() {
-			return this._activeClients;
-		}
-	}]);
-
-	return Room;
-}();
-
-// make the room class an emitter capable object
-
-
-(0, _eventEmitter2.default)(Room.prototype);
-
-// export the Room class
-exports.default = Room;
-
-/***/ }),
-/* 38 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
-exports.default = {
-	host: 'http://localhost',
-	port: 3030
-};
-
-/***/ }),
-/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -6250,9 +5929,9 @@ exports.default = {
  */
 
 var XMLHttpRequest = __webpack_require__(26);
-var XHR = __webpack_require__(89);
-var JSONP = __webpack_require__(88);
-var websocket = __webpack_require__(90);
+var XHR = __webpack_require__(87);
+var JSONP = __webpack_require__(86);
+var websocket = __webpack_require__(88);
 
 /**
  * Export transports.
@@ -6302,7 +5981,7 @@ function polling (opts) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 40 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -6313,7 +5992,7 @@ var Transport = __webpack_require__(25);
 var parseqs = __webpack_require__(20);
 var parser = __webpack_require__(7);
 var inherit = __webpack_require__(12);
-var yeast = __webpack_require__(74);
+var yeast = __webpack_require__(70);
 var debug = __webpack_require__(13)('engine.io-client:polling');
 
 /**
@@ -6553,146 +6232,7 @@ Polling.prototype.uri = function () {
 
 
 /***/ }),
-/* 41 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var d        = __webpack_require__(83)
-  , callable = __webpack_require__(103)
-
-  , apply = Function.prototype.apply, call = Function.prototype.call
-  , create = Object.create, defineProperty = Object.defineProperty
-  , defineProperties = Object.defineProperties
-  , hasOwnProperty = Object.prototype.hasOwnProperty
-  , descriptor = { configurable: true, enumerable: false, writable: true }
-
-  , on, once, off, emit, methods, descriptors, base;
-
-on = function (type, listener) {
-	var data;
-
-	callable(listener);
-
-	if (!hasOwnProperty.call(this, '__ee__')) {
-		data = descriptor.value = create(null);
-		defineProperty(this, '__ee__', descriptor);
-		descriptor.value = null;
-	} else {
-		data = this.__ee__;
-	}
-	if (!data[type]) data[type] = listener;
-	else if (typeof data[type] === 'object') data[type].push(listener);
-	else data[type] = [data[type], listener];
-
-	return this;
-};
-
-once = function (type, listener) {
-	var once, self;
-
-	callable(listener);
-	self = this;
-	on.call(this, type, once = function () {
-		off.call(self, type, once);
-		apply.call(listener, this, arguments);
-	});
-
-	once.__eeOnceListener__ = listener;
-	return this;
-};
-
-off = function (type, listener) {
-	var data, listeners, candidate, i;
-
-	callable(listener);
-
-	if (!hasOwnProperty.call(this, '__ee__')) return this;
-	data = this.__ee__;
-	if (!data[type]) return this;
-	listeners = data[type];
-
-	if (typeof listeners === 'object') {
-		for (i = 0; (candidate = listeners[i]); ++i) {
-			if ((candidate === listener) ||
-					(candidate.__eeOnceListener__ === listener)) {
-				if (listeners.length === 2) data[type] = listeners[i ? 0 : 1];
-				else listeners.splice(i, 1);
-			}
-		}
-	} else {
-		if ((listeners === listener) ||
-				(listeners.__eeOnceListener__ === listener)) {
-			delete data[type];
-		}
-	}
-
-	return this;
-};
-
-emit = function (type) {
-	var i, l, listener, listeners, args;
-
-	if (!hasOwnProperty.call(this, '__ee__')) return;
-	listeners = this.__ee__[type];
-	if (!listeners) return;
-
-	if (typeof listeners === 'object') {
-		l = arguments.length;
-		args = new Array(l - 1);
-		for (i = 1; i < l; ++i) args[i - 1] = arguments[i];
-
-		listeners = listeners.slice();
-		for (i = 0; (listener = listeners[i]); ++i) {
-			apply.call(listener, this, args);
-		}
-	} else {
-		switch (arguments.length) {
-		case 1:
-			call.call(listeners, this);
-			break;
-		case 2:
-			call.call(listeners, this, arguments[1]);
-			break;
-		case 3:
-			call.call(listeners, this, arguments[1], arguments[2]);
-			break;
-		default:
-			l = arguments.length;
-			args = new Array(l - 1);
-			for (i = 1; i < l; ++i) {
-				args[i - 1] = arguments[i];
-			}
-			apply.call(listeners, this, args);
-		}
-	}
-};
-
-methods = {
-	on: on,
-	once: once,
-	off: off,
-	emit: emit
-};
-
-descriptors = {
-	on: d(on),
-	once: d(once),
-	off: d(off),
-	emit: d(emit)
-};
-
-base = defineProperties({}, descriptors);
-
-module.exports = exports = function (o) {
-	return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
-};
-exports.methods = methods;
-
-
-/***/ }),
-/* 42 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/* global Blob File */
@@ -6701,7 +6241,7 @@ exports.methods = methods;
  * Module requirements.
  */
 
-var isArray = __webpack_require__(112);
+var isArray = __webpack_require__(110);
 
 var toString = Object.prototype.toString;
 var withNativeBlob = typeof global.Blob === 'function' || toString.call(global.Blob) === '[object BlobConstructor]';
@@ -6761,7 +6301,7 @@ function hasBinary (obj) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 43 */
+/* 40 */
 /***/ (function(module, exports) {
 
 var hat = module.exports = function (bits, base) {
@@ -6829,7 +6369,7 @@ hat.rack = function (bits, base, expandBy) {
 
 
 /***/ }),
-/* 44 */
+/* 41 */
 /***/ (function(module, exports) {
 
 
@@ -6844,7 +6384,7 @@ module.exports = function(arr, obj){
 };
 
 /***/ }),
-/* 45 */
+/* 42 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -6855,7 +6395,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 46 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(29),
@@ -6868,7 +6408,7 @@ module.exports = Map;
 
 
 /***/ }),
-/* 47 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var root = __webpack_require__(8);
@@ -6880,7 +6420,7 @@ module.exports = Symbol;
 
 
 /***/ }),
-/* 48 */
+/* 45 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseAssignValue = __webpack_require__(28),
@@ -6906,7 +6446,7 @@ module.exports = assignMergeValue;
 
 
 /***/ }),
-/* 49 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getNative = __webpack_require__(29);
@@ -6923,7 +6463,7 @@ module.exports = defineProperty;
 
 
 /***/ }),
-/* 50 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/** Detect free variable `global` from Node.js. */
@@ -6934,10 +6474,10 @@ module.exports = freeGlobal;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 51 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var overArg = __webpack_require__(167);
+var overArg = __webpack_require__(165);
 
 /** Built-in value references. */
 var getPrototype = overArg(Object.getPrototypeOf, Object);
@@ -6946,7 +6486,7 @@ module.exports = getPrototype;
 
 
 /***/ }),
-/* 52 */
+/* 49 */
 /***/ (function(module, exports) {
 
 /** Used as references for various `Number` constants. */
@@ -6974,7 +6514,7 @@ module.exports = isIndex;
 
 
 /***/ }),
-/* 53 */
+/* 50 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -6998,7 +6538,7 @@ module.exports = isPrototype;
 
 
 /***/ }),
-/* 54 */
+/* 51 */
 /***/ (function(module, exports) {
 
 /**
@@ -7025,10 +6565,10 @@ module.exports = identity;
 
 
 /***/ }),
-/* 55 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIsArguments = __webpack_require__(125),
+var baseIsArguments = __webpack_require__(123),
     isObjectLike = __webpack_require__(10);
 
 /** Used for built-in method references. */
@@ -7067,7 +6607,7 @@ module.exports = isArguments;
 
 
 /***/ }),
-/* 56 */
+/* 53 */
 /***/ (function(module, exports) {
 
 /**
@@ -7099,11 +6639,11 @@ module.exports = isArray;
 
 
 /***/ }),
-/* 57 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(8),
-    stubFalse = __webpack_require__(180);
+    stubFalse = __webpack_require__(178);
 
 /** Detect free variable `exports`. */
 var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -7144,7 +6684,7 @@ module.exports = isBuffer;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)(module)))
 
 /***/ }),
-/* 58 */
+/* 55 */
 /***/ (function(module, exports) {
 
 /** Used as references for various `Number` constants. */
@@ -7185,12 +6725,12 @@ module.exports = isLength;
 
 
 /***/ }),
-/* 59 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseIsTypedArray = __webpack_require__(127),
-    baseUnary = __webpack_require__(134),
-    nodeUtil = __webpack_require__(165);
+var baseIsTypedArray = __webpack_require__(125),
+    baseUnary = __webpack_require__(132),
+    nodeUtil = __webpack_require__(163);
 
 /* Node.js helper references. */
 var nodeIsTypedArray = nodeUtil && nodeUtil.isTypedArray;
@@ -7218,11 +6758,11 @@ module.exports = isTypedArray;
 
 
 /***/ }),
-/* 60 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var arrayLikeKeys = __webpack_require__(121),
-    baseKeysIn = __webpack_require__(128),
+var arrayLikeKeys = __webpack_require__(119),
+    baseKeysIn = __webpack_require__(126),
     isArrayLike = __webpack_require__(30);
 
 /**
@@ -7256,52 +6796,7 @@ module.exports = keysIn;
 
 
 /***/ }),
-/* 61 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var baseMerge = __webpack_require__(129),
-    createAssigner = __webpack_require__(141);
-
-/**
- * This method is like `_.assign` except that it recursively merges own and
- * inherited enumerable string keyed properties of source objects into the
- * destination object. Source properties that resolve to `undefined` are
- * skipped if a destination value exists. Array and plain object properties
- * are merged recursively. Other objects and value types are overridden by
- * assignment. Source objects are applied from left to right. Subsequent
- * sources overwrite property assignments of previous sources.
- *
- * **Note:** This method mutates `object`.
- *
- * @static
- * @memberOf _
- * @since 0.5.0
- * @category Object
- * @param {Object} object The destination object.
- * @param {...Object} [sources] The source objects.
- * @returns {Object} Returns `object`.
- * @example
- *
- * var object = {
- *   'a': [{ 'b': 2 }, { 'd': 4 }]
- * };
- *
- * var other = {
- *   'a': [{ 'c': 3 }, { 'e': 5 }]
- * };
- *
- * _.merge(object, other);
- * // => { 'a': [{ 'b': 2, 'c': 3 }, { 'd': 4, 'e': 5 }] }
- */
-var merge = createAssigner(function(object, source, srcIndex) {
-  baseMerge(object, source, srcIndex);
-});
-
-module.exports = merge;
-
-
-/***/ }),
-/* 62 */
+/* 58 */
 /***/ (function(module, exports) {
 
 /**
@@ -7346,7 +6841,7 @@ module.exports = function parseuri(str) {
 
 
 /***/ }),
-/* 63 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7359,7 +6854,7 @@ var processNextTick = __webpack_require__(32);
 /*</replacement>*/
 
 /*<replacement>*/
-var isArray = __webpack_require__(45);
+var isArray = __webpack_require__(42);
 /*</replacement>*/
 
 /*<replacement>*/
@@ -7377,7 +6872,7 @@ var EElistenerCount = function (emitter, type) {
 /*</replacement>*/
 
 /*<replacement>*/
-var Stream = __webpack_require__(65);
+var Stream = __webpack_require__(61);
 /*</replacement>*/
 
 var Buffer = __webpack_require__(2).Buffer;
@@ -7391,7 +6886,7 @@ util.inherits = __webpack_require__(4);
 /*</replacement>*/
 
 /*<replacement>*/
-var debugUtil = __webpack_require__(215);
+var debugUtil = __webpack_require__(212);
 var debug = void 0;
 if (debugUtil && debugUtil.debuglog) {
   debug = debugUtil.debuglog('stream');
@@ -7400,7 +6895,7 @@ if (debugUtil && debugUtil.debuglog) {
 }
 /*</replacement>*/
 
-var BufferList = __webpack_require__(187);
+var BufferList = __webpack_require__(185);
 var StringDecoder;
 
 util.inherits(Readable, Stream);
@@ -7484,7 +6979,7 @@ function ReadableState(options, stream) {
   this.decoder = null;
   this.encoding = null;
   if (options.encoding) {
-    if (!StringDecoder) StringDecoder = __webpack_require__(73).StringDecoder;
+    if (!StringDecoder) StringDecoder = __webpack_require__(69).StringDecoder;
     this.decoder = new StringDecoder(options.encoding);
     this.encoding = options.encoding;
   }
@@ -7594,7 +7089,7 @@ function needMoreData(state) {
 
 // backwards compatibility.
 Readable.prototype.setEncoding = function (enc) {
-  if (!StringDecoder) StringDecoder = __webpack_require__(73).StringDecoder;
+  if (!StringDecoder) StringDecoder = __webpack_require__(69).StringDecoder;
   this._readableState.decoder = new StringDecoder(enc);
   this._readableState.encoding = enc;
   return this;
@@ -8288,7 +7783,7 @@ function indexOf(xs, x) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 64 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -8476,14 +7971,14 @@ function done(stream, er, data) {
 }
 
 /***/ }),
-/* 65 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(27).EventEmitter;
 
 
 /***/ }),
-/* 66 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -8491,15 +7986,15 @@ module.exports = __webpack_require__(27).EventEmitter;
  * Module dependencies.
  */
 
-var eio = __webpack_require__(85);
-var Socket = __webpack_require__(68);
+var eio = __webpack_require__(83);
+var Socket = __webpack_require__(64);
 var Emitter = __webpack_require__(3);
 var parser = __webpack_require__(35);
-var on = __webpack_require__(67);
+var on = __webpack_require__(63);
 var bind = __webpack_require__(23);
 var debug = __webpack_require__(21)('socket.io-client:manager');
-var indexOf = __webpack_require__(44);
-var Backoff = __webpack_require__(79);
+var indexOf = __webpack_require__(41);
+var Backoff = __webpack_require__(77);
 
 /**
  * IE6+ hasOwnProperty
@@ -9062,7 +8557,7 @@ Manager.prototype.onreconnect = function () {
 
 
 /***/ }),
-/* 67 */
+/* 63 */
 /***/ (function(module, exports) {
 
 
@@ -9092,7 +8587,7 @@ function on (obj, ev, fn) {
 
 
 /***/ }),
-/* 68 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -9102,8 +8597,8 @@ function on (obj, ev, fn) {
 
 var parser = __webpack_require__(35);
 var Emitter = __webpack_require__(3);
-var toArray = __webpack_require__(72);
-var on = __webpack_require__(67);
+var toArray = __webpack_require__(68);
+var on = __webpack_require__(63);
 var bind = __webpack_require__(23);
 var debug = __webpack_require__(21)('socket.io-client:socket');
 var parseqs = __webpack_require__(20);
@@ -9516,7 +9011,7 @@ Socket.prototype.compress = function (compress) {
 
 
 /***/ }),
-/* 69 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -9537,7 +9032,7 @@ function isBuf(obj) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 70 */
+/* 66 */
 /***/ (function(module, exports) {
 
 module.exports = Array.isArray || function (arr) {
@@ -9546,7 +9041,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 71 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -9566,7 +9061,7 @@ function isBuf(obj) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 72 */
+/* 68 */
 /***/ (function(module, exports) {
 
 module.exports = toArray
@@ -9585,7 +9080,7 @@ function toArray(list, index) {
 
 
 /***/ }),
-/* 73 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Copyright Joyent, Inc. and other Node contributors.
@@ -9812,7 +9307,7 @@ function base64DetectIncompleteChar(buffer) {
 
 
 /***/ }),
-/* 74 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9887,36 +9382,191 @@ module.exports = yeast;
 
 
 /***/ }),
-/* 75 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-	value: true
-});
+var d        = __webpack_require__(81)
+  , callable = __webpack_require__(101)
 
-var _room = __webpack_require__(37);
+  , apply = Function.prototype.apply, call = Function.prototype.call
+  , create = Object.create, defineProperty = Object.defineProperty
+  , defineProperties = Object.defineProperties
+  , hasOwnProperty = Object.prototype.hasOwnProperty
+  , descriptor = { configurable: true, enumerable: false, writable: true }
 
-var _room2 = _interopRequireDefault(_room);
+  , on, once, off, emit, methods, descriptors, base;
 
-var _client = __webpack_require__(78);
+on = function (type, listener) {
+	var data;
 
-var _client2 = _interopRequireDefault(_client);
+	callable(listener);
 
-function _interopRequireDefault(obj) {
-	return obj && obj.__esModule ? obj : { default: obj };
-}
+	if (!hasOwnProperty.call(this, '__ee__')) {
+		data = descriptor.value = create(null);
+		defineProperty(this, '__ee__', descriptor);
+		descriptor.value = null;
+	} else {
+		data = this.__ee__;
+	}
+	if (!data[type]) data[type] = listener;
+	else if (typeof data[type] === 'object') data[type].push(listener);
+	else data[type] = [data[type], listener];
 
-var api = {
-	Client: _client2.default,
-	Room: _room2.default
+	return this;
 };
-exports.default = api;
+
+once = function (type, listener) {
+	var once, self;
+
+	callable(listener);
+	self = this;
+	on.call(this, type, once = function () {
+		off.call(self, type, once);
+		apply.call(listener, this, arguments);
+	});
+
+	once.__eeOnceListener__ = listener;
+	return this;
+};
+
+off = function (type, listener) {
+	var data, listeners, candidate, i;
+
+	callable(listener);
+
+	if (!hasOwnProperty.call(this, '__ee__')) return this;
+	data = this.__ee__;
+	if (!data[type]) return this;
+	listeners = data[type];
+
+	if (typeof listeners === 'object') {
+		for (i = 0; (candidate = listeners[i]); ++i) {
+			if ((candidate === listener) ||
+					(candidate.__eeOnceListener__ === listener)) {
+				if (listeners.length === 2) data[type] = listeners[i ? 0 : 1];
+				else listeners.splice(i, 1);
+			}
+		}
+	} else {
+		if ((listeners === listener) ||
+				(listeners.__eeOnceListener__ === listener)) {
+			delete data[type];
+		}
+	}
+
+	return this;
+};
+
+emit = function (type) {
+	var i, l, listener, listeners, args;
+
+	if (!hasOwnProperty.call(this, '__ee__')) return;
+	listeners = this.__ee__[type];
+	if (!listeners) return;
+
+	if (typeof listeners === 'object') {
+		l = arguments.length;
+		args = new Array(l - 1);
+		for (i = 1; i < l; ++i) args[i - 1] = arguments[i];
+
+		listeners = listeners.slice();
+		for (i = 0; (listener = listeners[i]); ++i) {
+			apply.call(listener, this, args);
+		}
+	} else {
+		switch (arguments.length) {
+		case 1:
+			call.call(listeners, this);
+			break;
+		case 2:
+			call.call(listeners, this, arguments[1]);
+			break;
+		case 3:
+			call.call(listeners, this, arguments[1], arguments[2]);
+			break;
+		default:
+			l = arguments.length;
+			args = new Array(l - 1);
+			for (i = 1; i < l; ++i) {
+				args[i - 1] = arguments[i];
+			}
+			apply.call(listeners, this, args);
+		}
+	}
+};
+
+methods = {
+	on: on,
+	once: once,
+	off: off,
+	emit: emit
+};
+
+descriptors = {
+	on: d(on),
+	once: d(once),
+	off: d(off),
+	emit: d(emit)
+};
+
+base = defineProperties({}, descriptors);
+
+module.exports = exports = function (o) {
+	return (o == null) ? create(base) : defineProperties(Object(o), descriptors);
+};
+exports.methods = methods;
+
 
 /***/ }),
-/* 76 */
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var baseMerge = __webpack_require__(127),
+    createAssigner = __webpack_require__(139);
+
+/**
+ * This method is like `_.assign` except that it recursively merges own and
+ * inherited enumerable string keyed properties of source objects into the
+ * destination object. Source properties that resolve to `undefined` are
+ * skipped if a destination value exists. Array and plain object properties
+ * are merged recursively. Other objects and value types are overridden by
+ * assignment. Source objects are applied from left to right. Subsequent
+ * sources overwrite property assignments of previous sources.
+ *
+ * **Note:** This method mutates `object`.
+ *
+ * @static
+ * @memberOf _
+ * @since 0.5.0
+ * @category Object
+ * @param {Object} object The destination object.
+ * @param {...Object} [sources] The source objects.
+ * @returns {Object} Returns `object`.
+ * @example
+ *
+ * var object = {
+ *   'a': [{ 'b': 2 }, { 'd': 4 }]
+ * };
+ *
+ * var other = {
+ *   'a': [{ 'c': 3 }, { 'e': 5 }]
+ * };
+ *
+ * _.merge(object, other);
+ * // => { 'a': [{ 'b': 2, 'c': 3 }, { 'd': 4, 'e': 5 }] }
+ */
+var merge = createAssigner(function(object, source, srcIndex) {
+  baseMerge(object, source, srcIndex);
+});
+
+module.exports = merge;
+
+
+/***/ }),
+/* 73 */
 /***/ (function(module, exports) {
 
 module.exports = after
@@ -9950,7 +9600,7 @@ function noop() {}
 
 
 /***/ }),
-/* 77 */
+/* 74 */
 /***/ (function(module, exports) {
 
 /**
@@ -9985,24 +9635,22 @@ module.exports = function(arraybuffer, start, end) {
 
 
 /***/ }),
-/* 78 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
+var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) {
-	for (var i = 1; i < arguments.length; i++) {
-		var source = arguments[i];for (var key in source) {
-			if (Object.prototype.hasOwnProperty.call(source, key)) {
-				target[key] = source[key];
-			}
-		}
-	}return target;
+var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+	return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+} : function (obj) {
+	return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
 };
 
 var _createClass = function () {
@@ -10015,29 +9663,25 @@ var _createClass = function () {
 	};
 }();
 
-var _socket = __webpack_require__(200);
+var _socket = __webpack_require__(36);
 
 var _socket2 = _interopRequireDefault(_socket);
 
-var _socket3 = __webpack_require__(36);
-
-var _socket4 = _interopRequireDefault(_socket3);
-
-var _settings = __webpack_require__(38);
+var _settings = __webpack_require__(76);
 
 var _settings2 = _interopRequireDefault(_settings);
 
-var _eventEmitter = __webpack_require__(41);
+var _uniqid = __webpack_require__(217);
 
-var _eventEmitter2 = _interopRequireDefault(_eventEmitter);
+var _uniqid2 = _interopRequireDefault(_uniqid);
 
-var _room = __webpack_require__(37);
-
-var _room2 = _interopRequireDefault(_room);
-
-var _merge2 = __webpack_require__(61);
+var _merge2 = __webpack_require__(72);
 
 var _merge3 = _interopRequireDefault(_merge2);
+
+var _eventEmitter = __webpack_require__(71);
+
+var _eventEmitter2 = _interopRequireDefault(_eventEmitter);
 
 function _interopRequireDefault(obj) {
 	return obj && obj.__esModule ? obj : { default: obj };
@@ -10049,163 +9693,267 @@ function _classCallCheck(instance, Constructor) {
 	}
 }
 
-var Client = function () {
-	function Client() {
-		var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-		var settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+var Room = function () {
+	function Room(data, socket) {
+		var _this = this;
 
-		_classCallCheck(this, Client);
+		_classCallCheck(this, Room);
 
-		this.data = {};
-		this._socket = null;
 		this._id = null;
-		this._joinedRooms = {};
-		this._availableRooms = {};
-		this._announced = false;
-		this._cbs = {};
-		this.log = {
-			success: function success(message) {
-				console.log('%c Remote stack client : ' + message, 'color: green');
-			},
-			error: function error(message) {
-				console.log('%c Remote stack client : ' + message, 'color: red');
-			}
-		};
+		this._name = null;
+		this._clients = {};
+		this._activeClients = {};
+		this._queue = [];
+		this._joined = false;
+		this._leaveCb = null;
+		this._leavePromiseResolve = null;
+		this._leavePromiseReject = null;
+		this._joinPromiseResolve = null;
+		this._joinPromiseReject = null;
+		this._processedMsg = {};
+		this._socket = null;
 
-		// save the user data
-		this.data = data;
+		// save the socket
+		this._socket = socket;
+		// save the room name to join
+		this.updateData(data);
 
-		// extend settings
-		this._settings = _extends({}, _settings2.default, settings);
+		// listen for new room data
+		this._socket.on('new-room-data.' + data.id, function (data) {
+			console.log('new data', data);
+			// new room data
+			_this.updateData(data);
+		});
+
+		this._socket.on('left-room-' + data.id, function () {
+			if (!_this.id) return;
+			// resolve the promise
+			_this._leavePromiseResolve(_this);
+			// let the app know that we have left the room
+			_this.emit('left', _this);
+		});
+
+		this._socket.on('joined-room-' + data.id, function () {
+			if (!_this.id) return;
+			// resolve the promise
+			_this._joinPromiseResolve(_this);
+			// let the app know that we have left the room
+			_this.emit('joined', _this);
+		});
 	}
 
-	_createClass(Client, [{
-		key: 'announce',
-		value: function announce() {
-			var _this = this;
+	_createClass(Room, [{
+		key: 'sendToClients',
+		value: function sendToClients(something) {
+			if (!this.hasJoined()) {
+				throw 'You cannot send something to client in the room "' + this.id + '" cause you don\'t has joined it yet...';
+				return;
+			}
 
-			return new Promise(function (resolve) {
-				_this._socket = (0, _socket4.default)(_this._settings.host + _this._settings.port ? ':' + _this._settings.port : '');
-				// this._p2p = new __socketIoP2p(this._socket, {
-				// 	autoUpgrade : false,
-				// 	peerOpts: {
-				// 		numClients: 300000
-				// 	}
-				// });
-				_this._p2p = _this._socket;
-				_this._p2p.on('connect', function () {
-					// save the client id
-					_this._id = _this._socket.id;
+			if ((typeof something === 'undefined' ? 'undefined' : _typeof(something)) === 'object') {
+				something._roomId = this.id;
+			}
 
-					// announce the client
-					_this._socket.emit('announce', _this.data);
-				});
-				_this._p2p.on('announced', function (data) {
-					// update client state
-					_this._announced = true;
-					// the client has been annouced correctly
-					resolve(_this);
-					// emit an event
-					_this.emit('announced', _this);
-					// log
-					_this.log.success('Successfuly announced');
-					console.log(_this);
-				});
-				// listen for rooms
-				_this._p2p.on('available-rooms', function (rooms) {
+			this._socket.emit('send-to-clients', something);
+		}
+	}, {
+		key: 'sendToApp',
+		value: function sendToApp(something) {
+			if (!this.hasJoined()) {
+				throw 'You cannot send something to app in the room "' + this.id + '" cause you don\'t has joined it yet...';
+				return;
+			}
 
-					// remove the rooms that have dissapeard
-					Object.keys(_this._availableRooms).forEach(function (roomId) {
-						if (!rooms[roomId]) {
-							_this._availableRooms[roomId] && _this._availableRooms[roomId].destroy();
-							delete _this._availableRooms[roomId];
-						}
-					});
+			if ((typeof something === 'undefined' ? 'undefined' : _typeof(something)) === 'object') {
+				something._roomId = this.id;
+			}
 
-					// save the rooms
-					Object.keys(rooms).forEach(function (roomId) {
-						if (_this._availableRooms[roomId]) {
-							_this._availableRooms[roomId].updateData(rooms[roomId]);
-						} else {
-							_this._availableRooms[roomId] = new _room2.default(rooms[roomId], _this._p2p);
+			this._socket.emit('send-to-app', something);
+		}
 
-							// listen when the room has been left
-							_this._availableRooms[roomId].on('left', function (roomId) {
-								_this._p2p.usePeerConnection = false;
-								_this._p2p.useSockets = true;
-								delete _this._joinedRooms[roomId];
-							});
-						}
-					});
+		/**
+   * Leave this room
+   */
 
-					console.log('new rooms', _this._availableRooms);
+	}, {
+		key: 'leave',
+		value: function leave() {
+			var _this2 = this;
 
-					// emit new rooms
-					_this.emit('available-rooms', _this._availableRooms);
-				});
+			return new Promise(function (resolve, reject) {
 
-				// listen for joined room
-				_this._p2p.on('joined', function (room) {
+				// check that we have joined the room before
+				if (!_this2.hasJoined()) {
+					reject('You cannot leave a the room "' + _this2.id + '" cause you have not joined it yet...');
+					return;
+				}
 
-					_this._cbs[room.id] && _this._cbs[room.id](room);
+				_this2._leavePromiseReject = reject;
+				_this2._leavePromiseResolve = resolve;
 
-					console.log('joined', room);
-				});
+				// this._socket.useSockets = true;
+				// this._socket.usePeerConnection = false;
+
+				_this2._socket.off('receive-from-client');
+
+				_this2._socket.emit('leave', _this2.id);
 			});
 		}
 	}, {
 		key: 'join',
-		value: function join(roomId) {
-			// join a room
-			if (this._joinedRooms[roomId]) {
-				reject('You cannot join the room "' + roomId + '" cause this client has already joined it...');
-				return;
-			}
+		value: function join() {
+			var _this3 = this;
 
-			// if not annouced
-			if (!this.isAnnounced()) {
-				reject('You need to announce the client first with the "Client.announce" method...');
-				return;
-			}
-			// join the room
-			return this._availableRooms[roomId].join();
+			return new Promise(function (resolve, reject) {
+
+				// check that we have joined the room before
+				if (_this3.hasJoined()) {
+					reject('You cannot join a the room "' + _this3.id + '" cause you have already joined it...');
+					return;
+				}
+
+				_this3._joinPromiseReject = reject;
+				_this3._joinPromiseResolve = resolve;
+
+				_this3._socket.on('receive-from-client', function (something) {
+					console.error('receive from client', something);
+				});
+
+				_this3._socket.emit('join', _this3.id);
+
+				// this._socket.usePeerConnection = true;
+				// this._socket.useSockets = false;
+			});
 		}
 	}, {
-		key: 'leave',
-		value: function leave(roomId) {
-			// left the room
-			return this._joinedRooms[roomId].leave();
+		key: 'destroy',
+		value: function destroy() {
+			// stop listening for this room datas
+			this._socket.off('new-room-data.' + this.id);
+			// remove some datas to clean memory
+			delete this._clients;
+			delete this._queue;
+			delete this._activeClients;
+		}
+	}, {
+		key: 'updateData',
+		value: function updateData(data) {
+			this._id = data.id;
+			this._name = data.name;
+			// _merge(this._clients, data.clients);
+			this._clients = data.clients;
+			this._activeClients = data.activeClients;
+			this._queue = data.queue;
+		}
+	}, {
+		key: '_onJoined',
+		value: function _onJoined() {
+			var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+			console.log('joined', data);
+			// emit an event
+			this.emit('joined', data);
+		}
+	}, {
+		key: '_onQueued',
+		value: function _onQueued() {
+			var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+			console.log('queued', data);
+			this.emit('queued', data);
+		}
+	}, {
+		key: '_onPicked',
+		value: function _onPicked() {
+			var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+			console.log('picked', data);
+			this.emit('picked', data);
 		}
 
 		/**
-   * All the rooms in which the client is in
-   * @type 		{Object<Room>}
+   * The room id
+   * @type 		{String}
    */
 
 	}, {
-		key: 'isAnnounced',
-		value: function isAnnounced() {
-			return this._announced;
+		key: 'hasJoined',
+
+		/**
+   * Return if the current client has joined the room or not
+   * @return  	{Boolean} 		true if the client has joined the room, false if not
+   */
+		value: function hasJoined() {
+			return this.clients[this._socket.id || this._socket.socket.id] != null;
 		}
 	}, {
-		key: 'joinedRooms',
+		key: 'id',
 		get: function get() {
-			return this._joinedRooms;
+			return this._id;
+		}
+
+		/**
+   * The room name
+   * @type 		{String}
+   */
+
+	}, {
+		key: 'name',
+		get: function get() {
+			return this._name;
+		}
+
+		/**
+   * The clients in the room
+   * @type  	{Array<Client>}
+   */
+
+	}, {
+		key: 'clients',
+		get: function get() {
+			return this._clients;
+		}
+
+		/**
+   * The active clients
+   * @type  	{Array<Client>}
+   */
+
+	}, {
+		key: 'activeClients',
+		get: function get() {
+			return this._activeClients;
 		}
 	}]);
 
-	return Client;
+	return Room;
 }();
 
 // make the room class an emitter capable object
 
 
-(0, _eventEmitter2.default)(Client.prototype);
+(0, _eventEmitter2.default)(Room.prototype);
 
-exports.default = Client;
+// export the Room class
+exports.default = Room;
 
 /***/ }),
-/* 79 */
+/* 76 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+exports.default = {
+	host: 'http://localhost',
+	port: 3030
+};
+
+/***/ }),
+/* 77 */
 /***/ (function(module, exports) {
 
 
@@ -10296,7 +10044,7 @@ Backoff.prototype.setJitter = function(jitter){
 
 
 /***/ }),
-/* 80 */
+/* 78 */
 /***/ (function(module, exports) {
 
 /*
@@ -10369,7 +10117,7 @@ Backoff.prototype.setJitter = function(jitter){
 
 
 /***/ }),
-/* 81 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10490,7 +10238,7 @@ function fromByteArray (uint8) {
 
 
 /***/ }),
-/* 82 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -10593,16 +10341,16 @@ module.exports = (function() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 83 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var assign        = __webpack_require__(95)
-  , normalizeOpts = __webpack_require__(102)
-  , isCallable    = __webpack_require__(98)
-  , contains      = __webpack_require__(105)
+var assign        = __webpack_require__(93)
+  , normalizeOpts = __webpack_require__(100)
+  , isCallable    = __webpack_require__(96)
+  , contains      = __webpack_require__(103)
 
   , d;
 
@@ -10663,7 +10411,7 @@ d.gs = function (dscr, get, set/*, options*/) {
 
 
 /***/ }),
-/* 84 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -10679,7 +10427,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(182);
+exports.humanize = __webpack_require__(180);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -10871,19 +10619,19 @@ function coerce(val) {
 
 
 /***/ }),
-/* 85 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-module.exports = __webpack_require__(86);
+module.exports = __webpack_require__(84);
 
 
 /***/ }),
-/* 86 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
-module.exports = __webpack_require__(87);
+module.exports = __webpack_require__(85);
 
 /**
  * Exports parser
@@ -10895,20 +10643,20 @@ module.exports.parser = __webpack_require__(7);
 
 
 /***/ }),
-/* 87 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
  * Module dependencies.
  */
 
-var transports = __webpack_require__(39);
+var transports = __webpack_require__(37);
 var Emitter = __webpack_require__(3);
 var debug = __webpack_require__(13)('engine.io-client:socket');
-var index = __webpack_require__(44);
+var index = __webpack_require__(41);
 var parser = __webpack_require__(7);
-var parseuri = __webpack_require__(62);
-var parsejson = __webpack_require__(184);
+var parseuri = __webpack_require__(58);
+var parsejson = __webpack_require__(182);
 var parseqs = __webpack_require__(20);
 
 /**
@@ -11043,7 +10791,7 @@ Socket.protocol = parser.protocol; // this is an int
 
 Socket.Socket = Socket;
 Socket.Transport = __webpack_require__(25);
-Socket.transports = __webpack_require__(39);
+Socket.transports = __webpack_require__(37);
 Socket.parser = __webpack_require__(7);
 
 /**
@@ -11646,7 +11394,7 @@ Socket.prototype.filterUpgrades = function (upgrades) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 88 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -11654,7 +11402,7 @@ Socket.prototype.filterUpgrades = function (upgrades) {
  * Module requirements.
  */
 
-var Polling = __webpack_require__(40);
+var Polling = __webpack_require__(38);
 var inherit = __webpack_require__(12);
 
 /**
@@ -11884,7 +11632,7 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 89 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -11892,7 +11640,7 @@ JSONPPolling.prototype.doWrite = function (data, fn) {
  */
 
 var XMLHttpRequest = __webpack_require__(26);
-var Polling = __webpack_require__(40);
+var Polling = __webpack_require__(38);
 var Emitter = __webpack_require__(3);
 var inherit = __webpack_require__(12);
 var debug = __webpack_require__(13)('engine.io-client:polling-xhr');
@@ -12304,7 +12052,7 @@ function unloadHandler () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 90 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -12315,13 +12063,13 @@ var Transport = __webpack_require__(25);
 var parser = __webpack_require__(7);
 var parseqs = __webpack_require__(20);
 var inherit = __webpack_require__(12);
-var yeast = __webpack_require__(74);
+var yeast = __webpack_require__(70);
 var debug = __webpack_require__(13)('engine.io-client:websocket');
 var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 var NodeWebSocket;
 if (typeof window === 'undefined') {
   try {
-    NodeWebSocket = __webpack_require__(214);
+    NodeWebSocket = __webpack_require__(211);
   } catch (e) { }
 }
 
@@ -12597,7 +12345,7 @@ WS.prototype.check = function () {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 91 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -12613,7 +12361,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(92);
+exports.humanize = __webpack_require__(90);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -12805,7 +12553,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 92 */
+/* 90 */
 /***/ (function(module, exports) {
 
 /**
@@ -12963,7 +12711,7 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 93 */
+/* 91 */
 /***/ (function(module, exports) {
 
 
@@ -12988,7 +12736,7 @@ module.exports = Object.keys || function keys (obj){
 
 
 /***/ }),
-/* 94 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module, global) {var __WEBPACK_AMD_DEFINE_RESULT__;/*! https://mths.be/utf8js v2.1.2 by @mathias */
@@ -13249,19 +12997,19 @@ module.exports = Object.keys || function keys (obj){
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)(module), __webpack_require__(0)))
 
 /***/ }),
-/* 95 */
+/* 93 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(96)()
+module.exports = __webpack_require__(94)()
 	? Object.assign
-	: __webpack_require__(97);
+	: __webpack_require__(95);
 
 
 /***/ }),
-/* 96 */
+/* 94 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13277,14 +13025,14 @@ module.exports = function () {
 
 
 /***/ }),
-/* 97 */
+/* 95 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var keys  = __webpack_require__(99)
-  , value = __webpack_require__(104)
+var keys  = __webpack_require__(97)
+  , value = __webpack_require__(102)
 
   , max = Math.max;
 
@@ -13306,7 +13054,7 @@ module.exports = function (dest, src/*, …srcn*/) {
 
 
 /***/ }),
-/* 98 */
+/* 96 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13318,19 +13066,19 @@ module.exports = function (obj) { return typeof obj === 'function'; };
 
 
 /***/ }),
-/* 99 */
+/* 97 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(100)()
+module.exports = __webpack_require__(98)()
 	? Object.keys
-	: __webpack_require__(101);
+	: __webpack_require__(99);
 
 
 /***/ }),
-/* 100 */
+/* 98 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13345,7 +13093,7 @@ module.exports = function () {
 
 
 /***/ }),
-/* 101 */
+/* 99 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13359,7 +13107,7 @@ module.exports = function (object) {
 
 
 /***/ }),
-/* 102 */
+/* 100 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13383,7 +13131,7 @@ module.exports = function (options/*, …options*/) {
 
 
 /***/ }),
-/* 103 */
+/* 101 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13396,7 +13144,7 @@ module.exports = function (fn) {
 
 
 /***/ }),
-/* 104 */
+/* 102 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13409,19 +13157,19 @@ module.exports = function (value) {
 
 
 /***/ }),
-/* 105 */
+/* 103 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-module.exports = __webpack_require__(106)()
+module.exports = __webpack_require__(104)()
 	? String.prototype.contains
-	: __webpack_require__(107);
+	: __webpack_require__(105);
 
 
 /***/ }),
-/* 106 */
+/* 104 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13436,7 +13184,7 @@ module.exports = function () {
 
 
 /***/ }),
-/* 107 */
+/* 105 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -13450,7 +13198,7 @@ module.exports = function (searchString/*, position*/) {
 
 
 /***/ }),
-/* 108 */
+/* 106 */
 /***/ (function(module, exports) {
 
 /**
@@ -13476,7 +13224,7 @@ module.exports = function(src) {
 
 
 /***/ }),
-/* 109 */
+/* 107 */
 /***/ (function(module, exports) {
 
 // originally pulled out of simple-peer
@@ -13497,7 +13245,7 @@ module.exports = function getBrowserRTC () {
 
 
 /***/ }),
-/* 110 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -13505,7 +13253,7 @@ module.exports = function getBrowserRTC () {
  * Module requirements.
  */
 
-var isArray = __webpack_require__(111);
+var isArray = __webpack_require__(109);
 
 /**
  * Module exports.
@@ -13563,7 +13311,7 @@ function hasBinary(data) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 111 */
+/* 109 */
 /***/ (function(module, exports) {
 
 module.exports = Array.isArray || function (arr) {
@@ -13572,7 +13320,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 112 */
+/* 110 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -13583,7 +13331,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 113 */
+/* 111 */
 /***/ (function(module, exports) {
 
 
@@ -13606,7 +13354,7 @@ try {
 
 
 /***/ }),
-/* 114 */
+/* 112 */
 /***/ (function(module, exports) {
 
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -13696,7 +13444,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 
 
 /***/ }),
-/* 115 */
+/* 113 */
 /***/ (function(module, exports) {
 
 module.exports      = isTypedArray
@@ -13743,14 +13491,14 @@ function isLooseTypedArray(arr) {
 
 
 /***/ }),
-/* 116 */
+/* 114 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var hashClear = __webpack_require__(145),
-    hashDelete = __webpack_require__(146),
-    hashGet = __webpack_require__(147),
-    hashHas = __webpack_require__(148),
-    hashSet = __webpack_require__(149);
+var hashClear = __webpack_require__(143),
+    hashDelete = __webpack_require__(144),
+    hashGet = __webpack_require__(145),
+    hashHas = __webpack_require__(146),
+    hashSet = __webpack_require__(147);
 
 /**
  * Creates a hash object.
@@ -13781,14 +13529,14 @@ module.exports = Hash;
 
 
 /***/ }),
-/* 117 */
+/* 115 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var mapCacheClear = __webpack_require__(159),
-    mapCacheDelete = __webpack_require__(160),
-    mapCacheGet = __webpack_require__(161),
-    mapCacheHas = __webpack_require__(162),
-    mapCacheSet = __webpack_require__(163);
+var mapCacheClear = __webpack_require__(157),
+    mapCacheDelete = __webpack_require__(158),
+    mapCacheGet = __webpack_require__(159),
+    mapCacheHas = __webpack_require__(160),
+    mapCacheSet = __webpack_require__(161);
 
 /**
  * Creates a map cache object to store key-value pairs.
@@ -13819,15 +13567,15 @@ module.exports = MapCache;
 
 
 /***/ }),
-/* 118 */
+/* 116 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var ListCache = __webpack_require__(14),
-    stackClear = __webpack_require__(171),
-    stackDelete = __webpack_require__(172),
-    stackGet = __webpack_require__(173),
-    stackHas = __webpack_require__(174),
-    stackSet = __webpack_require__(175);
+    stackClear = __webpack_require__(169),
+    stackDelete = __webpack_require__(170),
+    stackGet = __webpack_require__(171),
+    stackHas = __webpack_require__(172),
+    stackSet = __webpack_require__(173);
 
 /**
  * Creates a stack cache object to store key-value pairs.
@@ -13852,7 +13600,7 @@ module.exports = Stack;
 
 
 /***/ }),
-/* 119 */
+/* 117 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var root = __webpack_require__(8);
@@ -13864,7 +13612,7 @@ module.exports = Uint8Array;
 
 
 /***/ }),
-/* 120 */
+/* 118 */
 /***/ (function(module, exports) {
 
 /**
@@ -13891,15 +13639,15 @@ module.exports = apply;
 
 
 /***/ }),
-/* 121 */
+/* 119 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseTimes = __webpack_require__(133),
-    isArguments = __webpack_require__(55),
-    isArray = __webpack_require__(56),
-    isBuffer = __webpack_require__(57),
-    isIndex = __webpack_require__(52),
-    isTypedArray = __webpack_require__(59);
+var baseTimes = __webpack_require__(131),
+    isArguments = __webpack_require__(52),
+    isArray = __webpack_require__(53),
+    isBuffer = __webpack_require__(54),
+    isIndex = __webpack_require__(49),
+    isTypedArray = __webpack_require__(56);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -13946,7 +13694,7 @@ module.exports = arrayLikeKeys;
 
 
 /***/ }),
-/* 122 */
+/* 120 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseAssignValue = __webpack_require__(28),
@@ -13980,7 +13728,7 @@ module.exports = assignValue;
 
 
 /***/ }),
-/* 123 */
+/* 121 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(5);
@@ -14016,10 +13764,10 @@ module.exports = baseCreate;
 
 
 /***/ }),
-/* 124 */
+/* 122 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var createBaseFor = __webpack_require__(142);
+var createBaseFor = __webpack_require__(140);
 
 /**
  * The base implementation of `baseForOwn` which iterates over `object`
@@ -14038,7 +13786,7 @@ module.exports = baseFor;
 
 
 /***/ }),
-/* 125 */
+/* 123 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(16),
@@ -14062,13 +13810,13 @@ module.exports = baseIsArguments;
 
 
 /***/ }),
-/* 126 */
+/* 124 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isFunction = __webpack_require__(31),
-    isMasked = __webpack_require__(153),
+    isMasked = __webpack_require__(151),
     isObject = __webpack_require__(5),
-    toSource = __webpack_require__(176);
+    toSource = __webpack_require__(174);
 
 /**
  * Used to match `RegExp`
@@ -14115,11 +13863,11 @@ module.exports = baseIsNative;
 
 
 /***/ }),
-/* 127 */
+/* 125 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(16),
-    isLength = __webpack_require__(58),
+    isLength = __webpack_require__(55),
     isObjectLike = __webpack_require__(10);
 
 /** `Object#toString` result references. */
@@ -14181,12 +13929,12 @@ module.exports = baseIsTypedArray;
 
 
 /***/ }),
-/* 128 */
+/* 126 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isObject = __webpack_require__(5),
-    isPrototype = __webpack_require__(53),
-    nativeKeysIn = __webpack_require__(164);
+    isPrototype = __webpack_require__(50),
+    nativeKeysIn = __webpack_require__(162);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -14220,15 +13968,15 @@ module.exports = baseKeysIn;
 
 
 /***/ }),
-/* 129 */
+/* 127 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Stack = __webpack_require__(118),
-    assignMergeValue = __webpack_require__(48),
-    baseFor = __webpack_require__(124),
-    baseMergeDeep = __webpack_require__(130),
+var Stack = __webpack_require__(116),
+    assignMergeValue = __webpack_require__(45),
+    baseFor = __webpack_require__(122),
+    baseMergeDeep = __webpack_require__(128),
     isObject = __webpack_require__(5),
-    keysIn = __webpack_require__(60);
+    keysIn = __webpack_require__(57);
 
 /**
  * The base implementation of `_.merge` without support for multiple sources.
@@ -14267,23 +14015,23 @@ module.exports = baseMerge;
 
 
 /***/ }),
-/* 130 */
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assignMergeValue = __webpack_require__(48),
-    cloneBuffer = __webpack_require__(136),
-    cloneTypedArray = __webpack_require__(137),
-    copyArray = __webpack_require__(138),
-    initCloneObject = __webpack_require__(150),
-    isArguments = __webpack_require__(55),
-    isArray = __webpack_require__(56),
-    isArrayLikeObject = __webpack_require__(178),
-    isBuffer = __webpack_require__(57),
+var assignMergeValue = __webpack_require__(45),
+    cloneBuffer = __webpack_require__(134),
+    cloneTypedArray = __webpack_require__(135),
+    copyArray = __webpack_require__(136),
+    initCloneObject = __webpack_require__(148),
+    isArguments = __webpack_require__(52),
+    isArray = __webpack_require__(53),
+    isArrayLikeObject = __webpack_require__(176),
+    isBuffer = __webpack_require__(54),
     isFunction = __webpack_require__(31),
     isObject = __webpack_require__(5),
-    isPlainObject = __webpack_require__(179),
-    isTypedArray = __webpack_require__(59),
-    toPlainObject = __webpack_require__(181);
+    isPlainObject = __webpack_require__(177),
+    isTypedArray = __webpack_require__(56),
+    toPlainObject = __webpack_require__(179);
 
 /**
  * A specialized version of `baseMerge` for arrays and objects which performs
@@ -14366,12 +14114,12 @@ module.exports = baseMergeDeep;
 
 
 /***/ }),
-/* 131 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var identity = __webpack_require__(54),
-    overRest = __webpack_require__(168),
-    setToString = __webpack_require__(169);
+var identity = __webpack_require__(51),
+    overRest = __webpack_require__(166),
+    setToString = __webpack_require__(167);
 
 /**
  * The base implementation of `_.rest` which doesn't validate or coerce arguments.
@@ -14389,12 +14137,12 @@ module.exports = baseRest;
 
 
 /***/ }),
-/* 132 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var constant = __webpack_require__(177),
-    defineProperty = __webpack_require__(49),
-    identity = __webpack_require__(54);
+var constant = __webpack_require__(175),
+    defineProperty = __webpack_require__(46),
+    identity = __webpack_require__(51);
 
 /**
  * The base implementation of `setToString` without support for hot loop shorting.
@@ -14417,7 +14165,7 @@ module.exports = baseSetToString;
 
 
 /***/ }),
-/* 133 */
+/* 131 */
 /***/ (function(module, exports) {
 
 /**
@@ -14443,7 +14191,7 @@ module.exports = baseTimes;
 
 
 /***/ }),
-/* 134 */
+/* 132 */
 /***/ (function(module, exports) {
 
 /**
@@ -14463,10 +14211,10 @@ module.exports = baseUnary;
 
 
 /***/ }),
-/* 135 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Uint8Array = __webpack_require__(119);
+var Uint8Array = __webpack_require__(117);
 
 /**
  * Creates a clone of `arrayBuffer`.
@@ -14485,7 +14233,7 @@ module.exports = cloneArrayBuffer;
 
 
 /***/ }),
-/* 136 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {var root = __webpack_require__(8);
@@ -14527,10 +14275,10 @@ module.exports = cloneBuffer;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)(module)))
 
 /***/ }),
-/* 137 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var cloneArrayBuffer = __webpack_require__(135);
+var cloneArrayBuffer = __webpack_require__(133);
 
 /**
  * Creates a clone of `typedArray`.
@@ -14549,7 +14297,7 @@ module.exports = cloneTypedArray;
 
 
 /***/ }),
-/* 138 */
+/* 136 */
 /***/ (function(module, exports) {
 
 /**
@@ -14575,10 +14323,10 @@ module.exports = copyArray;
 
 
 /***/ }),
-/* 139 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var assignValue = __webpack_require__(122),
+var assignValue = __webpack_require__(120),
     baseAssignValue = __webpack_require__(28);
 
 /**
@@ -14621,7 +14369,7 @@ module.exports = copyObject;
 
 
 /***/ }),
-/* 140 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var root = __webpack_require__(8);
@@ -14633,11 +14381,11 @@ module.exports = coreJsData;
 
 
 /***/ }),
-/* 141 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseRest = __webpack_require__(131),
-    isIterateeCall = __webpack_require__(151);
+var baseRest = __webpack_require__(129),
+    isIterateeCall = __webpack_require__(149);
 
 /**
  * Creates a function like `_.assign`.
@@ -14676,7 +14424,7 @@ module.exports = createAssigner;
 
 
 /***/ }),
-/* 142 */
+/* 140 */
 /***/ (function(module, exports) {
 
 /**
@@ -14707,10 +14455,10 @@ module.exports = createBaseFor;
 
 
 /***/ }),
-/* 143 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Symbol = __webpack_require__(47);
+var Symbol = __webpack_require__(44);
 
 /** Used for built-in method references. */
 var objectProto = Object.prototype;
@@ -14759,7 +14507,7 @@ module.exports = getRawTag;
 
 
 /***/ }),
-/* 144 */
+/* 142 */
 /***/ (function(module, exports) {
 
 /**
@@ -14778,7 +14526,7 @@ module.exports = getValue;
 
 
 /***/ }),
-/* 145 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var nativeCreate = __webpack_require__(18);
@@ -14799,7 +14547,7 @@ module.exports = hashClear;
 
 
 /***/ }),
-/* 146 */
+/* 144 */
 /***/ (function(module, exports) {
 
 /**
@@ -14822,7 +14570,7 @@ module.exports = hashDelete;
 
 
 /***/ }),
-/* 147 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var nativeCreate = __webpack_require__(18);
@@ -14858,7 +14606,7 @@ module.exports = hashGet;
 
 
 /***/ }),
-/* 148 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var nativeCreate = __webpack_require__(18);
@@ -14887,7 +14635,7 @@ module.exports = hashHas;
 
 
 /***/ }),
-/* 149 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var nativeCreate = __webpack_require__(18);
@@ -14916,12 +14664,12 @@ module.exports = hashSet;
 
 
 /***/ }),
-/* 150 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseCreate = __webpack_require__(123),
-    getPrototype = __webpack_require__(51),
-    isPrototype = __webpack_require__(53);
+var baseCreate = __webpack_require__(121),
+    getPrototype = __webpack_require__(48),
+    isPrototype = __webpack_require__(50);
 
 /**
  * Initializes an object clone.
@@ -14940,12 +14688,12 @@ module.exports = initCloneObject;
 
 
 /***/ }),
-/* 151 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var eq = __webpack_require__(19),
     isArrayLike = __webpack_require__(30),
-    isIndex = __webpack_require__(52),
+    isIndex = __webpack_require__(49),
     isObject = __webpack_require__(5);
 
 /**
@@ -14976,7 +14724,7 @@ module.exports = isIterateeCall;
 
 
 /***/ }),
-/* 152 */
+/* 150 */
 /***/ (function(module, exports) {
 
 /**
@@ -14997,10 +14745,10 @@ module.exports = isKeyable;
 
 
 /***/ }),
-/* 153 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var coreJsData = __webpack_require__(140);
+var coreJsData = __webpack_require__(138);
 
 /** Used to detect methods masquerading as native. */
 var maskSrcKey = (function() {
@@ -15023,7 +14771,7 @@ module.exports = isMasked;
 
 
 /***/ }),
-/* 154 */
+/* 152 */
 /***/ (function(module, exports) {
 
 /**
@@ -15042,7 +14790,7 @@ module.exports = listCacheClear;
 
 
 /***/ }),
-/* 155 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assocIndexOf = __webpack_require__(15);
@@ -15083,7 +14831,7 @@ module.exports = listCacheDelete;
 
 
 /***/ }),
-/* 156 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assocIndexOf = __webpack_require__(15);
@@ -15108,7 +14856,7 @@ module.exports = listCacheGet;
 
 
 /***/ }),
-/* 157 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assocIndexOf = __webpack_require__(15);
@@ -15130,7 +14878,7 @@ module.exports = listCacheHas;
 
 
 /***/ }),
-/* 158 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var assocIndexOf = __webpack_require__(15);
@@ -15162,12 +14910,12 @@ module.exports = listCacheSet;
 
 
 /***/ }),
-/* 159 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Hash = __webpack_require__(116),
+var Hash = __webpack_require__(114),
     ListCache = __webpack_require__(14),
-    Map = __webpack_require__(46);
+    Map = __webpack_require__(43);
 
 /**
  * Removes all key-value entries from the map.
@@ -15189,7 +14937,7 @@ module.exports = mapCacheClear;
 
 
 /***/ }),
-/* 160 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getMapData = __webpack_require__(17);
@@ -15213,7 +14961,7 @@ module.exports = mapCacheDelete;
 
 
 /***/ }),
-/* 161 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getMapData = __webpack_require__(17);
@@ -15235,7 +14983,7 @@ module.exports = mapCacheGet;
 
 
 /***/ }),
-/* 162 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getMapData = __webpack_require__(17);
@@ -15257,7 +15005,7 @@ module.exports = mapCacheHas;
 
 
 /***/ }),
-/* 163 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var getMapData = __webpack_require__(17);
@@ -15285,7 +15033,7 @@ module.exports = mapCacheSet;
 
 
 /***/ }),
-/* 164 */
+/* 162 */
 /***/ (function(module, exports) {
 
 /**
@@ -15311,10 +15059,10 @@ module.exports = nativeKeysIn;
 
 
 /***/ }),
-/* 165 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(50);
+/* WEBPACK VAR INJECTION */(function(module) {var freeGlobal = __webpack_require__(47);
 
 /** Detect free variable `exports`. */
 var freeExports = typeof exports == 'object' && exports && !exports.nodeType && exports;
@@ -15340,7 +15088,7 @@ module.exports = nodeUtil;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(11)(module)))
 
 /***/ }),
-/* 166 */
+/* 164 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -15368,7 +15116,7 @@ module.exports = objectToString;
 
 
 /***/ }),
-/* 167 */
+/* 165 */
 /***/ (function(module, exports) {
 
 /**
@@ -15389,10 +15137,10 @@ module.exports = overArg;
 
 
 /***/ }),
-/* 168 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var apply = __webpack_require__(120);
+var apply = __webpack_require__(118);
 
 /* Built-in method references for those with the same name as other `lodash` methods. */
 var nativeMax = Math.max;
@@ -15431,11 +15179,11 @@ module.exports = overRest;
 
 
 /***/ }),
-/* 169 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var baseSetToString = __webpack_require__(132),
-    shortOut = __webpack_require__(170);
+var baseSetToString = __webpack_require__(130),
+    shortOut = __webpack_require__(168);
 
 /**
  * Sets the `toString` method of `func` to return `string`.
@@ -15451,7 +15199,7 @@ module.exports = setToString;
 
 
 /***/ }),
-/* 170 */
+/* 168 */
 /***/ (function(module, exports) {
 
 /** Used to detect hot functions by number of calls within a span of milliseconds. */
@@ -15494,7 +15242,7 @@ module.exports = shortOut;
 
 
 /***/ }),
-/* 171 */
+/* 169 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var ListCache = __webpack_require__(14);
@@ -15515,7 +15263,7 @@ module.exports = stackClear;
 
 
 /***/ }),
-/* 172 */
+/* 170 */
 /***/ (function(module, exports) {
 
 /**
@@ -15539,7 +15287,7 @@ module.exports = stackDelete;
 
 
 /***/ }),
-/* 173 */
+/* 171 */
 /***/ (function(module, exports) {
 
 /**
@@ -15559,7 +15307,7 @@ module.exports = stackGet;
 
 
 /***/ }),
-/* 174 */
+/* 172 */
 /***/ (function(module, exports) {
 
 /**
@@ -15579,12 +15327,12 @@ module.exports = stackHas;
 
 
 /***/ }),
-/* 175 */
+/* 173 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var ListCache = __webpack_require__(14),
-    Map = __webpack_require__(46),
-    MapCache = __webpack_require__(117);
+    Map = __webpack_require__(43),
+    MapCache = __webpack_require__(115);
 
 /** Used as the size to enable large array optimizations. */
 var LARGE_ARRAY_SIZE = 200;
@@ -15619,7 +15367,7 @@ module.exports = stackSet;
 
 
 /***/ }),
-/* 176 */
+/* 174 */
 /***/ (function(module, exports) {
 
 /** Used for built-in method references. */
@@ -15651,7 +15399,7 @@ module.exports = toSource;
 
 
 /***/ }),
-/* 177 */
+/* 175 */
 /***/ (function(module, exports) {
 
 /**
@@ -15683,7 +15431,7 @@ module.exports = constant;
 
 
 /***/ }),
-/* 178 */
+/* 176 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var isArrayLike = __webpack_require__(30),
@@ -15722,11 +15470,11 @@ module.exports = isArrayLikeObject;
 
 
 /***/ }),
-/* 179 */
+/* 177 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var baseGetTag = __webpack_require__(16),
-    getPrototype = __webpack_require__(51),
+    getPrototype = __webpack_require__(48),
     isObjectLike = __webpack_require__(10);
 
 /** `Object#toString` result references. */
@@ -15790,7 +15538,7 @@ module.exports = isPlainObject;
 
 
 /***/ }),
-/* 180 */
+/* 178 */
 /***/ (function(module, exports) {
 
 /**
@@ -15814,11 +15562,11 @@ module.exports = stubFalse;
 
 
 /***/ }),
-/* 181 */
+/* 179 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var copyObject = __webpack_require__(139),
-    keysIn = __webpack_require__(60);
+var copyObject = __webpack_require__(137),
+    keysIn = __webpack_require__(57);
 
 /**
  * Converts `value` to a plain object flattening inherited enumerable string
@@ -15852,7 +15600,7 @@ module.exports = toPlainObject;
 
 
 /***/ }),
-/* 182 */
+/* 180 */
 /***/ (function(module, exports) {
 
 /**
@@ -16007,10 +15755,10 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 183 */
+/* 181 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var wrappy = __webpack_require__(213)
+var wrappy = __webpack_require__(210)
 module.exports = wrappy(once)
 module.exports.strict = wrappy(onceStrict)
 
@@ -16055,7 +15803,7 @@ function onceStrict (fn) {
 
 
 /***/ }),
-/* 184 */
+/* 182 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -16093,14 +15841,14 @@ module.exports = function parsejson(data) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 185 */
+/* 183 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(6);
 
 
 /***/ }),
-/* 186 */
+/* 184 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16112,7 +15860,7 @@ module.exports = __webpack_require__(6);
 
 module.exports = PassThrough;
 
-var Transform = __webpack_require__(64);
+var Transform = __webpack_require__(60);
 
 /*<replacement>*/
 var util = __webpack_require__(9);
@@ -16132,7 +15880,7 @@ PassThrough.prototype._transform = function (chunk, encoding, cb) {
 };
 
 /***/ }),
-/* 187 */
+/* 185 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -16202,28 +15950,28 @@ BufferList.prototype.concat = function (n) {
 };
 
 /***/ }),
-/* 188 */
+/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(34).PassThrough
 
 
 /***/ }),
-/* 189 */
+/* 187 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(34).Transform
 
 
 /***/ }),
-/* 190 */
+/* 188 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(33);
 
 
 /***/ }),
-/* 191 */
+/* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -16416,7 +16164,7 @@ module.exports = __webpack_require__(33);
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0), __webpack_require__(1)))
 
 /***/ }),
-/* 192 */
+/* 190 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -16424,7 +16172,7 @@ module.exports = __webpack_require__(33);
  * Module dependencies.
  */
 
-var parseuri = __webpack_require__(62);
+var parseuri = __webpack_require__(58);
 var debug = __webpack_require__(21)('socket.io-client:url');
 
 /**
@@ -16498,7 +16246,7 @@ function url (uri, loc) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 193 */
+/* 191 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -16514,7 +16262,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(194);
+exports.humanize = __webpack_require__(192);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -16706,7 +16454,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 194 */
+/* 192 */
 /***/ (function(module, exports) {
 
 /**
@@ -16864,7 +16612,7 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 195 */
+/* 193 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/*global Blob,File*/
@@ -16873,8 +16621,8 @@ function plural(ms, n, name) {
  * Module requirements
  */
 
-var isArray = __webpack_require__(70);
-var isBuf = __webpack_require__(69);
+var isArray = __webpack_require__(66);
+var isBuf = __webpack_require__(65);
 
 /**
  * Replaces every Buffer | ArrayBuffer in packet with a numbered placeholder.
@@ -17012,7 +16760,7 @@ exports.removeBlobs = function(data, callback) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 196 */
+/* 194 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -17020,12 +16768,12 @@ exports.removeBlobs = function(data, callback) {
  * Module dependencies.
  */
 
-var debug = __webpack_require__(198)('socket.io-parser');
-var json = __webpack_require__(199);
-var isArray = __webpack_require__(70);
-var Emitter = __webpack_require__(197);
-var binary = __webpack_require__(195);
-var isBuf = __webpack_require__(69);
+var debug = __webpack_require__(196)('socket.io-parser');
+var json = __webpack_require__(197);
+var isArray = __webpack_require__(66);
+var Emitter = __webpack_require__(195);
+var binary = __webpack_require__(193);
+var isBuf = __webpack_require__(65);
 
 /**
  * Protocol version.
@@ -17432,7 +17180,7 @@ BinaryReconstructor.prototype._appendBuffer = function(curr, prev) {
 
 
 /***/ }),
-/* 197 */
+/* 195 */
 /***/ (function(module, exports) {
 
 
@@ -17602,7 +17350,7 @@ Emitter.prototype.hasListeners = function(event){
 
 
 /***/ }),
-/* 198 */
+/* 196 */
 /***/ (function(module, exports) {
 
 
@@ -17745,7 +17493,7 @@ try {
 
 
 /***/ }),
-/* 199 */
+/* 197 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/*! JSON v3.2.6 | http://bestiejs.github.io/json3 | Copyright 2012-2013, Kit Cambridge | http://kit.mit-license.org */
@@ -17755,7 +17503,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*! JSON v3.2.6 | http://bestiejs.github.io/js
 
   // Detect the `define` function exposed by asynchronous module loaders. The
   // strict `define` check is necessary for compatibility with `r.js`.
-  var isLoader = "function" === "function" && __webpack_require__(211);
+  var isLoader = "function" === "function" && __webpack_require__(208);
 
   // Detect native implementations.
   var nativeJSON = typeof JSON == "object" && JSON;
@@ -18613,20 +18361,20 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*! JSON v3.2.6 | http://bestiejs.github.io/js
 
 
 /***/ }),
-/* 200 */
+/* 198 */
 /***/ (function(module, exports, __webpack_require__) {
 
 window.myDebug = __webpack_require__(24)
-var Peer = __webpack_require__(201)
+var Peer = __webpack_require__(199)
 var Emitter = __webpack_require__(3)
-var parser = __webpack_require__(196)
-var toArray = __webpack_require__(72)
-var hasBin = __webpack_require__(110)
+var parser = __webpack_require__(194)
+var toArray = __webpack_require__(68)
+var hasBin = __webpack_require__(108)
 var bind = __webpack_require__(23)
 var debug = __webpack_require__(24)('socket')
-var hat = __webpack_require__(43)
-var extend = __webpack_require__(108)
-var rtcSupport = __webpack_require__(212)
+var hat = __webpack_require__(40)
+var extend = __webpack_require__(106)
+var rtcSupport = __webpack_require__(209)
 
 var emitfn = Emitter.prototype.emit
 
@@ -18895,7 +18643,7 @@ module.exports = Socketiop2p
 
 
 /***/ }),
-/* 201 */
+/* 199 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {/* global Blob */
@@ -18903,12 +18651,12 @@ module.exports = Socketiop2p
 module.exports = Peer
 
 var debug = __webpack_require__(24)('simple-peer')
-var getBrowserRTC = __webpack_require__(109)
-var hat = __webpack_require__(43)
+var getBrowserRTC = __webpack_require__(107)
+var hat = __webpack_require__(40)
 var inherits = __webpack_require__(4)
-var isTypedArray = __webpack_require__(115)
-var once = __webpack_require__(183)
-var stream = __webpack_require__(207)
+var isTypedArray = __webpack_require__(113)
+var once = __webpack_require__(181)
+var stream = __webpack_require__(205)
 
 inherits(Peer, stream.Duplex)
 
@@ -19433,7 +19181,7 @@ function noop () {}
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2).Buffer))
 
 /***/ }),
-/* 202 */
+/* 200 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/*global Blob,File*/
@@ -19442,8 +19190,8 @@ function noop () {}
  * Module requirements
  */
 
-var isArray = __webpack_require__(205);
-var isBuf = __webpack_require__(71);
+var isArray = __webpack_require__(203);
+var isBuf = __webpack_require__(67);
 var toString = Object.prototype.toString;
 var withNativeBlob = typeof global.Blob === 'function' || toString.call(global.Blob) === '[object BlobConstructor]';
 var withNativeFile = typeof global.File === 'function' || toString.call(global.File) === '[object FileConstructor]';
@@ -19581,7 +19329,7 @@ exports.removeBlobs = function(data, callback) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 203 */
+/* 201 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(process) {/**
@@ -19590,7 +19338,7 @@ exports.removeBlobs = function(data, callback) {
  * Expose `debug()` as the module.
  */
 
-exports = module.exports = __webpack_require__(204);
+exports = module.exports = __webpack_require__(202);
 exports.log = log;
 exports.formatArgs = formatArgs;
 exports.save = save;
@@ -19773,7 +19521,7 @@ function localstorage() {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ }),
-/* 204 */
+/* 202 */
 /***/ (function(module, exports, __webpack_require__) {
 
 
@@ -19789,7 +19537,7 @@ exports.coerce = coerce;
 exports.disable = disable;
 exports.enable = enable;
 exports.enabled = enabled;
-exports.humanize = __webpack_require__(206);
+exports.humanize = __webpack_require__(204);
 
 /**
  * The currently active debug mode names, and names to skip.
@@ -19981,7 +19729,7 @@ function coerce(val) {
 
 
 /***/ }),
-/* 205 */
+/* 203 */
 /***/ (function(module, exports) {
 
 var toString = {}.toString;
@@ -19992,7 +19740,7 @@ module.exports = Array.isArray || function (arr) {
 
 
 /***/ }),
-/* 206 */
+/* 204 */
 /***/ (function(module, exports) {
 
 /**
@@ -20150,7 +19898,7 @@ function plural(ms, n, name) {
 
 
 /***/ }),
-/* 207 */
+/* 205 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Copyright Joyent, Inc. and other Node contributors.
@@ -20181,10 +19929,10 @@ var inherits = __webpack_require__(4);
 
 inherits(Stream, EE);
 Stream.Readable = __webpack_require__(34);
-Stream.Writable = __webpack_require__(190);
-Stream.Duplex = __webpack_require__(185);
-Stream.Transform = __webpack_require__(189);
-Stream.PassThrough = __webpack_require__(188);
+Stream.Writable = __webpack_require__(188);
+Stream.Duplex = __webpack_require__(183);
+Stream.Transform = __webpack_require__(187);
+Stream.PassThrough = __webpack_require__(186);
 
 // Backwards-compat with node 0.4.x
 Stream.Stream = Stream;
@@ -20283,7 +20031,7 @@ Stream.prototype.pipe = function(dest, options) {
 
 
 /***/ }),
-/* 208 */
+/* 206 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var apply = Function.prototype.apply;
@@ -20336,57 +20084,13 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(191);
+__webpack_require__(189);
 exports.setImmediate = setImmediate;
 exports.clearImmediate = clearImmediate;
 
 
 /***/ }),
-/* 209 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(process, module) {/* 
-(The MIT License)
-Copyright (c) 2014 Halász Ádám <mail@adamhalasz.com>
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-
-//  Unique Hexatridecimal ID Generator
-// ================================================
-
-//  Dependencies
-// ================================================
-var pid = process && process.pid ? process.pid.toString(36) : '' ;
-var mac =  false ? require('macaddress').one(macHandler) : null ;
-var address = mac ? parseInt(mac.replace(/\:|\D+/gi, '')).toString(36) : '' ;
-
-//  Exports
-// ================================================
-module.exports         = function(prefix){ return (prefix || '') + address + pid + now().toString(36); }
-module.exports.process = function(prefix){ return (prefix || '')           + pid + now().toString(36); }
-module.exports.time    = function(prefix){ return (prefix || '')                 + now().toString(36); }
-
-//  Helpers
-// ================================================
-function now(){
-    var time = Date.now();
-    var last = now.last || time;
-    return now.last = time > last ? time : last + 1;
-}
-
-function macHandler(error){
-    if(module.parent && module.parent.uniqid_debug){
-        if(error) console.error('Info: No mac address - uniqid() falls back to uniqid.process().', error)
-        if(pid == '') console.error('Info: No process.pid - uniqid.process() falls back to uniqid.time().')
-    }
-}
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(11)(module)))
-
-/***/ }),
-/* 210 */
+/* 207 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {
@@ -20460,7 +20164,7 @@ function config (name) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 211 */
+/* 208 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -20469,7 +20173,7 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 212 */
+/* 209 */
 /***/ (function(module, exports) {
 
 // created by @HenrikJoreteg
@@ -20520,7 +20224,7 @@ module.exports = {
 
 
 /***/ }),
-/* 213 */
+/* 210 */
 /***/ (function(module, exports) {
 
 // Returns a wrapper function that returns a wrapped callback
@@ -20559,19 +20263,1466 @@ function wrappy (fn, cb) {
 
 
 /***/ }),
-/* 214 */
+/* 211 */
 /***/ (function(module, exports) {
 
 /* (ignored) */
+
+/***/ }),
+/* 212 */
+/***/ (function(module, exports) {
+
+/* (ignored) */
+
+/***/ }),
+/* 213 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _room = __webpack_require__(75);
+
+var _room2 = _interopRequireDefault(_room);
+
+var _client = __webpack_require__(216);
+
+var _client2 = _interopRequireDefault(_client);
+
+function _interopRequireDefault(obj) {
+	return obj && obj.__esModule ? obj : { default: obj };
+}
+
+var api = {
+	Client: _client2.default,
+	Room: _room2.default
+};
+exports.default = api;
+
+/***/ }),
+/* 214 */
+/***/ (function(module, exports, __webpack_require__) {
+
+(function(f){if(true){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.nipplejs = f()}})(function(){var define,module,exports;
+'use strict';
+
+// Constants
+var isTouch = !!('ontouchstart' in window);
+var isPointer = window.PointerEvent ? true : false;
+var isMSPointer = window.MSPointerEvent ? true : false;
+var events = {
+    touch: {
+        start: 'touchstart',
+        move: 'touchmove',
+        end: 'touchend'
+    },
+    mouse: {
+        start: 'mousedown',
+        move: 'mousemove',
+        end: 'mouseup'
+    },
+    pointer: {
+        start: 'pointerdown',
+        move: 'pointermove',
+        end: 'pointerup'
+    },
+    MSPointer: {
+        start: 'MSPointerDown',
+        move: 'MSPointerMove',
+        end: 'MSPointerUp'
+    }
+};
+var toBind;
+var secondBind = {};
+if (isPointer) {
+    toBind = events.pointer;
+} else if (isMSPointer) {
+    toBind = events.MSPointer;
+} else if (isTouch) {
+    toBind = events.touch;
+    secondBind = events.mouse;
+} else {
+    toBind = events.mouse;
+}
+///////////////////////
+///      UTILS      ///
+///////////////////////
+
+var u = {};
+u.distance = function (p1, p2) {
+    var dx = p2.x - p1.x;
+    var dy = p2.y - p1.y;
+
+    return Math.sqrt((dx * dx) + (dy * dy));
+};
+
+u.angle = function(p1, p2) {
+    var dx = p2.x - p1.x;
+    var dy = p2.y - p1.y;
+
+    return u.degrees(Math.atan2(dy, dx));
+};
+
+u.findCoord = function(p, d, a) {
+    var b = {x: 0, y: 0};
+    a = u.radians(a);
+    b.x = p.x - d * Math.cos(a);
+    b.y = p.y - d * Math.sin(a);
+    return b;
+};
+
+u.radians = function(a) {
+    return a * (Math.PI / 180);
+};
+
+u.degrees = function(a) {
+    return a * (180 / Math.PI);
+};
+
+u.bindEvt = function (el, type, handler) {
+    if (el.addEventListener) {
+        el.addEventListener(type, handler, false);
+    } else if (el.attachEvent) {
+        el.attachEvent(type, handler);
+    }
+};
+
+u.unbindEvt = function (el, type, handler) {
+    if (el.removeEventListener) {
+        el.removeEventListener(type, handler);
+    } else if (el.detachEvent) {
+        el.detachEvent(type, handler);
+    }
+};
+
+u.trigger = function (el, type, data) {
+    var evt = new CustomEvent(type, data);
+    el.dispatchEvent(evt);
+};
+
+u.prepareEvent = function (evt) {
+    evt.preventDefault();
+    return evt.type.match(/^touch/) ? evt.changedTouches : evt;
+};
+
+u.getScroll = function () {
+    var x = (window.pageXOffset !== undefined) ?
+        window.pageXOffset :
+        (document.documentElement || document.body.parentNode || document.body)
+            .scrollLeft;
+
+    var y = (window.pageYOffset !== undefined) ?
+        window.pageYOffset :
+        (document.documentElement || document.body.parentNode || document.body)
+            .scrollTop;
+    return {
+        x: x,
+        y: y
+    };
+};
+
+u.applyPosition = function (el, pos) {
+    if (pos.x && pos.y) {
+        el.style.left = pos.x + 'px';
+        el.style.top = pos.y + 'px';
+    } else if (pos.top || pos.right || pos.bottom || pos.left) {
+        el.style.top = pos.top;
+        el.style.right = pos.right;
+        el.style.bottom = pos.bottom;
+        el.style.left = pos.left;
+    }
+};
+
+u.getTransitionStyle = function (property, values, time) {
+    var obj = u.configStylePropertyObject(property);
+    for (var i in obj) {
+        if (obj.hasOwnProperty(i)) {
+            if (typeof values === 'string') {
+                obj[i] = values + ' ' + time;
+            } else {
+                var st = '';
+                for (var j = 0, max = values.length; j < max; j += 1) {
+                    st += values[j] + ' ' + time + ', ';
+                }
+                obj[i] = st.slice(0, -2);
+            }
+        }
+    }
+    return obj;
+};
+
+u.getVendorStyle = function (property, value) {
+    var obj = u.configStylePropertyObject(property);
+    for (var i in obj) {
+        if (obj.hasOwnProperty(i)) {
+            obj[i] = value;
+        }
+    }
+    return obj;
+};
+
+u.configStylePropertyObject = function (prop) {
+    var obj = {};
+    obj[prop] = '';
+    var vendors = ['webkit', 'Moz', 'o'];
+    vendors.forEach(function (vendor) {
+        obj[vendor + prop.charAt(0).toUpperCase() + prop.slice(1)] = '';
+    });
+    return obj;
+};
+
+u.extend = function (objA, objB) {
+    for (var i in objB) {
+        if (objB.hasOwnProperty(i)) {
+            objA[i] = objB[i];
+        }
+    }
+    return objA;
+};
+
+// Overwrite only what's already present
+u.safeExtend = function (objA, objB) {
+    var obj = {};
+    for (var i in objA) {
+        if (objA.hasOwnProperty(i) && objB.hasOwnProperty(i)) {
+            obj[i] = objB[i];
+        } else if (objA.hasOwnProperty(i)) {
+            obj[i] = objA[i];
+        }
+    }
+    return obj;
+};
+
+// Map for array or unique item.
+u.map = function (ar, fn) {
+    if (ar.length) {
+        for (var i = 0, max = ar.length; i < max; i += 1) {
+            fn(ar[i]);
+        }
+    } else {
+        fn(ar);
+    }
+};
+///////////////////////
+///   SUPER CLASS   ///
+///////////////////////
+
+function Super () {};
+
+// Basic event system.
+Super.prototype.on = function (arg, cb) {
+    var self = this;
+    var types = arg.split(/[ ,]+/g);
+    var type;
+    self._handlers_ = self._handlers_ || {};
+
+    for (var i = 0; i < types.length; i += 1) {
+        type = types[i];
+        self._handlers_[type] = self._handlers_[type] || [];
+        self._handlers_[type].push(cb);
+    }
+    return self;
+};
+
+Super.prototype.off = function (type, cb) {
+    var self = this;
+    self._handlers_ = self._handlers_ || {};
+
+    if (type === undefined) {
+        self._handlers_ = {};
+    } else if (cb === undefined) {
+        self._handlers_[type] = null;
+    } else if (self._handlers_[type] &&
+            self._handlers_[type].indexOf(cb) >= 0) {
+        self._handlers_[type].splice(self._handlers_[type].indexOf(cb), 1);
+    }
+
+    return self;
+};
+
+Super.prototype.trigger = function (arg, data) {
+    var self = this;
+    var types = arg.split(/[ ,]+/g);
+    var type;
+    self._handlers_ = self._handlers_ || {};
+
+    for (var i = 0; i < types.length; i += 1) {
+        type = types[i];
+        if (self._handlers_[type] && self._handlers_[type].length) {
+            self._handlers_[type].forEach(function (handler) {
+                handler.call(self, {
+                    type: type,
+                    target: self
+                }, data);
+            });
+        }
+    }
+};
+
+// Configuration
+Super.prototype.config = function (options) {
+    var self = this;
+    self.options = self.defaults || {};
+    if (options) {
+        self.options = u.safeExtend(self.options, options);
+    }
+};
+
+// Bind internal events.
+Super.prototype.bindEvt = function (el, type) {
+    var self = this;
+    self._domHandlers_ = self._domHandlers_ || {};
+
+    self._domHandlers_[type] = function () {
+        if (typeof self['on' + type] === 'function') {
+            self['on' + type].apply(self, arguments);
+        } else {
+            console.warn('[WARNING] : Missing "on' + type + '" handler.');
+        }
+    };
+
+    u.bindEvt(el, toBind[type], self._domHandlers_[type]);
+
+    if (secondBind[type]) {
+        // Support for both touch and mouse at the same time.
+        u.bindEvt(el, secondBind[type], self._domHandlers_[type]);
+    }
+
+    return self;
+};
+
+// Unbind dom events.
+Super.prototype.unbindEvt = function (el, type) {
+    var self = this;
+    self._domHandlers_ = self._domHandlers_ || {};
+
+    u.unbindEvt(el, toBind[type], self._domHandlers_[type]);
+
+    if (secondBind[type]) {
+        // Support for both touch and mouse at the same time.
+        u.unbindEvt(el, secondBind[type], self._domHandlers_[type]);
+    }
+
+    delete self._domHandlers_[type];
+
+    return this;
+};
+///////////////////////
+///   THE NIPPLE    ///
+///////////////////////
+
+function Nipple (collection, options) {
+    this.identifier = options.identifier;
+    this.position = options.position;
+    this.frontPosition = options.frontPosition;
+    this.collection = collection;
+
+    // Defaults
+    this.defaults = {
+        size: 100,
+        threshold: 0.1,
+        color: 'white',
+        fadeTime: 250,
+        dataOnly: false,
+        restOpacity: 0.5,
+        mode: 'dynamic',
+        zone: document.body
+    };
+
+    this.config(options);
+
+    // Overwrites
+    if (this.options.mode === 'dynamic') {
+        this.options.restOpacity = 0;
+    }
+
+    this.id = Nipple.id;
+    Nipple.id += 1;
+    this.buildEl()
+        .stylize();
+
+    // Nipple's API.
+    this.instance = {
+        el: this.ui.el,
+        on: this.on.bind(this),
+        off: this.off.bind(this),
+        show: this.show.bind(this),
+        hide: this.hide.bind(this),
+        add: this.addToDom.bind(this),
+        remove: this.removeFromDom.bind(this),
+        destroy: this.destroy.bind(this),
+        resetDirection: this.resetDirection.bind(this),
+        computeDirection: this.computeDirection.bind(this),
+        trigger: this.trigger.bind(this),
+        position: this.position,
+        frontPosition: this.frontPosition,
+        ui: this.ui,
+        identifier: this.identifier,
+        id: this.id,
+        options: this.options
+    };
+
+    return this.instance;
+};
+
+Nipple.prototype = new Super();
+Nipple.constructor = Nipple;
+Nipple.id = 0;
+
+// Build the dom element of the Nipple instance.
+Nipple.prototype.buildEl = function (options) {
+    this.ui = {};
+
+    if (this.options.dataOnly) {
+        return this;
+    }
+
+    this.ui.el = document.createElement('div');
+    this.ui.back = document.createElement('div');
+    this.ui.front = document.createElement('div');
+
+    this.ui.el.className = 'nipple collection_' + this.collection.id;
+    this.ui.back.className = 'back';
+    this.ui.front.className = 'front';
+
+    this.ui.el.setAttribute('id', 'nipple_' + this.collection.id +
+        '_' + this.id);
+
+    this.ui.el.appendChild(this.ui.back);
+    this.ui.el.appendChild(this.ui.front);
+
+    return this;
+};
+
+// Apply CSS to the Nipple instance.
+Nipple.prototype.stylize = function () {
+    if (this.options.dataOnly) {
+        return this;
+    }
+    var animTime = this.options.fadeTime + 'ms';
+    var borderStyle = u.getVendorStyle('borderRadius', '50%');
+    var transitStyle = u.getTransitionStyle('transition', 'opacity', animTime);
+    var styles = {};
+    styles.el = {
+        position: 'absolute',
+        opacity: this.options.restOpacity,
+        display: 'block',
+        'zIndex': 999
+    };
+
+    styles.back = {
+        position: 'absolute',
+        display: 'block',
+        width: this.options.size + 'px',
+        height: this.options.size + 'px',
+        marginLeft: -this.options.size / 2 + 'px',
+        marginTop: -this.options.size / 2 + 'px',
+        background: this.options.color,
+        'opacity': '.5'
+    };
+
+    styles.front = {
+        width: this.options.size / 2 + 'px',
+        height: this.options.size / 2 + 'px',
+        position: 'absolute',
+        display: 'block',
+        marginLeft: -this.options.size / 4 + 'px',
+        marginTop: -this.options.size / 4 + 'px',
+        background: this.options.color,
+        'opacity': '.5'
+    };
+
+    u.extend(styles.el, transitStyle);
+    u.extend(styles.back, borderStyle);
+    u.extend(styles.front, borderStyle);
+
+    this.applyStyles(styles);
+
+    return this;
+};
+
+Nipple.prototype.applyStyles = function (styles) {
+    // Apply styles
+    for (var i in this.ui) {
+        if (this.ui.hasOwnProperty(i)) {
+            for (var j in styles[i]) {
+                this.ui[i].style[j] = styles[i][j];
+            }
+        }
+    }
+
+    return this;
+};
+
+// Inject the Nipple instance into DOM.
+Nipple.prototype.addToDom = function () {
+    // We're not adding it if we're dataOnly or already in dom.
+    if (this.options.dataOnly || document.body.contains(this.ui.el)) {
+        return this;
+    }
+    this.options.zone.appendChild(this.ui.el);
+    return this;
+};
+
+// Remove the Nipple instance from DOM.
+Nipple.prototype.removeFromDom = function () {
+    if (this.options.dataOnly || !document.body.contains(this.ui.el)) {
+        return this;
+    }
+    this.options.zone.removeChild(this.ui.el);
+    return this;
+};
+
+// Entirely destroy this nipple
+Nipple.prototype.destroy = function () {
+    clearTimeout(this.removeTimeout);
+    clearTimeout(this.showTimeout);
+    clearTimeout(this.restTimeout);
+    this.trigger('destroyed', this.instance);
+    this.removeFromDom();
+    this.off();
+};
+
+// Fade in the Nipple instance.
+Nipple.prototype.show = function (cb) {
+    var self = this;
+
+    if (self.options.dataOnly) {
+        return self;
+    }
+
+    clearTimeout(self.removeTimeout);
+    clearTimeout(self.showTimeout);
+    clearTimeout(self.restTimeout);
+
+    self.addToDom();
+
+    self.restCallback();
+
+    setTimeout(function () {
+        self.ui.el.style.opacity = 1;
+    }, 0);
+
+    self.showTimeout = setTimeout(function () {
+        self.trigger('shown', self.instance);
+        if (typeof cb === 'function') {
+            cb.call(this);
+        }
+    }, self.options.fadeTime);
+
+    return self;
+};
+
+// Fade out the Nipple instance.
+Nipple.prototype.hide = function (cb) {
+    var self = this;
+
+    if (self.options.dataOnly) {
+        return self;
+    }
+
+    self.ui.el.style.opacity = self.options.restOpacity;
+
+    clearTimeout(self.removeTimeout);
+    clearTimeout(self.showTimeout);
+    clearTimeout(self.restTimeout);
+
+    self.removeTimeout = setTimeout(
+        function () {
+            var display = self.options.mode === 'dynamic' ? 'none' : 'block';
+            self.ui.el.style.display = display;
+            if (typeof cb === 'function') {
+                cb.call(self);
+            }
+
+            self.trigger('hidden', self.instance);
+        },
+        self.options.fadeTime
+    );
+    self.restPosition();
+
+    return self;
+};
+
+Nipple.prototype.restPosition = function (cb) {
+    var self = this;
+    self.frontPosition = {
+        x: 0,
+        y: 0
+    };
+    var animTime = self.options.fadeTime + 'ms';
+
+    var transitStyle = {};
+    transitStyle.front = u.getTransitionStyle('transition',
+        ['top', 'left'], animTime);
+
+    var styles = {front: {}};
+    styles.front = {
+        left: self.frontPosition.x + 'px',
+        top: self.frontPosition.y + 'px'
+    };
+
+    self.applyStyles(transitStyle);
+    self.applyStyles(styles);
+
+    self.restTimeout = setTimeout(
+        function () {
+            if (typeof cb === 'function') {
+                cb.call(self);
+            }
+            self.restCallback();
+        },
+        self.options.fadeTime
+    );
+};
+
+Nipple.prototype.restCallback = function () {
+    var self = this;
+    var transitStyle = {};
+    transitStyle.front = u.getTransitionStyle('transition', 'none', '');
+    self.applyStyles(transitStyle);
+    self.trigger('rested', self.instance);
+};
+
+Nipple.prototype.resetDirection = function () {
+    // Fully rebuild the object to let the iteration possible.
+    this.direction = {
+        x: false,
+        y: false,
+        angle: false
+    };
+};
+
+Nipple.prototype.computeDirection = function (obj) {
+    var rAngle = obj.angle.radian;
+    var angle45 = Math.PI / 4;
+    var angle90 = Math.PI / 2;
+    var direction, directionX, directionY;
+
+    // Angular direction
+    //     \  UP /
+    //      \   /
+    // LEFT       RIGHT
+    //      /   \
+    //     /DOWN \
+    //
+    if (rAngle > angle45 && rAngle < (angle45 * 3)) {
+        direction = 'up';
+    } else if (rAngle > -angle45 && rAngle <= angle45) {
+        direction = 'left';
+    } else if (rAngle > (-angle45 * 3) && rAngle <= -angle45) {
+        direction = 'down';
+    } else {
+        direction = 'right';
+    }
+
+    // Plain direction
+    //    UP                 |
+    // _______               | RIGHT
+    //                  LEFT |
+    //   DOWN                |
+    if (rAngle > -angle90 && rAngle < angle90) {
+        directionX = 'left';
+    } else {
+        directionX = 'right';
+    }
+
+    if (rAngle > 0) {
+        directionY = 'up';
+    } else {
+        directionY = 'down';
+    }
+
+    if (obj.force > this.options.threshold) {
+        var oldDirection = {};
+        for (var i in this.direction) {
+            if (this.direction.hasOwnProperty(i)) {
+                oldDirection[i] = this.direction[i];
+            }
+        }
+
+        var same = {};
+
+        this.direction = {
+            x: directionX,
+            y: directionY,
+            angle: direction
+        };
+
+        obj.direction = this.direction;
+
+        for (var i in oldDirection) {
+            if (oldDirection[i] === this.direction[i]) {
+                same[i] = true;
+            }
+        }
+
+        // If all 3 directions are the same, we don't trigger anything.
+        if (same.x && same.y && same.angle) {
+            return obj;
+        }
+
+        if (!same.x || !same.y) {
+            this.trigger('plain', obj);
+        }
+
+        if (!same.x) {
+            this.trigger('plain:' + directionX, obj);
+        }
+
+        if (!same.y) {
+            this.trigger('plain:' + directionY, obj);
+        }
+
+        if (!same.angle) {
+            this.trigger('dir dir:' + direction, obj);
+        }
+    }
+    return obj;
+};
+/* global Nipple, Super */
+
+///////////////////////////
+///   THE COLLECTION    ///
+///////////////////////////
+
+function Collection (manager, options) {
+    var self = this;
+    self.nipples = [];
+    self.idles = [];
+    self.actives = [];
+    self.ids = [];
+    self.pressureIntervals = {};
+    self.manager = manager;
+    self.id = Collection.id;
+    Collection.id += 1;
+
+    // Defaults
+    self.defaults = {
+        zone: document.body,
+        multitouch: false,
+        maxNumberOfNipples: 10,
+        mode: 'dynamic',
+        position: {top: 0, left: 0},
+        catchDistance: 200,
+        size: 100,
+        threshold: 0.1,
+        color: 'white',
+        fadeTime: 250,
+        dataOnly: false,
+        restOpacity: 0.5
+    };
+
+    self.config(options);
+
+    // Overwrites
+    if (self.options.mode === 'static' || self.options.mode === 'semi') {
+        self.options.multitouch = false;
+    }
+
+    if (!self.options.multitouch) {
+        self.options.maxNumberOfNipples = 1;
+    }
+
+    self.updateBox();
+    self.prepareNipples();
+    self.bindings();
+    self.begin();
+
+    return self.nipples;
+}
+
+Collection.prototype = new Super();
+Collection.constructor = Collection;
+Collection.id = 0;
+
+Collection.prototype.prepareNipples = function () {
+    var self = this;
+    var nips = self.nipples;
+
+    // Public API Preparation.
+    nips.on = self.on.bind(self);
+    nips.off = self.off.bind(self);
+    nips.options = self.options;
+    nips.destroy = self.destroy.bind(self);
+    nips.ids = self.ids;
+    nips.id = self.id;
+    nips.processOnMove = self.processOnMove.bind(self);
+    nips.processOnEnd = self.processOnEnd.bind(self);
+    nips.get = function (id) {
+        if (id === undefined) {
+            return nips[0];
+        }
+        for (var i = 0, max = nips.length; i < max; i += 1) {
+            if (nips[i].identifier === id) {
+                return nips[i];
+            }
+        }
+        return false;
+    };
+};
+
+Collection.prototype.bindings = function () {
+    var self = this;
+    // Touch start event.
+    self.bindEvt(self.options.zone, 'start');
+    // Avoid native touch actions (scroll, zoom etc...) on the zone.
+    self.options.zone.style.touchAction = 'none';
+    self.options.zone.style.msTouchAction = 'none';
+};
+
+Collection.prototype.begin = function () {
+    var self = this;
+    var opts = self.options;
+
+    // We place our static nipple
+    // if needed.
+    if (opts.mode === 'static') {
+        var nipple = self.createNipple(
+            opts.position,
+            self.manager.getIdentifier()
+        );
+        // Add it to the dom.
+        nipple.add();
+        // Store it in idles.
+        self.idles.push(nipple);
+    }
+};
+
+// Nipple Factory
+Collection.prototype.createNipple = function (position, identifier) {
+    var self = this;
+    var scroll = u.getScroll();
+    var toPutOn = {};
+    var opts = self.options;
+
+    if (position.x && position.y) {
+        toPutOn = {
+            x: position.x -
+                (scroll.x + self.box.left),
+            y: position.y -
+                (scroll.y + self.box.top)
+        };
+    } else if (
+            position.top ||
+            position.right ||
+            position.bottom ||
+            position.left
+        ) {
+
+        // We need to compute the position X / Y of the joystick.
+        var dumb = document.createElement('DIV');
+        dumb.style.display = 'hidden';
+        dumb.style.top = position.top;
+        dumb.style.right = position.right;
+        dumb.style.bottom = position.bottom;
+        dumb.style.left = position.left;
+        dumb.style.position = 'absolute';
+
+        opts.zone.appendChild(dumb);
+        var dumbBox = dumb.getBoundingClientRect();
+        opts.zone.removeChild(dumb);
+
+        toPutOn = position;
+        position = {
+            x: dumbBox.left + scroll.x,
+            y: dumbBox.top + scroll.y
+        };
+    }
+
+    var nipple = new Nipple(self, {
+        color: opts.color,
+        size: opts.size,
+        threshold: opts.threshold,
+        fadeTime: opts.fadeTime,
+        dataOnly: opts.dataOnly,
+        restOpacity: opts.restOpacity,
+        mode: opts.mode,
+        identifier: identifier,
+        position: position,
+        zone: opts.zone,
+        frontPosition: {
+            x: 0,
+            y: 0
+        }
+    });
+
+    if (!opts.dataOnly) {
+        u.applyPosition(nipple.ui.el, toPutOn);
+        u.applyPosition(nipple.ui.front, nipple.frontPosition);
+    }
+    self.nipples.push(nipple);
+    self.trigger('added ' + nipple.identifier + ':added', nipple);
+    self.manager.trigger('added ' + nipple.identifier + ':added', nipple);
+
+    self.bindNipple(nipple);
+
+    return nipple;
+};
+
+Collection.prototype.updateBox = function () {
+    var self = this;
+    self.box = self.options.zone.getBoundingClientRect();
+};
+
+Collection.prototype.bindNipple = function (nipple) {
+    var self = this;
+    var type;
+    // Bubble up identified events.
+    var handler = function (evt, data) {
+        // Identify the event type with the nipple's id.
+        type = evt.type + ' ' + data.id + ':' + evt.type;
+        self.trigger(type, data);
+    };
+
+    // When it gets destroyed.
+    nipple.on('destroyed', self.onDestroyed.bind(self));
+
+    // Other events that will get bubbled up.
+    nipple.on('shown hidden rested dir plain', handler);
+    nipple.on('dir:up dir:right dir:down dir:left', handler);
+    nipple.on('plain:up plain:right plain:down plain:left', handler);
+};
+
+Collection.prototype.pressureFn = function (touch, nipple, identifier) {
+    var self = this;
+    var previousPressure = 0;
+    clearInterval(self.pressureIntervals[identifier]);
+    // Create an interval that will read the pressure every 100ms
+    self.pressureIntervals[identifier] = setInterval(function () {
+        var pressure = touch.force || touch.pressure ||
+            touch.webkitForce || 0;
+        if (pressure !== previousPressure) {
+            nipple.trigger('pressure', pressure);
+            self.trigger('pressure ' +
+                nipple.identifier + ':pressure', pressure);
+            previousPressure = pressure;
+        }
+    }.bind(self), 100);
+};
+
+Collection.prototype.onstart = function (evt) {
+    var self = this;
+    var opts = self.options;
+    evt = u.prepareEvent(evt);
+
+    // Update the box position
+    self.updateBox();
+
+    var process = function (touch) {
+        // If we can create new nipples
+        // meaning we don't have more active nipples than we should.
+        if (self.actives.length < opts.maxNumberOfNipples) {
+            self.processOnStart(touch);
+        }
+    };
+
+    u.map(evt, process);
+
+    // We ask upstream to bind the document
+    // on 'move' and 'end'
+    self.manager.bindDocument();
+    return false;
+};
+
+Collection.prototype.processOnStart = function (evt) {
+    var self = this;
+    var opts = self.options;
+    var indexInIdles;
+    var identifier = self.manager.getIdentifier(evt);
+    var pressure = evt.force || evt.pressure || evt.webkitForce || 0;
+    var position = {
+        x: evt.pageX,
+        y: evt.pageY
+    };
+
+    var nipple = self.getOrCreate(identifier, position);
+
+    // Update its touch identifier
+    nipple.identifier = identifier;
+
+    var process = function (nip) {
+        // Trigger the start.
+        nip.trigger('start', nip);
+        self.trigger('start ' + nip.id + ':start', nip);
+
+        nip.show();
+        if (pressure > 0) {
+            self.pressureFn(evt, nip, nip.identifier);
+        }
+        // Trigger the first move event.
+        self.processOnMove(evt);
+    };
+
+    // Transfer it from idles to actives.
+    if ((indexInIdles = self.idles.indexOf(nipple)) >= 0) {
+        self.idles.splice(indexInIdles, 1);
+    }
+
+    // Store the nipple in the actives array
+    self.actives.push(nipple);
+    self.ids.push(nipple.identifier);
+
+    if (opts.mode !== 'semi') {
+        process(nipple);
+    } else {
+        // In semi we check the distance of the touch
+        // to decide if we have to reset the nipple
+        var distance = u.distance(position, nipple.position);
+        if (distance <= opts.catchDistance) {
+            process(nipple);
+        } else {
+            nipple.destroy();
+            self.processOnStart(evt);
+            return;
+        }
+    }
+
+    return nipple;
+};
+
+Collection.prototype.getOrCreate = function (identifier, position) {
+    var self = this;
+    var opts = self.options;
+    var nipple;
+
+    // If we're in static or semi, we might already have an active.
+    if (/(semi|static)/.test(opts.mode)) {
+        // Get the active one.
+        // TODO: Multi-touche for semi and static will start here.
+        // Return the nearest one.
+        nipple = self.idles[0];
+        if (nipple) {
+            self.idles.splice(0, 1);
+            return nipple;
+        }
+
+        if (opts.mode === 'semi') {
+            // If we're in semi mode, we need to create one.
+            return self.createNipple(position, identifier);
+        }
+
+        console.warn('Coudln\'t find the needed nipple.');
+        return false;
+    }
+    // In dynamic, we create a new one.
+    nipple = self.createNipple(position, identifier);
+    return nipple;
+};
+
+Collection.prototype.processOnMove = function (evt) {
+    var self = this;
+    var opts = self.options;
+    var identifier = self.manager.getIdentifier(evt);
+    var nipple = self.nipples.get(identifier);
+
+    if (!nipple) {
+        // This is here just for safety.
+        // It shouldn't happen.
+        console.error('Found zombie joystick with ID ' + identifier);
+        self.manager.removeIdentifier(identifier);
+        return;
+    }
+
+    nipple.identifier = identifier;
+
+    var size = nipple.options.size / 2;
+    var pos = {
+        x: evt.pageX,
+        y: evt.pageY
+    };
+
+    var dist = u.distance(pos, nipple.position);
+    var angle = u.angle(pos, nipple.position);
+    var rAngle = u.radians(angle);
+    var force = dist / size;
+
+    // If distance is bigger than nipple's size
+    // we clamp the position.
+    if (dist > size) {
+        dist = size;
+        pos = u.findCoord(nipple.position, dist, angle);
+    }
+
+    nipple.frontPosition = {
+        x: pos.x - nipple.position.x,
+        y: pos.y - nipple.position.y
+    };
+
+    if (!opts.dataOnly) {
+        u.applyPosition(nipple.ui.front, nipple.frontPosition);
+    }
+
+    // Prepare event's datas.
+    var toSend = {
+        identifier: nipple.identifier,
+        position: pos,
+        force: force,
+        pressure: evt.force || evt.pressure || evt.webkitForce || 0,
+        distance: dist,
+        angle: {
+            radian: rAngle,
+            degree: angle
+        },
+        instance: nipple
+    };
+
+    // Compute the direction's datas.
+    toSend = nipple.computeDirection(toSend);
+
+    // Offset angles to follow units circle.
+    toSend.angle = {
+        radian: u.radians(180 - angle),
+        degree: 180 - angle
+    };
+
+    // Send everything to everyone.
+    nipple.trigger('move', toSend);
+    self.trigger('move ' + nipple.id + ':move', toSend);
+};
+
+Collection.prototype.processOnEnd = function (evt) {
+    var self = this;
+    var opts = self.options;
+    var identifier = self.manager.getIdentifier(evt);
+    var nipple = self.nipples.get(identifier);
+    var removedIdentifier = self.manager.removeIdentifier(nipple.identifier);
+
+    if (!nipple) {
+        return;
+    }
+
+    if (!opts.dataOnly) {
+        nipple.hide(function () {
+            if (opts.mode === 'dynamic') {
+                nipple.trigger('removed', nipple);
+                self.trigger('removed ' + nipple.id + ':removed', nipple);
+                self.manager
+                    .trigger('removed ' + nipple.id + ':removed', nipple);
+                nipple.destroy();
+            }
+        });
+    }
+
+    // Clear the pressure interval reader
+    clearInterval(self.pressureIntervals[nipple.identifier]);
+
+    // Reset the direciton of the nipple, to be able to trigger a new direction
+    // on start.
+    nipple.resetDirection();
+
+    nipple.trigger('end', nipple);
+    self.trigger('end ' + nipple.id + ':end', nipple);
+
+    // Remove identifier from our bank.
+    if (self.ids.indexOf(nipple.identifier) >= 0) {
+        self.ids.splice(self.ids.indexOf(nipple.identifier), 1);
+    }
+
+    // Clean our actives array.
+    if (self.actives.indexOf(nipple) >= 0) {
+        self.actives.splice(self.actives.indexOf(nipple), 1);
+    }
+
+    if (/(semi|static)/.test(opts.mode)) {
+        // Transfer nipple from actives to idles
+        // if we're in semi or static mode.
+        self.idles.push(nipple);
+    } else if (self.nipples.indexOf(nipple) >= 0) {
+        // Only if we're not in semi or static mode
+        // we can remove the instance.
+        self.nipples.splice(self.nipples.indexOf(nipple), 1);
+    }
+
+    // We unbind move and end.
+    self.manager.unbindDocument();
+
+    // We add back the identifier of the idle nipple;
+    if (/(semi|static)/.test(opts.mode)) {
+        self.manager.ids[removedIdentifier.id] = removedIdentifier.identifier;
+    }
+};
+
+// Remove destroyed nipple from the lists
+Collection.prototype.onDestroyed = function(evt, nipple) {
+    var self = this;
+    if (self.nipples.indexOf(nipple) >= 0) {
+        self.nipples.splice(self.nipples.indexOf(nipple), 1);
+    }
+    if (self.actives.indexOf(nipple) >= 0) {
+        self.actives.splice(self.actives.indexOf(nipple), 1);
+    }
+    if (self.idles.indexOf(nipple) >= 0) {
+        self.idles.splice(self.idles.indexOf(nipple), 1);
+    }
+    if (self.ids.indexOf(nipple.identifier) >= 0) {
+        self.ids.splice(self.ids.indexOf(nipple.identifier), 1);
+    }
+
+    // Remove the identifier from our bank
+    self.manager.removeIdentifier(nipple.identifier);
+
+    // We unbind move and end.
+    self.manager.unbindDocument();
+};
+
+// Cleanly destroy the manager
+Collection.prototype.destroy = function () {
+    var self = this;
+    self.unbindEvt(self.options.zone, 'start');
+
+    // Destroy nipples.
+    self.nipples.forEach(function(nipple) {
+        nipple.destroy();
+    });
+
+    // Clean 3DTouch intervals.
+    for (var i in self.pressureIntervals) {
+        if (self.pressureIntervals.hasOwnProperty(i)) {
+            clearInterval(self.pressureIntervals[i]);
+        }
+    }
+
+    // Notify the manager passing the instance
+    self.trigger('destroyed', self.nipples);
+    // We unbind move and end.
+    self.manager.unbindDocument();
+    // Unbind everything.
+    self.off();
+};
+/* global u, Super, Collection */
+
+///////////////////////
+///     MANAGER     ///
+///////////////////////
+
+function Manager (options) {
+    var self = this;
+    self.ids = {};
+    self.index = 0;
+    self.collections = [];
+
+    self.config(options);
+    self.prepareCollections();
+
+    // Listen for resize, to reposition every joysticks
+    var resizeTimer;
+    u.bindEvt(window, 'resize', function (evt) {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+            var pos;
+            var scroll = u.getScroll();
+            self.collections.forEach(function (collection) {
+                collection.forEach(function (nipple) {
+                    pos = nipple.el.getBoundingClientRect();
+                    nipple.position = {
+                        x: scroll.x + pos.left,
+                        y: scroll.y + pos.top
+                    };
+                });
+            });
+        }, 100);
+    });
+
+    return self.collections;
+};
+
+Manager.prototype = new Super();
+Manager.constructor = Manager;
+
+Manager.prototype.prepareCollections = function () {
+    var self = this;
+    // Public API Preparation.
+    self.collections.create = self.create.bind(self);
+    // Listen to anything
+    self.collections.on = self.on.bind(self);
+    // Unbind general events
+    self.collections.off = self.off.bind(self);
+    // Destroy everything
+    self.collections.destroy = self.destroy.bind(self);
+    // Get any nipple
+    self.collections.get = function (id) {
+        var nipple;
+        self.collections.every(function (collection) {
+            if (nipple = collection.get(id)) {
+                return false;
+            }
+            return true;
+        });
+        return nipple;
+    };
+};
+
+Manager.prototype.create = function (options) {
+    return this.createCollection(options);
+};
+
+// Collection Factory
+Manager.prototype.createCollection = function (options) {
+    var self = this;
+    var collection = new Collection(self, options);
+
+    self.bindCollection(collection);
+    self.collections.push(collection);
+
+    return collection;
+};
+
+Manager.prototype.bindCollection = function (collection) {
+    var self = this;
+    var type;
+    // Bubble up identified events.
+    var handler = function (evt, data) {
+        // Identify the event type with the nipple's identifier.
+        type = evt.type + ' ' + data.id + ':' + evt.type;
+        self.trigger(type, data);
+    };
+
+    // When it gets destroyed we clean.
+    collection.on('destroyed', self.onDestroyed.bind(self));
+
+    // Other events that will get bubbled up.
+    collection.on('shown hidden rested dir plain', handler);
+    collection.on('dir:up dir:right dir:down dir:left', handler);
+    collection.on('plain:up plain:right plain:down plain:left', handler);
+};
+
+Manager.prototype.bindDocument = function () {
+    var self = this;
+    // Bind only if not already binded
+    if (!self.binded) {
+        self.bindEvt(document, 'move')
+            .bindEvt(document, 'end');
+        self.binded = true;
+    }
+};
+
+Manager.prototype.unbindDocument = function (force) {
+    var self = this;
+    // If there are no touch left
+    // unbind the document.
+    if (!Object.keys(self.ids).length || force === true) {
+        self.unbindEvt(document, 'move')
+            .unbindEvt(document, 'end');
+        self.binded = false;
+    }
+};
+
+Manager.prototype.getIdentifier = function (evt) {
+    var id;
+    // If no event, simple increment
+    if (!evt) {
+        id = this.index;
+    } else {
+        // Extract identifier from event object.
+        // Unavailable in mouse events so replaced by latest increment.
+        id = evt.identifier === undefined ? evt.pointerId : evt.identifier;
+        if (id === undefined) {
+            id = this.latest || 0;
+        }
+    }
+
+    if (this.ids[id] === undefined) {
+        this.ids[id] = this.index;
+        this.index += 1;
+    }
+
+    // Keep the latest id used in case we're using an unidentified mouseEvent
+    this.latest = id;
+    return this.ids[id];
+};
+
+Manager.prototype.removeIdentifier = function (identifier) {
+    var removed = {};
+    for (var id in this.ids) {
+        if (this.ids[id] === identifier) {
+            removed.id = id;
+            removed.identifier = this.ids[id];
+            delete this.ids[id];
+            break;
+        }
+    }
+    return removed;
+};
+
+Manager.prototype.onmove = function (evt) {
+    var self = this;
+    self.onAny('move', evt);
+    return false;
+};
+
+Manager.prototype.onend = function (evt) {
+    var self = this;
+    self.onAny('end', evt);
+    return false;
+};
+
+Manager.prototype.onAny = function (which, evt) {
+    var self = this;
+    var id;
+    var processFn = 'processOn' + which.charAt(0).toUpperCase() +
+        which.slice(1);
+    evt = u.prepareEvent(evt);
+    var processColl = function (e, id, coll) {
+        if (coll.ids.indexOf(id) >= 0) {
+            coll[processFn](e);
+            // Mark the event to avoid cleaning it later.
+            e._found_ = true;
+        }
+    };
+    var processEvt = function (e) {
+        id = self.getIdentifier(e);
+        u.map(self.collections, processColl.bind(null, e, id));
+        // If the event isn't handled by any collection,
+        // we need to clean its identifier.
+        if (!e._found_) {
+            self.removeIdentifier(id);
+        }
+    };
+
+    u.map(evt, processEvt);
+
+    return false;
+};
+
+// Cleanly destroy the manager
+Manager.prototype.destroy = function () {
+    var self = this;
+    self.unbindDocument(true);
+    self.ids = {};
+    self.index = 0;
+    self.collections.forEach(function(collection) {
+        collection.destroy();
+    });
+    self.off();
+};
+
+// When a collection gets destroyed
+// we clean behind.
+Manager.prototype.onDestroyed = function (evt, coll) {
+    var self = this;
+    if (self.collections.indexOf(coll) < 0) {
+        return false;
+    }
+    self.collections.splice(self.collections.indexOf(coll), 1);
+};
+var factory = new Manager();
+return {
+    create: function (options) {
+        return factory.create(options);
+    },
+    factory: factory
+};
+
+});
+
 
 /***/ }),
 /* 215 */
-/***/ (function(module, exports) {
-
-/* (ignored) */
-
-/***/ }),
-/* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -30191,20 +31342,284 @@ return Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 217 */,
-/* 218 */
+/* 216 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _index = __webpack_require__(75);
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _extends = Object.assign || function (target) {
+	for (var i = 1; i < arguments.length; i++) {
+		var source = arguments[i];for (var key in source) {
+			if (Object.prototype.hasOwnProperty.call(source, key)) {
+				target[key] = source[key];
+			}
+		}
+	}return target;
+};
+
+var _createClass = function () {
+	function defineProperties(target, props) {
+		for (var i = 0; i < props.length; i++) {
+			var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+		}
+	}return function (Constructor, protoProps, staticProps) {
+		if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	};
+}();
+
+var _socket = __webpack_require__(198);
+
+var _socket2 = _interopRequireDefault(_socket);
+
+var _socket3 = __webpack_require__(36);
+
+var _socket4 = _interopRequireDefault(_socket3);
+
+var _settings = __webpack_require__(76);
+
+var _settings2 = _interopRequireDefault(_settings);
+
+var _eventEmitter = __webpack_require__(71);
+
+var _eventEmitter2 = _interopRequireDefault(_eventEmitter);
+
+var _room = __webpack_require__(75);
+
+var _room2 = _interopRequireDefault(_room);
+
+var _merge2 = __webpack_require__(72);
+
+var _merge3 = _interopRequireDefault(_merge2);
+
+function _interopRequireDefault(obj) {
+	return obj && obj.__esModule ? obj : { default: obj };
+}
+
+function _classCallCheck(instance, Constructor) {
+	if (!(instance instanceof Constructor)) {
+		throw new TypeError("Cannot call a class as a function");
+	}
+}
+
+var Client = function () {
+	function Client() {
+		var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+		var settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+		_classCallCheck(this, Client);
+
+		this.data = {};
+		this._socket = null;
+		this._id = null;
+		this._joinedRooms = {};
+		this._availableRooms = {};
+		this._announced = false;
+		this.log = {
+			success: function success(message) {
+				console.log('%c Remote stack client : ' + message, 'color: green');
+			},
+			error: function error(message) {
+				console.log('%c Remote stack client : ' + message, 'color: red');
+			}
+		};
+
+		// save the user data
+		this.data = data;
+
+		// extend settings
+		this._settings = _extends({}, _settings2.default, settings);
+	}
+
+	_createClass(Client, [{
+		key: 'announce',
+		value: function announce() {
+			var _this = this;
+
+			return new Promise(function (resolve) {
+				_this._socket = (0, _socket4.default)(_this._settings.host + _this._settings.port ? ':' + _this._settings.port : '');
+				// this._socket = new __socketIoP2p(this._socket, {
+				// 	autoUpgrade : false,
+				// 	peerOpts: {
+				// 		numClients: 300000
+				// 	}
+				// });
+				_this._socket.on('connect', function () {
+					// save the client id
+					_this._id = _this._socket.id;
+
+					// announce the client
+					_this._socket.emit('announce', _this.data);
+				});
+				_this._socket.on('announced', function (data) {
+					// update client state
+					_this._announced = true;
+					// the client has been annouced correctly
+					resolve(_this);
+					// emit an event
+					_this.emit('announced', _this);
+					// log
+					_this.log.success('Successfuly announced');
+				});
+				// listen for rooms
+				_this._socket.on('available-rooms', function (rooms) {
+
+					// remove the rooms that have dissapeard
+					Object.keys(_this._availableRooms).forEach(function (roomId) {
+						if (!rooms[roomId]) {
+							_this._availableRooms[roomId] && _this._availableRooms[roomId].destroy();
+							delete _this._availableRooms[roomId];
+						}
+					});
+
+					// save the rooms
+					Object.keys(rooms).forEach(function (roomId) {
+						if (_this._availableRooms[roomId]) {
+							_this._availableRooms[roomId].updateData(rooms[roomId]);
+						} else {
+							_this._availableRooms[roomId] = new _room2.default(rooms[roomId], _this._socket);
+
+							// listen when the room has been left
+							_this._availableRooms[roomId].on('left', function (roomId) {
+								// this._socket.usePeerConnection = false;
+								// this._socket.useSockets = true;
+								delete _this._joinedRooms[roomId];
+								_this.emit('left', roomId);
+							});
+							_this._availableRooms[roomId].on('joined', function (roomId) {
+								_this._joinedRooms[roomId] = _this._availableRooms[roomId];
+								_this.emit('joined', roomId);
+							});
+						}
+					});
+
+					// emit new rooms
+					_this.emit('available-rooms', _this._availableRooms);
+				});
+			});
+		}
+	}, {
+		key: 'join',
+		value: function join(roomId) {
+			// join a room
+			if (this._joinedRooms[roomId]) {
+				reject('You cannot join the room "' + roomId + '" cause this client has already joined it...');
+				return;
+			}
+
+			// if not annouced
+			if (!this.isAnnounced()) {
+				reject('You need to announce the client first with the "Client.announce" method...');
+				return;
+			}
+			// join the room
+			return this._availableRooms[roomId].join();
+		}
+	}, {
+		key: 'leave',
+		value: function leave(roomId) {
+			// left the room
+			return this._joinedRooms[roomId].leave();
+		}
+
+		/**
+   * All the rooms in which the client is in
+   * @type 		{Object<Room>}
+   */
+
+	}, {
+		key: 'isAnnounced',
+		value: function isAnnounced() {
+			return this._announced;
+		}
+	}, {
+		key: 'joinedRooms',
+		get: function get() {
+			return this._joinedRooms;
+		}
+	}]);
+
+	return Client;
+}();
+
+// make the room class an emitter capable object
+
+
+(0, _eventEmitter2.default)(Client.prototype);
+
+exports.default = Client;
+
+/***/ }),
+/* 217 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process, module) {/* 
+(The MIT License)
+Copyright (c) 2014 Halász Ádám <mail@adamhalasz.com>
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+//  Unique Hexatridecimal ID Generator
+// ================================================
+
+//  Dependencies
+// ================================================
+var pid = process && process.pid ? process.pid.toString(36) : '' ;
+var mac =  false ? require('macaddress').one(macHandler) : null ;
+var address = mac ? parseInt(mac.replace(/\:|\D+/gi, '')).toString(36) : '' ;
+
+//  Exports
+// ================================================
+module.exports         = function(prefix){ return (prefix || '') + address + pid + now().toString(36); }
+module.exports.process = function(prefix){ return (prefix || '')           + pid + now().toString(36); }
+module.exports.time    = function(prefix){ return (prefix || '')                 + now().toString(36); }
+
+//  Helpers
+// ================================================
+function now(){
+    var time = Date.now();
+    var last = now.last || time;
+    return now.last = time > last ? time : last + 1;
+}
+
+function macHandler(error){
+    if(module.parent && module.parent.uniqid_debug){
+        if(error) console.error('Info: No mac address - uniqid() falls back to uniqid.process().', error)
+        if(pid == '') console.error('Info: No process.pid - uniqid.process() falls back to uniqid.time().')
+    }
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(11)(module)))
+
+/***/ }),
+/* 218 */,
+/* 219 */,
+/* 220 */,
+/* 221 */,
+/* 222 */,
+/* 223 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _index = __webpack_require__(213);
 
 var _index2 = _interopRequireDefault(_index);
 
-var _vue = __webpack_require__(216);
+var _vue = __webpack_require__(215);
 
 var _vue2 = _interopRequireDefault(_vue);
+
+var _nipplejs = __webpack_require__(214);
+
+var _nipplejs2 = _interopRequireDefault(_nipplejs);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -30216,6 +31631,7 @@ var app = new _vue2.default({
 	el: '#testsApp',
 	delimiters: ["<%", "%>"],
 	data: {
+		color: '#ff0000',
 		client: {},
 		toPeer: null,
 		username: '',
@@ -30223,17 +31639,67 @@ var app = new _vue2.default({
 	},
 	methods: {
 		join: function join(room) {
+			var _this2 = this;
 
 			console.log('join room', room);
 
 			client.join(room.id).then(function (room) {
-				console.log('joinded the room', room);
+				console.log('joinded the room', room.id);
+
+				var joystickElm = document.querySelector('.joystick[for="' + room.id + '"]');
+
+				var joystickManager = _nipplejs2.default.create({
+					zone: joystickElm,
+					color: 'blue'
+				});
+
+				var start = {
+					x: 0,
+					y: 0
+				};
+
+				var sendPositionInterval = null;
+				var joystick = null;
+
+				joystickManager.on('start', function (e, data) {
+
+					joystick = data;
+
+					// console.log('start', e, data);
+					// start.x = data.position.x;
+					// start.y = data.position.y;
+
+
+					sendPositionInterval = setInterval(function () {
+						// console.log(joystick.get(joystick.id));
+						_this2.availableRooms[room.id].sendToApp({
+							type: 'move',
+							x: joystick.frontPosition.x,
+							y: joystick.frontPosition.y
+						});
+					}, 1000 / 60);
+				});
+				joystickManager.on('end', function (e, data) {
+					clearInterval(sendPositionInterval);
+				});
+				// 		joystick.on('move', (e, data) => {
+
+				// 			this.availableRooms[room.id].sendToApp({
+				// 				type : 'move',
+				// 				angle : data.angle.degree,
+				// 				distance : data.distance,
+				// 				x : data.position.x - start.x,
+				// 				y : data.position.y - start.y
+				// 			});
+
+				// // 			console.log('move', e, data);
+				// 		});
 			});
 		},
 		click: function click(room, client) {
 			console.log('clicked on', room, client);
 
-			room.say({
+			room.sendToClients({
 				message: 'user ' + client.username + ' has clicked on the user ' + client.id + ' in the room ' + room.id
 			});
 		},
@@ -30242,13 +31708,18 @@ var app = new _vue2.default({
 			console.log('leave room', room);
 
 			room.leave().then(function (room) {
-				console.log('leaved the room', room);
+				console.log('leaved the room', room.id);
 			});
 		},
 		hi: function hi(room) {
 
-			room.say({
+			room.sendToClients({
 				message: 'hello world'
+			});
+		},
+		hiApp: function hiApp(room) {
+			room.sendToApp({
+				message: 'hello app'
 			});
 		},
 		announce: function announce(e) {
@@ -30258,7 +31729,8 @@ var app = new _vue2.default({
 			if (!this.username) return;
 			// create new client and announce it
 			client = new _index2.default.Client({
-				username: this.username
+				username: this.username,
+				color: this.color
 			});
 
 			// listen for rooms

@@ -1,5 +1,11 @@
 .tests {
 	background: darken(white, 5%);
+
+	.joystick {
+		width: 100%; height: 400px;
+		background:darken(white, 5%);
+		position:relative;
+	}
 }
 
 .tests__room {

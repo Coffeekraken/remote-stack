@@ -1,53 +1,138 @@
-import __socketIo from 'socket.io-client'
-
 import __remoteStack from '../../../api/client/index';
+import __Vue from 'vue/dist/vue';
 
-const client = new __remoteStack.Client({
-	username : 'Olivier Bossel'
-});
-client.announce().then(() => {
+import nipplejs from 'nipplejs';
 
-	console.log('client has been announced', client);
+__Vue.config.delimiters = ['<%', '%>']
 
-	// join a room
-	client.join('tv').then((room) => {
-		console.log('joinded the tv room', room);
-	});
+let client;
+let joystickManager;
 
-});
+var app = new __Vue({
+	el: '#testsApp',
+	delimiters: ["<%","%>"],
+	data: {
+		color : '#ff0000',
+		client : {},
+		toPeer : null,
+		username : '',
+		availableRooms : []
+	},
+	methods : {
+		join : function(room) {
 
-window.joinRoom = function(roomId) {
-	// join a room
-	client.join(roomId).then((room) => {
-		console.log('joinded the room', room);
-	});
-}
+			console.log('join room', room);
 
-window.leaveRoom = function(roomId) {
-	// join a room
-	client.leave(roomId).then((room) => {
-		console.log('left the room', room);
-	});
-}
+			client.join(room.id).then((room) => {
+				console.log('joinded the room', room.id);
 
-// const room = new __remoteStack.Room('tv');
-// room.join();
-
-// room.on('queued', (data) => {
-// 	console.log('queued', data);
-// });
+				const joystickElm = document.querySelector(`.joystick[for="${room.id}"]`);
 
 
-// const socket = __socketIo('http://localhost:8181');
-// socket.on('connect', function(){
-// 	console.log('connected');
+				joystickManager = nipplejs.create({
+					zone: joystickElm,
+					color: 'blue'
+				});
 
-// 	socket.emit('join', {
-// 		session : 12
-// 	});
-// });
+				let start = {
+					x : 0,
+					y : 0
+				};
+
+				let sendPositionInterval = null;
+				let joystick = null
+
+				joystickManager.on('start', (e, data) => {
+
+					joystick = data;
+
+					// console.log('start', e, data);
+					// start.x = data.position.x;
+					// start.y = data.position.y;
 
 
-// socket.on('joined', (data) => {
-// 	console.log('joined', data);
-// });
+					sendPositionInterval = setInterval(() => {
+						// console.log(joystick.get(joystick.id));
+						this.availableRooms[room.id].sendToApp({
+							type : 'move',
+							x : joystick.frontPosition.x,
+							y : joystick.frontPosition.y
+						});
+					}, 1000 / 60);
+
+				});
+				joystickManager.on('end', (e, data) => {
+					clearInterval(sendPositionInterval);
+				});
+		// 		joystick.on('move', (e, data) => {
+
+		// 			this.availableRooms[room.id].sendToApp({
+		// 				type : 'move',
+		// 				angle : data.angle.degree,
+		// 				distance : data.distance,
+		// 				x : data.position.x - start.x,
+		// 				y : data.position.y - start.y
+		// 			});
+
+		// // 			console.log('move', e, data);
+		// 		});
+
+			});
+
+		},
+		click: function(room, client) {
+			console.log('clicked on', room, client);
+
+			room.sendToClients({
+				message : `user ${client.username} has clicked on the user ${client.id} in the room ${room.id}`
+			});
+
+		},
+		leave : function(room) {
+
+			console.log('leave room', room);
+
+			if (joystickManager) {
+				joystickManager.destroy();
+			}
+
+			room.leave().then((room) => {
+				console.log('leaved the room', room.id);
+			});
+
+		},
+		hi : function(room) {
+
+			room.sendToClients({
+				message : 'hello world'
+			});
+
+		},
+		hiApp : function(room) {
+			room.sendToApp({
+				message : 'hello app'
+			});
+		},
+		announce : function(e) {
+			const _this = this;
+
+			e.preventDefault();
+			if ( ! this.username) return;
+			// create new client and announce it
+			client = new __remoteStack.Client({
+				username : this.username,
+				color : this.color
+			});
+
+			// listen for rooms
+			client.on('available-rooms', (rooms) => {
+				_this.availableRooms = rooms;
+			});
+
+			client.announce().then(() => {
+				console.log('client has been announced', client);
+			});
+		}
+	}
+})
+

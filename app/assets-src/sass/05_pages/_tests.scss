@@ -1,0 +1,51 @@
+.tests {
+	background: darken(white, 5%);
+}
+
+.tests__room {
+	padding: 50px;
+	background: white;
+	margin: 20px;
+
+	.h2 {
+		display:block;
+		margin-bottom:20px;
+		font-size: 30px;
+	}
+
+	button {
+		background: s-color(primary);
+		border:none;
+		padding: 5px 10px;
+		color: white;
+		outline:none;
+
+		&:hover {
+			background-color: s-color(primary, -darken 10%);
+		}
+	}
+}
+.tests__room-clients {
+	margin:0 -10px;
+}
+
+.tests__room-client {
+	display:inline-block;
+	width:50px; height:50px;
+	border-radius:50%;
+	background:red;
+	margin: 0 10px;
+	text-align: center;
+	line-height: 50px;
+	font-size: 20px;
+	color: white;
+	text-transform: uppercase;
+	font-weight: bold;
+
+	@for $i from 0 through 10 {
+		&:nth-child(#{$i}) {
+			background-color: adjust-hue(red, (360 / 10 * $i));
+		}
+	}
+
+}

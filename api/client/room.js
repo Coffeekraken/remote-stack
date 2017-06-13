@@ -67,41 +67,47 @@ var Room = function () {
 		this._socket.on('left-room-' + data.id, function () {
 			if (!_this.id) return;
 			// resolve the promise
-			_this._leavePromiseResolve();
+			_this._leavePromiseResolve(_this);
 			// let the app know that we have left the room
-			_this.emit('left', _this.id);
+			_this.emit('left', _this);
 		});
 
 		this._socket.on('joined-room-' + data.id, function () {
 			if (!_this.id) return;
 			// resolve the promise
-			_this._joinPromiseResolve();
+			_this._joinPromiseResolve(_this);
 			// let the app know that we have left the room
-			_this.emit('joined', _this.id);
+			_this.emit('joined', _this);
 		});
 	}
 
 	_createClass(Room, [{
-		key: 'say',
-		value: function say(something) {
+		key: 'sendToClients',
+		value: function sendToClients(something) {
 			if (!this.hasJoined()) {
-				throw 'You cannot say something in the room "' + this.id + '" cause you don\'t has joined it yet...';
+				throw 'You cannot send something to client in the room "' + this.id + '" cause you don\'t has joined it yet...';
 				return;
 			}
 
 			if ((typeof something === 'undefined' ? 'undefined' : _typeof(something)) === 'object') {
-				// something.toPeers = Object.keys(this.clients);
-				// const myIdIdx = something.toPeers.indexOf(this._socket.id || this._socket.socket.id);
-				// console.log('myIdIdx', myIdIdx);
-				// if (myIdIdx !== -1) {
-				// 	something.toPeers.splice(myIdIdx, 1);
-				// }
-				// console.log('send to', something.toPeers);
-				// something._uniqid = __uniqid();
 				something._roomId = this.id;
 			}
 
-			this._socket.emit('say', something);
+			this._socket.emit('send-to-clients', something);
+		}
+	}, {
+		key: 'sendToApp',
+		value: function sendToApp(something) {
+			if (!this.hasJoined()) {
+				throw 'You cannot send something to app in the room "' + this.id + '" cause you don\'t has joined it yet...';
+				return;
+			}
+
+			if ((typeof something === 'undefined' ? 'undefined' : _typeof(something)) === 'object') {
+				something._roomId = this.id;
+			}
+
+			this._socket.emit('send-to-app', something);
 		}
 
 		/**
@@ -127,7 +133,7 @@ var Room = function () {
 				// this._socket.useSockets = true;
 				// this._socket.usePeerConnection = false;
 
-				_this2._socket.off('say');
+				_this2._socket.off('receive-from-client');
 
 				_this2._socket.emit('leave', _this2.id);
 			});
@@ -148,17 +154,8 @@ var Room = function () {
 				_this3._joinPromiseReject = reject;
 				_this3._joinPromiseResolve = resolve;
 
-				_this3._socket.on('say', function (something) {
-
-					console.error('receive', something);
-
-					// if (something._roomId !== this.id) return;
-					// if (something._uniqid && this._processedMsg[something._uniqid]) return;
-					// this._processedMsg[something._uniqid] = true;
-
-					console.log(_this3);
-
-					console.warn('someone say', something);
+				_this3._socket.on('receive-from-client', function (something) {
+					console.error('receive from client', something);
 				});
 
 				_this3._socket.emit('join', _this3.id);
