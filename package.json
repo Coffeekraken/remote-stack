@@ -61,7 +61,8 @@
     "coffeekraken-testing-stack": "0.0.2",
     "node-sass": "^4.5.3",
     "simple-ajax": "^2.6.0",
-    "webpack": "^2.6.1"
+    "webpack": "^2.6.1",
+    "websocket-bench": "^0.2.0"
   },
   "dependencies": {
     "body-parser": "^1.15.2",

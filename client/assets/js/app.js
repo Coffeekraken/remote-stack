@@ -31444,7 +31444,11 @@ var Client = function () {
 			var _this = this;
 
 			return new Promise(function (resolve) {
-				_this._socket = (0, _socket4.default)(_this._settings.host + _this._settings.port ? ':' + _this._settings.port : '');
+				var socketUrl = _this._settings.host;
+				if (_this._settings.port) {
+					socketUrl += ':' + _this._settings.port;
+				}
+				_this._socket = (0, _socket4.default)(socketUrl);
 				// this._socket = new __socketIoP2p(this._socket, {
 				// 	autoUpgrade : false,
 				// 	peerOpts: {
@@ -31594,6 +31598,28 @@ var app = new _vue2.default({
 		availableRooms: []
 	},
 	methods: {
+		announce: function announce(e) {
+			var _this = this;
+
+			e.preventDefault();
+			if (!this.username) return;
+			// create new client and announce it
+			client = new _index2.default.Client({
+				username: this.username,
+				color: this.color
+			}, {
+				host: 'jerome.olivierbossel.com'
+			});
+
+			// listen for rooms
+			client.on('available-rooms', function (rooms) {
+				_this.availableRooms = rooms;
+			});
+
+			client.announce().then(function () {
+				console.log('client has been announced', client);
+			});
+		},
 		join: function join(room) {
 			var _this2 = this;
 
@@ -31680,26 +31706,6 @@ var app = new _vue2.default({
 		hiApp: function hiApp(room) {
 			room.sendToApp({
 				message: 'hello app'
-			});
-		},
-		announce: function announce(e) {
-			var _this = this;
-
-			e.preventDefault();
-			if (!this.username) return;
-			// create new client and announce it
-			client = new _index2.default.Client({
-				username: this.username,
-				color: this.color
-			});
-
-			// listen for rooms
-			client.on('available-rooms', function (rooms) {
-				_this.availableRooms = rooms;
-			});
-
-			client.announce().then(function () {
-				console.log('client has been announced', client);
 			});
 		}
 	}

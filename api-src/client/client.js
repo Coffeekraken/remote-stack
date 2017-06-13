@@ -28,7 +28,11 @@ class Client {
 
 	announce() {
 		return new Promise((resolve) => {
-			this._socket = __socketIo(this._settings.host + (this._settings.port) ? `:${this._settings.port}` : '');
+			let socketUrl = this._settings.host;
+			if (this._settings.port) {
+				socketUrl += `:${this._settings.port}`;
+			}
+			this._socket = __socketIo(socketUrl);
 			// this._socket = new __socketIoP2p(this._socket, {
 			// 	autoUpgrade : false,
 			// 	peerOpts: {

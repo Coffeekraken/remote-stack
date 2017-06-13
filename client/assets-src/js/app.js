@@ -19,6 +19,28 @@ var app = new __Vue({
 		availableRooms : []
 	},
 	methods : {
+		announce : function(e) {
+			const _this = this;
+
+			e.preventDefault();
+			if ( ! this.username) return;
+			// create new client and announce it
+			client = new __remoteStack.Client({
+				username : this.username,
+				color : this.color
+			}, {
+				host : 'jerome.olivierbossel.com'
+			});
+
+			// listen for rooms
+			client.on('available-rooms', (rooms) => {
+				_this.availableRooms = rooms;
+			});
+
+			client.announce().then(() => {
+				console.log('client has been announced', client);
+			});
+		},
 		join : function(room) {
 
 			console.log('join room', room);
@@ -111,26 +133,6 @@ var app = new __Vue({
 		hiApp : function(room) {
 			room.sendToApp({
 				message : 'hello app'
-			});
-		},
-		announce : function(e) {
-			const _this = this;
-
-			e.preventDefault();
-			if ( ! this.username) return;
-			// create new client and announce it
-			client = new __remoteStack.Client({
-				username : this.username,
-				color : this.color
-			});
-
-			// listen for rooms
-			client.on('available-rooms', (rooms) => {
-				_this.availableRooms = rooms;
-			});
-
-			client.announce().then(() => {
-				console.log('client has been announced', client);
 			});
 		}
 	}

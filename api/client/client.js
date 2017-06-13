@@ -71,7 +71,11 @@ var Client = function () {
 			var _this = this;
 
 			return new Promise(function (resolve) {
-				_this._socket = (0, _socket4.default)(_this._settings.host + _this._settings.port ? ':' + _this._settings.port : '');
+				var socketUrl = _this._settings.host;
+				if (_this._settings.port) {
+					socketUrl += ':' + _this._settings.port;
+				}
+				_this._socket = (0, _socket4.default)(socketUrl);
 				// this._socket = new __socketIoP2p(this._socket, {
 				// 	autoUpgrade : false,
 				// 	peerOpts: {

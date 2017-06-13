@@ -69,7 +69,11 @@ var App = function () {
 			var _this2 = this;
 
 			return new Promise(function (resolve) {
-				_this2._socket = (0, _socket4.default)(_this2._settings.host + _this2._settings.port ? ':' + _this2._settings.port : '');
+				var socketUrl = _this2._settings.host;
+				if (_this2._settings.port) {
+					socketUrl += ':' + _this2._settings.port;
+				}
+				_this2._socket = (0, _socket4.default)(socketUrl);
 				_this2._socket.on('connect', function () {
 					// save the client id
 					_this2._id = _this2._socket.id;
