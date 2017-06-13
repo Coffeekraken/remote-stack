@@ -3,7 +3,7 @@
 	<div v-if="Object.keys(availableRooms).length">
 		<section class="tests__room m-b" v-for="(room, key) in availableRooms">
 			<h1 class="h2">
-				<% room.name %>
+				<% room.name %> (<% room.places %>)
 				<div>
 					<button v-on:click="join(room)">Join</button>
 					<button v-on:click="leave(room)">Leave</button>
@@ -11,6 +11,9 @@
 					<button v-on:click="hiApp(room)">Say hi to app</button> -->
 				</div>
 			</h1>
+			<p v-if="room.placeInQueue >= 0">
+				It's your turn in <% room.placeInQueue + 1 %>
+			</p>
 
 			<div class="joystick" v-bind:for="key"></div>
 

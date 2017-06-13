@@ -75,15 +75,22 @@ class Client {
 						this._availableRooms[roomId] = new __Room(rooms[roomId], this._socket);
 
 						// listen when the room has been left
-						this._availableRooms[roomId].on('left', (roomId) => {
+						this._availableRooms[roomId].on('left', (room) => {
+							console.log('leeeeeft', room);
 							// this._socket.usePeerConnection = false;
 							// this._socket.useSockets = true;
-							delete this._joinedRooms[roomId];
-							this.emit('left', roomId);
+							delete this._joinedRooms[room.id];
+							this.emit('left', room);
 						});
-						this._availableRooms[roomId].on('joined', (roomId) => {
-							this._joinedRooms[roomId] = this._availableRooms[roomId];
-							this.emit('joined', roomId);
+						this._availableRooms[roomId].on('joined', (room) => {
+							this._joinedRooms[room.id] = this._availableRooms[room.id];
+							this.emit('joined', room);
+						});
+						this._availableRooms[roomId].on('picked', (room) => {
+							this.emit('picked', room);
+						});
+						this._availableRooms[roomId].on('queued', (room) => {
+							this.emit('queued', room);
 						});
 					}
 				});

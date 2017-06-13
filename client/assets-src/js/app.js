@@ -29,12 +29,16 @@ var app = new __Vue({
 				username : this.username,
 				color : this.color
 			}, {
-				host : 'jerome.olivierbossel.com'
+				// host : 'jerome.olivierbossel.com'
 			});
 
 			// listen for rooms
 			client.on('available-rooms', (rooms) => {
 				_this.availableRooms = rooms;
+			});
+
+			client.on('queued', (room) => {
+				console.log('queue', this.username, room);
 			});
 
 			client.announce().then(() => {

@@ -12,6 +12,7 @@ class Room {
 	_clients = {};
 	_activeClients = {};
 	_queue = [];
+	_places = 0;
 
 	_joined = false;
 
@@ -46,6 +47,16 @@ class Room {
 			this._leavePromiseResolve(this);
 			// let the app know that we have left the room
 			this.emit('left', this);
+		});
+
+		this._socket.on(`queued-room-${data.id}`, () => {
+			if ( ! this.id) return;
+			this.emit('queued', this);
+		});
+
+		this._socket.on(`picked-room-${data.id}`, () => {
+			if ( ! this.id) return;
+			this.emit('picked', this);
 		});
 
 		this._socket.on(`joined-room-${data.id}`, () => {
@@ -132,6 +143,7 @@ class Room {
 	}
 
 	destroy() {
+		console.log('destroy room', this);
 		// stop listening for this room datas
 		this._socket.off(`new-room-data.${this.id}`);
 		// remove some datas to clean memory
@@ -148,6 +160,7 @@ class Room {
 		this._clients = data.clients;
 		this._activeClients = data.activeClients;
 		this._queue = data.queue;
+		this._places = data.simultaneous;
 	}
 
 	_onJoined(data = {}) {
@@ -199,11 +212,36 @@ class Room {
 	}
 
 	/**
+	 * Get the queue
+	 * @type 	{Array}
+	 */
+	get queue() {
+		return this._queue;
+	}
+
+	/**
+	 * The places number
+	 * @type 		{Integer}
+	 */
+	get places() {
+		return this._places;
+	}
+
+	/**
+	 * The place in the queue
+	 * @type 		{Integer}
+	 */
+	get placeInQueue() {
+		console.log('placeInQueue', this.queue.indexOf(this._socket.id));
+		return this.queue.indexOf(this._socket.id);
+	}
+
+	/**
 	 * Return if the current client has joined the room or not
 	 * @return  	{Boolean} 		true if the client has joined the room, false if not
 	 */
 	hasJoined() {
-		return this.clients[this._socket.id || this._socket.socket.id] != null;
+		return this.activeClients[this._socket.id || this._socket.socket.id] != null;
 	}
 }
 

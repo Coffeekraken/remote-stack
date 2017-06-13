@@ -20184,7 +20184,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var app = new _index2.default.App({
 	name: 'Ultra cool remotely controlled app'
 }, {
-	host: 'jerome.olivierbossel.com'
+	// host : 'jerome.olivierbossel.com'
 });
 
 var clients = {};

@@ -8,6 +8,6 @@ module.exports = {
 		id : 'tv',
 		name : 'Television',
 		max : 10,
-		simnultaneous : 1
+		simultaneous : 10
 	}]
 }

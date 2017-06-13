@@ -20026,6 +20026,7 @@ var Room = function () {
 		this._clients = {};
 		this._activeClients = {};
 		this._queue = [];
+		this._places = 0;
 		this._joined = false;
 		this._leaveCb = null;
 		this._leavePromiseResolve = null;
@@ -20053,6 +20054,16 @@ var Room = function () {
 			_this._leavePromiseResolve(_this);
 			// let the app know that we have left the room
 			_this.emit('left', _this);
+		});
+
+		this._socket.on('queued-room-' + data.id, function () {
+			if (!_this.id) return;
+			_this.emit('queued', _this);
+		});
+
+		this._socket.on('picked-room-' + data.id, function () {
+			if (!_this.id) return;
+			_this.emit('picked', _this);
 		});
 
 		this._socket.on('joined-room-' + data.id, function () {
@@ -20150,6 +20161,7 @@ var Room = function () {
 	}, {
 		key: 'destroy',
 		value: function destroy() {
+			console.log('destroy room', this);
 			// stop listening for this room datas
 			this._socket.off('new-room-data.' + this.id);
 			// remove some datas to clean memory
@@ -20166,6 +20178,7 @@ var Room = function () {
 			this._clients = data.clients;
 			this._activeClients = data.activeClients;
 			this._queue = data.queue;
+			this._places = data.simultaneous;
 		}
 	}, {
 		key: '_onJoined',
@@ -20206,7 +20219,7 @@ var Room = function () {
    * @return  	{Boolean} 		true if the client has joined the room, false if not
    */
 		value: function hasJoined() {
-			return this.clients[this._socket.id || this._socket.socket.id] != null;
+			return this.activeClients[this._socket.id || this._socket.socket.id] != null;
 		}
 	}, {
 		key: 'id',
@@ -20245,6 +20258,40 @@ var Room = function () {
 		key: 'activeClients',
 		get: function get() {
 			return this._activeClients;
+		}
+
+		/**
+   * Get the queue
+   * @type 	{Array}
+   */
+
+	}, {
+		key: 'queue',
+		get: function get() {
+			return this._queue;
+		}
+
+		/**
+   * The places number
+   * @type 		{Integer}
+   */
+
+	}, {
+		key: 'places',
+		get: function get() {
+			return this._places;
+		}
+
+		/**
+   * The place in the queue
+   * @type 		{Integer}
+   */
+
+	}, {
+		key: 'placeInQueue',
+		get: function get() {
+			console.log('placeInQueue', this.queue.indexOf(this._socket.id));
+			return this.queue.indexOf(this._socket.id);
 		}
 	}]);
 
@@ -31491,15 +31538,22 @@ var Client = function () {
 							_this._availableRooms[roomId] = new _room2.default(rooms[roomId], _this._socket);
 
 							// listen when the room has been left
-							_this._availableRooms[roomId].on('left', function (roomId) {
+							_this._availableRooms[roomId].on('left', function (room) {
+								console.log('leeeeeft', room);
 								// this._socket.usePeerConnection = false;
 								// this._socket.useSockets = true;
-								delete _this._joinedRooms[roomId];
-								_this.emit('left', roomId);
+								delete _this._joinedRooms[room.id];
+								_this.emit('left', room);
 							});
-							_this._availableRooms[roomId].on('joined', function (roomId) {
-								_this._joinedRooms[roomId] = _this._availableRooms[roomId];
-								_this.emit('joined', roomId);
+							_this._availableRooms[roomId].on('joined', function (room) {
+								_this._joinedRooms[room.id] = _this._availableRooms[room.id];
+								_this.emit('joined', room);
+							});
+							_this._availableRooms[roomId].on('picked', function (room) {
+								_this.emit('picked', room);
+							});
+							_this._availableRooms[roomId].on('queued', function (room) {
+								_this.emit('queued', room);
 							});
 						}
 					});
@@ -31599,6 +31653,8 @@ var app = new _vue2.default({
 	},
 	methods: {
 		announce: function announce(e) {
+			var _this2 = this;
+
 			var _this = this;
 
 			e.preventDefault();
@@ -31608,7 +31664,7 @@ var app = new _vue2.default({
 				username: this.username,
 				color: this.color
 			}, {
-				host: 'jerome.olivierbossel.com'
+				// host : 'jerome.olivierbossel.com'
 			});
 
 			// listen for rooms
@@ -31616,12 +31672,16 @@ var app = new _vue2.default({
 				_this.availableRooms = rooms;
 			});
 
+			client.on('queued', function (room) {
+				console.log('queue', _this2.username, room);
+			});
+
 			client.announce().then(function () {
 				console.log('client has been announced', client);
 			});
 		},
 		join: function join(room) {
-			var _this2 = this;
+			var _this3 = this;
 
 			console.log('join room', room);
 
@@ -31654,7 +31714,7 @@ var app = new _vue2.default({
 
 					sendPositionInterval = setInterval(function () {
 						// console.log(joystick.get(joystick.id));
-						_this2.availableRooms[room.id].sendToApp({
+						_this3.availableRooms[room.id].sendToApp({
 							type: 'move',
 							x: joystick.frontPosition.x,
 							y: joystick.frontPosition.y

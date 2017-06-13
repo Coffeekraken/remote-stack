@@ -5,7 +5,7 @@ import __remoteStackApp from '../../../api/app/index';
 const app = new __remoteStackApp.App({
 	name : 'Ultra cool remotely controlled app'
 }, {
-	host : 'jerome.olivierbossel.com'
+	// host : 'jerome.olivierbossel.com'
 });
 
 const clients = {};

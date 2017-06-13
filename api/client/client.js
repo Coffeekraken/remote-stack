@@ -118,15 +118,22 @@ var Client = function () {
 							_this._availableRooms[roomId] = new _room2.default(rooms[roomId], _this._socket);
 
 							// listen when the room has been left
-							_this._availableRooms[roomId].on('left', function (roomId) {
+							_this._availableRooms[roomId].on('left', function (room) {
+								console.log('leeeeeft', room);
 								// this._socket.usePeerConnection = false;
 								// this._socket.useSockets = true;
-								delete _this._joinedRooms[roomId];
-								_this.emit('left', roomId);
+								delete _this._joinedRooms[room.id];
+								_this.emit('left', room);
 							});
-							_this._availableRooms[roomId].on('joined', function (roomId) {
-								_this._joinedRooms[roomId] = _this._availableRooms[roomId];
-								_this.emit('joined', roomId);
+							_this._availableRooms[roomId].on('joined', function (room) {
+								_this._joinedRooms[room.id] = _this._availableRooms[room.id];
+								_this.emit('joined', room);
+							});
+							_this._availableRooms[roomId].on('picked', function (room) {
+								_this.emit('picked', room);
+							});
+							_this._availableRooms[roomId].on('queued', function (room) {
+								_this.emit('queued', room);
 							});
 						}
 					});

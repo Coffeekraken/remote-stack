@@ -11,6 +11,8 @@
     "api.client.js": "api-src/client/**/*.js",
     "api.server.js": "api-src/server/**/*.js",
     "api.app.js": "api-src/app/**/*.js",
+    "server.server": "server/server.js",
+    "client.server": "client/client.js",
     "client.js": "client/assets-src/js/**/*.js",
     "client.css": "client/assets-src/sass/**/*.scss",
     "app.server": "app/app.js",
