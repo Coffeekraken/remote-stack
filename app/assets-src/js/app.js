@@ -5,12 +5,13 @@ import __remoteStackApp from '../../../api/app/index';
 const app = new __remoteStackApp.App({
 	name : 'Ultra cool remotely controlled app'
 }, {
+	compression : false
 	// host : 'jerome.olivierbossel.com'
 });
 
 const clients = {};
 
-app.on('new-client', (client) => {
+app.on('client.joined', (client) => {
 	// console.log('new client', client);
 
 	// create new client
@@ -18,7 +19,7 @@ app.on('new-client', (client) => {
 
 });
 
-app.on('client-left', (client) => {
+app.on('client.left', (client) => {
 	if ( ! clients[client.id]) return;
 	clients[client.id].destroy();
 });

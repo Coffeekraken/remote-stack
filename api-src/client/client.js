@@ -33,12 +33,6 @@ class Client {
 				socketUrl += `:${this._settings.port}`;
 			}
 			this._socket = __socketIo(socketUrl);
-			// this._socket = new __socketIoP2p(this._socket, {
-			// 	autoUpgrade : false,
-			// 	peerOpts: {
-			// 		numClients: 300000
-			// 	}
-			// });
 			this._socket.on('connect', () => {
 				// save the client id
 				this._id = this._socket.id;
@@ -72,25 +66,28 @@ class Client {
 					if (this._availableRooms[roomId]) {
 						this._availableRooms[roomId].updateData(rooms[roomId]);
 					} else {
-						this._availableRooms[roomId] = new __Room(rooms[roomId], this._socket);
-
+						this._availableRooms[roomId] = new __Room(rooms[roomId], this._socket, this._settings);
 						// listen when the room has been left
 						this._availableRooms[roomId].on('left', (room) => {
 							console.log('leeeeeft', room);
-							// this._socket.usePeerConnection = false;
-							// this._socket.useSockets = true;
 							delete this._joinedRooms[room.id];
-							this.emit('left', room);
+							this.emit('room.left', room);
 						});
 						this._availableRooms[roomId].on('joined', (room) => {
 							this._joinedRooms[room.id] = this._availableRooms[room.id];
-							this.emit('joined', room);
+							this.emit('room.joined', room);
 						});
 						this._availableRooms[roomId].on('picked', (room) => {
-							this.emit('picked', room);
+							this.emit('room.picked', room);
 						});
 						this._availableRooms[roomId].on('queued', (room) => {
-							this.emit('queued', room);
+							this.emit('room.queued', room);
+						});
+						this._availableRooms[roomId].on('picked-queue-timeout', (room, remainingTime) => {
+							this.emit('room.picked-queue-timeout', room, remainingTime);
+						});
+						this._availableRooms[roomId].on('missed-turn', (room) => {
+							this.emit('room.missed-turn', room);
 						});
 					}
 				});

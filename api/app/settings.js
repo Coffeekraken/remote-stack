@@ -1,10 +1,11 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 exports.default = {
-	host: 'http://localhost',
+	host: document.location.hostname,
 	port: 3030,
-	debug: false
+	debug: false,
+	compression: false
 };

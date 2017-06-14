@@ -1,5 +1,6 @@
 export default {
-	host : 'http://localhost',
+	host : document.location.hostname,
 	port : 3030,
-	debug : false
+	debug : false,
+	compression : false
 }

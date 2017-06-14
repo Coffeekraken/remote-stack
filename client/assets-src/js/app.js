@@ -13,6 +13,8 @@ var app = new __Vue({
 	delimiters: ["<%","%>"],
 	data: {
 		color : '#ff0000',
+		pickedQueueTimeout : 0,
+		missedTurn : false,
 		client : {},
 		toPeer : null,
 		username : '',
@@ -29,6 +31,7 @@ var app = new __Vue({
 				username : this.username,
 				color : this.color
 			}, {
+				compression : false
 				// host : 'jerome.olivierbossel.com'
 			});
 
@@ -37,8 +40,12 @@ var app = new __Vue({
 				_this.availableRooms = rooms;
 			});
 
-			client.on('queued', (room) => {
-				console.log('queue', this.username, room);
+			client.on('room.missed-turn', (room) => {
+				console.log('missed-turn', room);
+				this.missedTurn = true;
+				setTimeout(() => {
+					this.missedTurn = false;
+				}, 3000);
 			});
 
 			client.announce().then(() => {
@@ -52,65 +59,53 @@ var app = new __Vue({
 			client.join(room.id).then((room) => {
 				console.log('joinded the room', room.id);
 
-				const joystickElm = document.querySelector(`.joystick[for="${room.id}"]`);
+				setInterval(() => {
+					console.log('queue clients', room.queuedClients);
+				}, 2000);
+
+				setTimeout(() => {
+					const joystickElm = document.querySelector(`.joystick[for="${room.id}"]`);
 
 
-				joystickManager = nipplejs.create({
-					zone: joystickElm,
-					color: 'blue'
-				});
+					joystickManager = nipplejs.create({
+						zone: joystickElm,
+						fadeTime:0,
+						color: 'blue'
+					});
 
-				let start = {
-					x : 0,
-					y : 0
-				};
+					let start = {
+						x : 0,
+						y : 0
+					};
 
-				let sendPositionInterval = null;
-				let joystick = null
+					let sendPositionInterval = null;
+					let joystick = null
 
-				joystickManager.on('start', (e, data) => {
+					joystickManager.on('start', (e, data) => {
 
-					joystick = data;
+						joystick = data;
 
-					// console.log('start', e, data);
-					// start.x = data.position.x;
-					// start.y = data.position.y;
+						// console.log('start', e, data);
+						// start.x = data.position.x;
+						// start.y = data.position.y;
 
 
-					sendPositionInterval = setInterval(() => {
-						// console.log(joystick.get(joystick.id));
-						this.availableRooms[room.id].sendToApp({
-							type : 'move',
-							x : joystick.frontPosition.x,
-							y : joystick.frontPosition.y
-						});
-					}, 1000 / 60);
+						sendPositionInterval = setInterval(() => {
+							// console.log(joystick.get(joystick.id));
+							this.availableRooms[room.id].sendToApp({
+								type : 'move',
+								x : Math.round(joystick.frontPosition.x),
+								y : Math.round(joystick.frontPosition.y)
+							});
+						}, 1000 / 60);
 
-				});
-				joystickManager.on('end', (e, data) => {
-					clearInterval(sendPositionInterval);
-				});
-		// 		joystick.on('move', (e, data) => {
+					});
+					joystickManager.on('end', (e, data) => {
+						clearInterval(sendPositionInterval);
+					});
 
-		// 			this.availableRooms[room.id].sendToApp({
-		// 				type : 'move',
-		// 				angle : data.angle.degree,
-		// 				distance : data.distance,
-		// 				x : data.position.x - start.x,
-		// 				y : data.position.y - start.y
-		// 			});
+				}, 100);
 
-		// // 			console.log('move', e, data);
-		// 		});
-
-			});
-
-		},
-		click: function(room, client) {
-			console.log('clicked on', room, client);
-
-			room.sendToClients({
-				message : `user ${client.username} has clicked on the user ${client.id} in the room ${room.id}`
 			});
 
 		},
@@ -126,18 +121,6 @@ var app = new __Vue({
 				console.log('leaved the room', room.id);
 			});
 
-		},
-		hi : function(room) {
-
-			room.sendToClients({
-				message : 'hello world'
-			});
-
-		},
-		hiApp : function(room) {
-			room.sendToApp({
-				message : 'hello app'
-			});
 		}
 	}
 })

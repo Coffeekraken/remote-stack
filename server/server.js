@@ -16,6 +16,8 @@ const __server = require("http").createServer();
 const __socketIoP2p = require('socket.io-p2p-server');
 const __socketIoP2pServer = __socketIoP2p.Server;
 
+const __pako = require('pako');
+
 const io = require('socket.io')(__server);
 
 module.exports = function(config) {
@@ -31,11 +33,11 @@ module.exports = function(config) {
 	config.rooms.forEach((room) => {
 		rooms[room.id] = room;
 		room.app = null;
-		room.clientsSessionsDuration = {};
+		// room.clientsSessionsDuration = {};
 		room.clients = {};
 		room.activeClients = {};
 		room.queue = [];
-		room.averageSessionDuration = 0;
+		room.pickedQueue = [];
 		room.queuedClientsEstimations = {};
 	});
 
@@ -46,38 +48,55 @@ module.exports = function(config) {
 
 	// io.use(__socketIoP2pServer);
 
-	function calculateQueuedClientsEstimations(roomId) {
-		const room = rooms[roomId];
-		if ( ! room) return;
-
-		// loop on each estimations
-		let total = 0;
-		let finishedSessionsCount = 0;
-		for (let userId in room.clientsSessionsDuration) {
-			const userSession = room.clientsSessionsDuration[userId];
-			if ( ! userSession) continue;
-			if (userSession.total) {
-				total += userSession.total;
-				finishedSessionsCount++;
-			}
-		}
-
-		// calculate each queued clients waiting time estimation
-		const now = new Date().getTime();
-		const sessionsDurations = [];
-		for (let userId in room.activeClients) {
-			const activeUserSession = room.clientsSessionsDuration[userId];
-			sessionsDurations.push(now - activeUserSession.start);
-		}
-
-		// sort times
-		sessionsDurations.sort();
-
-		console.log(sessionsDurations);
-
-		// set the average session duration
-		room.averageSessionDuration = total / finishedSessionsCount;
+	function broadcastNewRoomData(roomId) {
+		// notify all the room clients of new room data
+		io.emit(`new-room-data.${roomId}`, __pako.deflate(JSON.stringify(rooms[roomId]), { to: 'string' }));
 	}
+
+	// function calculateQueuedClientsEstimations(roomId) {
+	// 	const room = rooms[roomId];
+	// 	if ( ! room) return;
+
+	// 	// loop on each estimations
+	// 	let total = 0;
+	// 	let finishedSessionsCount = 0;
+	// 	for (let userId in room.clientsSessionsDuration) {
+	// 		const userSession = room.clientsSessionsDuration[userId];
+	// 		if ( ! userSession) continue;
+	// 		if (userSession.total) {
+	// 			total += userSession.total;
+	// 			finishedSessionsCount++;
+	// 		}
+	// 	}
+
+	// 	// calculate each queued clients waiting time estimation
+	// 	// const now = new Date().getTime();
+	// 	// const sessionsDurations = [];
+	// 	// for (let userId in room.activeClients) {
+	// 	// 	const activeUserSession = room.clientsSessionsDuration[userId];
+	// 	// 	sessionsDurations.push(now - activeUserSession.start);
+	// 	// }
+
+	// 	const averageSessionDuration = total / finishedSessionsCount;
+
+	// 	// // sort times
+	// 	// sessionsDurations.sort();
+
+	// 	// // calculate next times
+	// 	// let lastActiveClientSessionDuration
+	// 	// room.queue.forEach((queuedUserId, i) => {
+	// 	// 	if (sessionsDurations[i]) {
+	// 	// 		room.queuedClientsEstimations[queuedUserId] = averageSessionDuration - sessionsDurations[i];
+	// 	// 	} else {
+	// 	// 		room.queuedClientsEstimations[queuedUserId] = averageSessionDuration * (i+1);
+	// 	// 	}
+	// 	// });
+
+	// 	console.log('averageSessionDuration', averageSessionDuration);
+
+	// 	// set the average session duration
+	// 	room.averageSessionDuration = averageSessionDuration;
+	// }
 
 	function pickNextClientInRoom(roomId) {
 		const room = rooms[roomId];
@@ -92,12 +111,24 @@ module.exports = function(config) {
 
 		const nextClientSocket = io.sockets.connected[nextClientId];;
 
-		if ( ! nextClientSocket) pickNextClientInRoom(roomId);
+		if ( ! nextClientSocket) {
+			pickNextClientInRoom(roomId);
+			return;
+		}
 
-		// make the user join the room
-		nextClientSocket.join(roomId, (response) => {
-			onJoinedRoom(nextClientSocket, roomId);
-		});
+		room.pickedQueue.push(nextClientId);
+
+		// tell the client that he has bein picked
+		nextClientSocket.emit(`picked-room-${roomId}`, room);
+
+		// // make the user join the room
+		// nextClientSocket.join(roomId, (response) => {
+		// 	onJoinedRoom(nextClientSocket, roomId);
+		// });
+
+		// notify clients of new room data
+		broadcastNewRoomData(roomId);
+
 	}
 
 	function onJoinedRoom(socket, roomId) {
@@ -109,63 +140,114 @@ module.exports = function(config) {
 			room.activeClients[socket.id] = clients[socket.id];
 		}
 
+		// remove the client from the picked queue id needed
+		const pickedQueueClientIdx = room.pickedQueue.indexOf(socket.id);
+		if (pickedQueueClientIdx !== -1) {
+			room.pickedQueue.splice(pickedQueueClientIdx, 1);
+		}
+
 		// stack store the start timestamp of this user in this room
-		room.clientsSessionsDuration[socket.id] = {
-			start : new Date().getTime(),
-			end : new Date().getTime(),
-			total : 0
-		};
+		// room.clientsSessionsDuration[socket.id] = {
+		// 	start : new Date().getTime(),
+		// 	end : new Date().getTime(),
+		// 	total : 0
+		// };
 
 		// notify the app of a new client
-		socket.broadcast.to(rooms[roomId].app).emit('new-client', clients[socket.id]);
+		socket.broadcast.to(rooms[roomId].app).emit('client-joined', clients[socket.id]);
 
 		// calculate times estimations for queued users
-		calculateQueuedClientsEstimations(roomId);
+		// calculateQueuedClientsEstimations(roomId);
 
 		// callback fn
 		socket.emit(`joined-room-${roomId}`, room);
 
-		// notify all the room clients of new room data
-		io.emit(`new-room-data.${roomId}`, rooms[roomId]);
+		// notify clients of new room data
+		broadcastNewRoomData(roomId);
 	}
 
-	function onLeftRoom(socket, roomId) {
+	function removeClientFromRoom(socket, roomId) {
 
 		// remove the client from the actual room object
 		const room = rooms[roomId];
 		if ( ! room) return;
 
-		console.log(`Remote stack server : client "${socket.id}" has left the room "${roomId}"`);
-
 		// stack store the start timestamp of this user in this room
-		const endTime = new Date().getTime();
-		room.clientsSessionsDuration[socket.id].end = endTime;
-		room.clientsSessionsDuration[socket.id].total = endTime - room.clientsSessionsDuration[socket.id].start;
+		// if (room.clientsSessionsDuration[socket.id] && room.clientsSessionsDuration[socket.id].start) {
+		// 	const endTime = new Date().getTime();
+		// 	room.clientsSessionsDuration[socket.id].end = endTime;
+		// 	room.clientsSessionsDuration[socket.id].total = endTime - room.clientsSessionsDuration[socket.id].start;
+		// 	// calculate
+		// 	// calculateQueuedClientsEstimations(roomId);
+		// }
+
+		// keep track if the client was part of the room
+		let wasClientPartOfTheRoom = room.clients[socket.id];
+
+		// keep track if the client was active in the room
+		let wasClientActiveInTheRoom = room.activeClients[socket.id];
 
 		// check if the client was part of the room
+		let needToPickNextClientInQueue = room.activeClients[socket.id] || room.pickedQueue.indexOf(socket.id) !== -1;
+
+		// keep track if need to broadcast new room data
+		let isRoomUpdated = false;
+
+		// remove some client data from the room
+		if (room.clients[socket.id]) {
+			delete room.clients[socket.id];
+			isRoomUpdated = true;
+		}
 		if (room.activeClients[socket.id]) {
+			delete room.activeClients[socket.id];
+			isRoomUpdated = true;
+		}
+		if (room.queuedClientsEstimations[socket.id]) {
+			delete room.queuedClientsEstimations[socket.id];
+			isRoomUpdated = true;
+		}
+
+		// remove the client from the queue if needed
+		const queueIdx = room.queue.indexOf(socket.id);
+		if (queueIdx !== -1) {
+			room.queue.splice(queueIdx, 1);
+			isRoomUpdated = true;
+		}
+
+		// remove the client from the picked queue id needed
+		const pickedQueueClientIdx = room.pickedQueue.indexOf(socket.id);
+		if (pickedQueueClientIdx !== -1) {
+			room.pickedQueue.splice(pickedQueueClientIdx, 1);
+			isRoomUpdated = true;
+		}
+
+		// pick next client in queue if needed
+		if (needToPickNextClientInQueue) {
 			// pick the next client from the queue
 			pickNextClientInRoom(roomId);
 		}
 
-		delete room.clients[socket.id];
-		delete room.activeClients[socket.id];
-		const queueIdx = room.queue.indexOf(socket.id);
-		if (queueIdx !== -1) {
-			room.queue.splice(queueIdx, 1);
+		// notify clients of new room data
+		if (isRoomUpdated) {
+			broadcastNewRoomData(roomId);
 		}
 
-		// calculate times estimations for queued users
-		calculateQueuedClientsEstimations(roomId);
-
-		// notify all the room clients of new room data
-		io.emit(`new-room-data.${roomId}`, rooms[roomId]);
-
 		// callback fn
-		socket.emit(`left-room-${roomId}`, room);
+		if (wasClientPartOfTheRoom) {
+			socket.emit(`left-room-${roomId}`, room);
+		}
 
-		// notify the app of a new client
-		socket.broadcast.to(rooms[roomId].app).emit('client-left', clients[socket.id]);
+		// notify the app that the client has left the room
+		if (wasClientActiveInTheRoom) {
+			socket.broadcast.to(rooms[roomId].app).emit('client-left', clients[socket.id]);
+		}
+	}
+
+	function onLeftRoom(socket, roomId) {
+
+		console.log(`Remote stack server : client "${socket.id}" has left the room "${roomId}"`);
+
+		removeClientFromRoom(socket, roomId);
 
 	}
 
@@ -178,9 +260,46 @@ module.exports = function(config) {
 			console.log(`Remote stack server : The client "${socket.id}" has been disconnected for the following reason :`);
 			console.log(`Remote stack server : --- ${reason}`);
 
-			Object.keys(socket.rooms).forEach((roomId) => {
-				onLeftRoom(socket, roomId);
+			// Object.keys(socket.rooms).forEach((roomId) => {
+			// 	onLeftRoom(socket, roomId);
+			// });
+
+			// delete the clients from all the rooms
+			Object.keys(rooms).forEach((roomId) => {
+
+				removeClientFromRoom(socket, roomId);
+
+				// const room = rooms[roomId];
+				// const queuedClientIdx = room.queue.indexOf(socket.id);
+				// let isRoomUpdated = false;
+				// if (queuedClientIdx !== -1) {
+				// 	room.queue.splice(queuedClientIdx,1);
+				// 	isRoomUpdated = true;
+				// }
+				// if (room.queuedClientsEstimations[socket.id]) {
+				// 	delete room.queuedClientsEstimations[socket.id];
+				// 	isRoomUpdated = true;
+				// }
+				// // remove the client from the picked queue id needed
+				// const pickedQueueClientIdx = room.pickedQueue.indexOf(socket.id);
+				// if (pickedQueueClientIdx !== -1) {
+				// 	room.pickedQueue.splice(pickedQueueClientIdx, 1);
+				// 	isRoomUpdated = true;
+
+				// 	// we need to pick the next client in the room
+				// 	// cause this client has not played
+				// 	pickNextClientInRoom(roomId);
+				// }
+
+				// // notify all the room clients of new room data
+				// if (isRoomUpdated) {
+				// 	io.emit(`new-room-data.${roomId}`, rooms[roomId]);
+				// }
 			});
+
+			// delete the client
+			delete clients[socket.id];
+
 		});
 
 		// announce a client
@@ -246,6 +365,17 @@ module.exports = function(config) {
 		// join a room
 		socket.on('join', function(roomId) {
 
+			// check if the user that ask to join the room is part of the pickedQueue
+			if (rooms[roomId].pickedQueue.indexOf(socket.id) !== -1) {
+				// join the room
+				socket.join(roomId, () => {
+					onJoinedRoom(socket, roomId);
+				});
+
+				// stop here
+				return
+			}
+
 			console.log(`Remote stack server : client "${socket.id}" has asked to join the room "${roomId}"`);
 
 			// check if the room exist
@@ -263,7 +393,7 @@ module.exports = function(config) {
 
 			// check if can join the room now or need to wait for in the queue
 			const simultaneous = rooms[roomId].simultaneous;
-			if (simultaneous && _size(rooms[roomId].activeClients) >= simultaneous) {
+			if (simultaneous && _size(rooms[roomId].activeClients) >= simultaneous || rooms[roomId].pickedQueue.length) {
 
 				// add the user in queue
 				if (room.queue.indexOf(socket.id) !== -1) return;
@@ -277,8 +407,8 @@ module.exports = function(config) {
 				// tell the user that he has been queued
 				socket.emit(`queued-room-${roomId}`, room);
 
-				// notify all the room clients of new room data
-				io.emit(`new-room-data.${roomId}`, rooms[roomId]);
+				// notify clients of new room data
+				broadcastNewRoomData(roomId);
 
 				// stop here
 				return
@@ -290,33 +420,28 @@ module.exports = function(config) {
 			});
 		});
 
-		socket.on('send-to-clients', function(something) {
-			console.log(`Remote stack server : client "${socket.id}" send "${JSON.stringify(something)}" to the room (${something._roomId}) clients`);
+		socket.on('send-to-clients', function(roomId, something) {
+			// console.log(`Remote stack server : client "${socket.id}" send "${JSON.stringify(something)}" to the room (${something._roomId}) clients`);
 			if (something._roomId) {
-				socket.broadcast.to(something._roomId).emit('receive-from-client', something);
-			} else {
-				socket.broadcast.emit('receive-from-client', something);
+				socket.broadcast.to(something._roomId).emit(`receive-from-client-${roomId}`, something);
 			}
 		});
 
-		socket.on('send-to-app', function(something) {
-			console.log(`Remote stack server : client "${socket.id}" send "${JSON.stringify(something)}" to the room (${something._roomId}) app`);
-			if (something._roomId) {
-				socket.broadcast.to(rooms[something._roomId].app).emit('receive-from-client', something, clients[socket.id]);
+		socket.on('send-to-app', function(roomId, something) {
+			// console.log(`Remote stack server : client "${socket.id}" send "${something}" to the room (${roomId}) app`);
+			if (roomId) {
+				socket.broadcast.to(rooms[roomId].app).emit('receive-from-client', something, clients[socket.id]);
 			}
 		});
 
 		// leave a room
 		socket.on('leave', function(roomId) {
-
 			console.log(`Remote stack server : client "${socket.id}" has asked to leave the room "${roomId}"`);
 
 			// check if the room exist
 			if ( ! rooms[roomId]) {
-				socket.emit('rejected', {
-					room : roomId
-				})
-				return
+				console.log(`Remote stack server : the room "${roomId}" does not exist...`);
+				return;
 			}
 
 			// leave the room

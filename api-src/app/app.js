@@ -3,6 +3,7 @@ import __socketIo from 'socket.io-client'
 import __settings from './settings'
 import __eventEmitter from 'event-emitter';
 import _merge from 'lodash/merge';
+import __pako from 'pako';
 
 class App {
 
@@ -49,21 +50,26 @@ class App {
 			// listen for joined room
 			this._socket.on('joined-app', (room) => {
 				this.log.success(`App successfuly added to the "${roomId}" room`);
+				this.emit('joined', this);
 			});
 
 			this._socket.on('receive-from-client', (data, from) => {
+				// decompress data if needed
+				if (this._settings.compression) {
+					data = JSON.parse(__pako.inflate(data, { to: 'string' }));
+				}
 				this.log.success(`receive ${data} from client ${from.id}`);
 				this.emit('receive-from-client', data, from);
 			});
 
-			this._socket.on('new-client', (client) => {
+			this._socket.on('client-joined', (client) => {
 				this.log.success(`new client ${client.id}`);
-				this.emit('new-client', client);
+				this.emit('client.joined', client);
 			});
 
 			this._socket.on('client-left', (client) => {
 				this.log.success(`client ${client.id} has left`);
-				this.emit('client-left', client);
+				this.emit('client.left', client);
 			});
 
 

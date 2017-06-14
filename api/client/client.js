@@ -76,12 +76,6 @@ var Client = function () {
 					socketUrl += ':' + _this._settings.port;
 				}
 				_this._socket = (0, _socket4.default)(socketUrl);
-				// this._socket = new __socketIoP2p(this._socket, {
-				// 	autoUpgrade : false,
-				// 	peerOpts: {
-				// 		numClients: 300000
-				// 	}
-				// });
 				_this._socket.on('connect', function () {
 					// save the client id
 					_this._id = _this._socket.id;
@@ -115,25 +109,28 @@ var Client = function () {
 						if (_this._availableRooms[roomId]) {
 							_this._availableRooms[roomId].updateData(rooms[roomId]);
 						} else {
-							_this._availableRooms[roomId] = new _room2.default(rooms[roomId], _this._socket);
-
+							_this._availableRooms[roomId] = new _room2.default(rooms[roomId], _this._socket, _this._settings);
 							// listen when the room has been left
 							_this._availableRooms[roomId].on('left', function (room) {
 								console.log('leeeeeft', room);
-								// this._socket.usePeerConnection = false;
-								// this._socket.useSockets = true;
 								delete _this._joinedRooms[room.id];
-								_this.emit('left', room);
+								_this.emit('room.left', room);
 							});
 							_this._availableRooms[roomId].on('joined', function (room) {
 								_this._joinedRooms[room.id] = _this._availableRooms[room.id];
-								_this.emit('joined', room);
+								_this.emit('room.joined', room);
 							});
 							_this._availableRooms[roomId].on('picked', function (room) {
-								_this.emit('picked', room);
+								_this.emit('room.picked', room);
 							});
 							_this._availableRooms[roomId].on('queued', function (room) {
-								_this.emit('queued', room);
+								_this.emit('room.queued', room);
+							});
+							_this._availableRooms[roomId].on('picked-queue-timeout', function (room, remainingTime) {
+								_this.emit('room.picked-queue-timeout', room, remainingTime);
+							});
+							_this._availableRooms[roomId].on('missed-turn', function (room) {
+								_this.emit('room.missed-turn', room);
 							});
 						}
 					});

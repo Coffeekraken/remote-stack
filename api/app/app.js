@@ -28,6 +28,10 @@ var _merge2 = require('lodash/merge');
 
 var _merge3 = _interopRequireDefault(_merge2);
 
+var _pako = require('pako');
+
+var _pako2 = _interopRequireDefault(_pako);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -94,21 +98,26 @@ var App = function () {
 				// listen for joined room
 				_this2._socket.on('joined-app', function (room) {
 					_this2.log.success('App successfuly added to the "' + roomId + '" room');
+					_this2.emit('joined', _this2);
 				});
 
 				_this2._socket.on('receive-from-client', function (data, from) {
+					// decompress data if needed
+					if (_this2._settings.compression) {
+						data = JSON.parse(_pako2.default.inflate(data, { to: 'string' }));
+					}
 					_this2.log.success('receive ' + data + ' from client ' + from.id);
 					_this2.emit('receive-from-client', data, from);
 				});
 
-				_this2._socket.on('new-client', function (client) {
+				_this2._socket.on('client-joined', function (client) {
 					_this2.log.success('new client ' + client.id);
-					_this2.emit('new-client', client);
+					_this2.emit('client.joined', client);
 				});
 
 				_this2._socket.on('client-left', function (client) {
 					_this2.log.success('client ' + client.id + ' has left');
-					_this2.emit('client-left', client);
+					_this2.emit('client.left', client);
 				});
 			});
 		}

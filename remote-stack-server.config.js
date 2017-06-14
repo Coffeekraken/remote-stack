@@ -7,7 +7,8 @@ module.exports = {
 	rooms : [{
 		id : 'tv',
 		name : 'Television',
-		max : 10,
-		simultaneous : 10
+		simultaneous : 1,
+		pickedQueueTimeout : 10000,
+		averageSessionDuration : 20000
 	}]
 }
