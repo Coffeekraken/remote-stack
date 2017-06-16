@@ -53,13 +53,13 @@ class App {
 				this.emit('joined', this);
 			});
 
-			this._socket.on('receive-from-client', (data, from) => {
+			this._socket.on('received-from-client', (data, from) => {
 				// decompress data if needed
 				if (this._settings.compression) {
 					data = JSON.parse(__pako.inflate(data, { to: 'string' }));
 				}
-				this.log.success(`receive ${data} from client ${from.id}`);
-				this.emit('receive-from-client', data, from);
+				this.log.success(`received ${data} from client ${from.id}`);
+				this.emit('received-from-client', data, from);
 			});
 
 			this._socket.on('client-joined', (client) => {
@@ -71,13 +71,15 @@ class App {
 				this.log.success(`client ${client.id} has left`);
 				this.emit('client.left', client);
 			});
-
-
 		});
 	}
 
 	isAnnounced() {
 		return this._announced;
+	}
+
+	sendToClients(something, clientIds = null) {
+		this._socket.emit(`app-send-to-clients`, something, clientIds);
 	}
 
 	log = {

@@ -81,12 +81,21 @@ class Room {
 			this.emit('joined', this);
 		});
 
-		this._socket.on(`receive-from-client-${data.id}`, (something) => {
-			// decompress data
-			something = JSON.parse(__pako.inflate(something, { to: 'string' }));
-			console.error('receive from client', something);
+		this._socket.on(`received-from-app-${data.id}`, (something) => {
+			if (this._settings.compression) {
+				something = JSON.parse(__pako.inflate(something, { to: 'string' }));
+			}
+			// let the app know that we have received something from the app
+			this.emit('reveived-from-app', something);
+		});
+
+		this._socket.on(`received-from-client-${data.id}`, (something) => {
+			// decompress data if needed
+			if (this._settings.compression) {
+				something = JSON.parse(__pako.inflate(something, { to: 'string' }));
+			}
 			// let the app know that we have received something from another client
-			this.emit('receive-from-client', something);
+			this.emit('received-from-client', something);
 		});
 
 	}
@@ -158,7 +167,7 @@ class Room {
 
 			this._leavePromiseReject = reject;
 			this._leavePromiseResolve = resolve;
-			this._socket.off('receive-from-client');
+			this._socket.off('received-from-client');
 			this._socket.emit('leave', this.id);
 		});
 	}

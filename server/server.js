@@ -347,6 +347,9 @@ module.exports = function(config) {
 			// add the id to the app
 			data.id = socket.id;
 
+			// save the room in which the app lives
+			data.roomId = roomId;
+
 			// save the new app
 			apps[socket.id] = data;
 
@@ -423,14 +426,38 @@ module.exports = function(config) {
 		socket.on('send-to-clients', function(roomId, something) {
 			// console.log(`Remote stack server : client "${socket.id}" send "${JSON.stringify(something)}" to the room (${something._roomId}) clients`);
 			if (something._roomId) {
-				socket.broadcast.to(something._roomId).emit(`receive-from-client-${roomId}`, something);
+				socket.broadcast.to(something._roomId).emit(`received-from-client-${roomId}`, something);
 			}
 		});
 
 		socket.on('send-to-app', function(roomId, something) {
 			// console.log(`Remote stack server : client "${socket.id}" send "${something}" to the room (${roomId}) app`);
 			if (roomId) {
-				socket.broadcast.to(rooms[roomId].app).emit('receive-from-client', something, clients[socket.id]);
+				socket.broadcast.to(rooms[roomId].app).emit('received-from-client', something, clients[socket.id]);
+			}
+		});
+
+		socket.on('app-send-to-clients', (something, clientIds = null) => {
+
+			// process clientIds if not an array
+			if (clientIds) {
+				clientIds = [].concat(clientIds);
+			}
+
+			// make sure we have the roomId to send to
+			const appData = apps[socket.id];
+			if ( ! appData) return;
+			const toRoomId = appData.roomId;
+			if ( ! toRoomId) return;
+			if (clientIds) {
+				clientIds.forEach((clientId) => {
+					const clientSocket = io.sockets.connected[clientId];
+					if ( ! clientSocket) continue;
+					clientSocket.emit(`received-from-app-${toRoomId}`, something);
+				});
+			} else {
+				// send to all the room clients
+				io.broadcast.to(toRoomId).emit(`received-from-app-${toRoomId}`, something);
 			}
 		});
 
