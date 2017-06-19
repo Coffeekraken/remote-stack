@@ -4,17 +4,11 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _socket = require('socket.io-client');
 
 var _socket2 = _interopRequireDefault(_socket);
-
-var _settings = require('./settings');
-
-var _settings2 = _interopRequireDefault(_settings);
 
 var _uniqid = require('uniqid');
 
@@ -40,12 +34,23 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * @name 		Room
+ * Room class that represent a room getted from the socket.io server
+ * This class is usually instanciated by the Client one
+ *
+ * @author  	Olivier Bossel <olivier.bossel@gmail.com>
+ */
+
 var Room = function () {
-	// _queuedClientsEstimations = {};
+
+	/**
+  * @constructor
+  * @param 	{Object} 		data 		The room data object
+  * @param 	{SocketIo} 		socket 		The socket instance used to communicate with the server
+  */
 	function Room(data, socket) {
 		var _this = this;
-
-		var settings = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
 		_classCallCheck(this, Room);
 
@@ -64,12 +69,8 @@ var Room = function () {
 		this._leavePromiseReject = null;
 		this._joinPromiseResolve = null;
 		this._joinPromiseReject = null;
-		this._settings = {};
 		this._socket = null;
 
-
-		// extend settings
-		this._settings = _extends({}, _settings2.default, settings);
 
 		// save the socket
 		this._socket = socket;
@@ -77,50 +78,59 @@ var Room = function () {
 		this.updateData(data);
 
 		// listen for new room data
-		this._socket.on('new-room-data.' + data.id, function (data) {
+		this._socket.on('room.' + data.id + '.data', function (data) {
 			data = JSON.parse(_pako2.default.inflate(data, { to: 'string' }));
 			// new room data
 			_this.updateData(data);
 		});
 
-		this._socket.on('left-room-' + data.id, function () {
+		this._socket.on('room.' + data.id + '.left', function () {
 			if (!_this.id) return;
 			// resolve the promise
 			_this._leavePromiseResolve(_this);
 			// let the app know that we have left the room
-			_this.emit('left', _this);
+			_this.emit('client.left', _this);
 		});
 
-		this._socket.on('queued-room-' + data.id, function () {
+		this._socket.on('room.' + data.id + '.queued', function () {
 			if (!_this.id) return;
-			_this.emit('queued', _this);
+			_this.emit('client.queued', _this);
 		});
 
-		this._socket.on('picked-room-' + data.id, function () {
+		this._socket.on('room.' + data.id + '.picked', function () {
 			console.log('PICKED', _this);
 			if (!_this.id) return;
-			_this.emit('picked', _this);
+			_this.emit('client.picked', _this);
 
 			// start timer of the picked queue
 			_this._startPickedQueueTimeout();
 		});
 
-		this._socket.on('joined-room-' + data.id, function () {
+		this._socket.on('room.' + data.id + '.joined', function () {
 			if (!_this.id) return;
 			// resolve the promise
 			_this._joinPromiseResolve(_this);
 			// let the app know that we have left the room
-			_this.emit('joined', _this);
+			_this.emit('client.joined', _this);
 		});
 
-		this._socket.on('receive-from-client-' + data.id, function (something) {
-			// decompress data
-			something = JSON.parse(_pako2.default.inflate(something, { to: 'string' }));
-			console.error('receive from client', something);
+		this._socket.on('room.' + data.id + '.app.data', function (something) {
+			// let the app know that we have received something from the app
+			_this.emit('app.data', something);
+		});
+
+		this._socket.on('room.' + this.id + '.client.data', function (something) {
 			// let the app know that we have received something from another client
-			_this.emit('receive-from-client', something);
+			_this.emit('client.data', something);
 		});
 	}
+
+	/**
+  * Start the picked timeout
+  */
+
+	// _queuedClientsEstimations = {};
+
 
 	_createClass(Room, [{
 		key: '_startPickedQueueTimeout',
@@ -147,13 +157,23 @@ var Room = function () {
 					clearInterval(_this2._pickedQueueTimeoutInterval);
 
 					// emit a missed-turn event
-					_this2.emit('missed-turn', _this2);
+					_this2.emit('client.missed-turn', _this2);
 
 					// leave the room unfortunately...
 					_this2.leave();
 				}
 			}, 1000);
 		}
+
+		/**
+   * Send data to the other room clients
+   * @param 	{Object} 		data 		THe data to send
+   * @example 	js
+   * room.sendToClients({
+   * 	something : 'cool'
+   * });
+   */
+
 	}, {
 		key: 'sendToClients',
 		value: function sendToClients(something) {
@@ -162,12 +182,18 @@ var Room = function () {
 				return;
 			}
 
-			if (this._settings.compression) {
-				something = _pako2.default.deflate(JSON.stringify(something), { to: 'string' });
-			}
-
-			this._socket.emit('send-to-clients', this.id, something);
+			this._socket.emit('client.to.clients', this.id, something);
 		}
+
+		/**
+   * Send data to the room application
+   * @param 	{Object} 		data 		THe data to send
+   * @example 	js
+   * room.sendToApp({
+   * 	something : 'cool'
+   * });
+   */
+
 	}, {
 		key: 'sendToApp',
 		value: function sendToApp(something) {
@@ -175,14 +201,16 @@ var Room = function () {
 				throw 'You cannot send something to app in the room "' + this.id + '" cause you don\'t has joined it yet...';
 				return;
 			}
-			if (this._settings.compression) {
-				something = _pako2.default.deflate(JSON.stringify(something), { to: 'string' });
-			}
-			this._socket.emit('send-to-app', this.id, something);
+			this._socket.emit('client.to.app', this.id, something);
 		}
 
 		/**
    * Leave this room
+   * @return 	{Promise} 		A promise resolved when the client has successfuly left the room
+   * @example 	js
+   * room.leave().then(() => {
+   * 	// do something here...
+   * });
    */
 
 	}, {
@@ -200,10 +228,19 @@ var Room = function () {
 
 				_this3._leavePromiseReject = reject;
 				_this3._leavePromiseResolve = resolve;
-				_this3._socket.off('receive-from-client');
-				_this3._socket.emit('leave', _this3.id);
+				_this3._socket.off('client.to.clients');
+				_this3._socket.emit('client.leave', _this3.id);
 			});
 		}
+
+		/**
+   * Ask to join the room
+   * This request can lead to a "client.queued" event if this room is full. You will need to
+   * call this method again when you receive the "client.picked" event
+   *
+  	 * @return  {Promise} 					A promise that will be resolved only if the client is accepted directly in the room
+   */
+
 	}, {
 		key: 'join',
 		value: function join() {
@@ -227,14 +264,25 @@ var Room = function () {
 				_this4._joinPromiseReject = reject;
 				_this4._joinPromiseResolve = resolve;
 
-				_this4._socket.emit('join', _this4.id);
+				_this4._socket.emit('client.join', _this4.id);
 			});
 		}
+
+		/**
+   * Destroy this room instance locally
+   */
+
 	}, {
 		key: 'destroy',
 		value: function destroy() {
 			// stop listening for this room datas
-			this._socket.off('new-room-data.' + this.id);
+			this._socket.off('room.' + this.id + '.data');
+			this._socket.off('room.' + this.id + '.joined');
+			this._socket.off('room.' + this.id + '.left');
+			this._socket.off('room.' + this.id + '.picked');
+			this._socket.off('room.' + this.id + '.queued');
+			this._socket.off('room.' + this.id + '.app.data');
+			this._socket.off('room.' + this.id + '.client.data');
 			// remove some datas to clean memory
 			delete this._name;
 			delete this._id;
@@ -250,6 +298,13 @@ var Room = function () {
 			clearInterval(this._pickedQueueTimeoutInterval);
 			delete this._pickedQueueTimeoutInterval;
 		}
+
+		/**
+   * Update the room data with new ones
+   * @param 	{Object} 		data 		The new room data
+   * @return 	{Room} 						The instance itself to maintain chainability
+   */
+
 	}, {
 		key: 'updateData',
 		value: function updateData(data) {
@@ -265,6 +320,7 @@ var Room = function () {
 			this._queue = data.queue;
 			this._pickedQueue = data.pickedQueue;
 			this._places = data.simultaneous;
+			return this;
 		}
 	}, {
 		key: '_onJoined',
@@ -273,7 +329,7 @@ var Room = function () {
 
 			console.log('joined', data);
 			// emit an event
-			this.emit('joined', data);
+			this.emit('client.joined', data);
 		}
 	}, {
 		key: '_onQueued',
@@ -281,7 +337,7 @@ var Room = function () {
 			var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 			console.log('queued', data);
-			this.emit('queued', data);
+			this.emit('client.queued', data);
 		}
 	}, {
 		key: '_onPicked',
@@ -289,7 +345,7 @@ var Room = function () {
 			var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
 			console.log('picked', data);
-			this.emit('picked', data);
+			this.emit('client.picked', data);
 		}
 
 		/**
@@ -406,7 +462,6 @@ var Room = function () {
 			this.queue.forEach(function (clientId) {
 				queuedClients[clientId] = _this5.clients[clientId];
 			});
-			console.log('queuedClients', queuedClients);
 			return queuedClients;
 		}
 
@@ -416,7 +471,7 @@ var Room = function () {
    */
 
 	}, {
-		key: 'pickedQueueClients',
+		key: 'pickedClients',
 		get: function get() {
 			var _this6 = this;
 
@@ -505,6 +560,26 @@ var Room = function () {
 
 	return Room;
 }();
+
+/**
+ * @name  	on
+ * Listen to a particular event
+ * @param 	{String} 		name 		The event name to listen to
+ * @param 	{Function} 		cb 			The callback function to to call
+ */
+
+/**
+ * @name  	once
+ * Listen to a particular event only once
+ * @param 	{String} 		name 		The event name to listen to
+ * @param 	{Function} 		cb 			The callback function to to call
+ */
+
+/**
+ * @name  	off
+ * Remove a particular event listener
+ * @param 	{String} 		name 		The event name to listen to
+ */
 
 // make the room class an emitter capable object
 

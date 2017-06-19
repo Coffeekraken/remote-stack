@@ -2,13 +2,14 @@
 process.title = 'coffeekraken-remote-stack-app';
 const __clientServer = require(__dirname + '/../app/server');
 const __fs = require('fs');
+const __path = require('path');
 const __merge = require('lodash/merge');
 const app = require('commander');
 
 (function() {
 
 	app
-		.version('0.0.1')
+		.version('1.0.0')
 		.option('-p --port [port]', 'Port on which to start the server', /^\S+$/i)
 		.option('-c --config [config]', 'Configuration file to load', /^\S+$/i)
 		.parse(process.argv);

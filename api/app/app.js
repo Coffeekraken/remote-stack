@@ -36,7 +36,88 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+/**
+ * @name  		App
+ * Application proxy to connect into a room and be remotely controlled from any devices through sockets
+ * @example 		js
+ * import __remoteStack from 'coffeekraken-remote-stack'
+ * const app = new __remoteStack.App({
+ *  	name : 'My cool app'
+ * });
+ * app.announce('my-cool-room').then(() => {
+ *  	// listen for some events, etc...
+ *  	app.on('')
+ * });
+ *
+ * @author 		Olivier Bossel <olivier.bossel@gmail.com>
+ */
+
+/**
+ * @event
+ * @name  app.announced
+ * Notify that the app has been announced inside his room
+ *
+ * @example 	js
+ * myApp.on('app.annouced', () => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name  app.joined
+ * Notify that the app has joined his room
+ *
+ * @example 	js
+ * myApp.on('app.joined', () => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name  client.data
+ * Notify that the app has received some data from a client
+ * @param 	{Object} 	data 		The data sent by the client
+ * @param 	{Object} 	from 		The client object that has sent the data
+ *
+ * @example 	js
+ * myApp.on('client.data', (data, from) => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name  client.joined
+ * Notify that a client has joined the app
+ * @param 	{Object} 	from 		The client object that has sent the data
+ *
+ * @example 	js
+ * myApp.on('client.joined', (client) => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name  client.left
+ * Notify that a client has left the app
+ * @param 	{Object} 	from 		The client object that has sent the data
+ *
+ * @example 	js
+ * myApp.on('client.left', (client) => {
+ * 	// do something here...
+ * });
+ */
+
 var App = function () {
+
+	/**
+  * @constructor
+  * @param  		{Object} 		[data={}] 		The data you want to assign to the app
+  * @param 		{Object} 		[settings={}] 	Configure the app socket through this settings
+  */
 	function App() {
 		var _this = this;
 
@@ -67,6 +148,14 @@ var App = function () {
 		this._settings = _extends({}, _settings2.default, settings);
 	}
 
+	/**
+  * Announce the app in a particular room available on the server side.
+  * One room can contain only one app.
+  * @param 		{String} 		roomId 		The id of the room to join
+  * @return 		{Promise} 					A promise
+  */
+
+
 	_createClass(App, [{
 		key: 'announce',
 		value: function announce(roomId) {
@@ -82,54 +171,94 @@ var App = function () {
 					// save the client id
 					_this2._id = _this2._socket.id;
 					// announce the client
-					_this2._socket.emit('announce-app', _this2.data, roomId);
+					_this2._socket.emit('app.announce', _this2.data, roomId);
 				});
-				_this2._socket.on('announced-app', function (data) {
+				_this2._socket.on('app.announced', function (data) {
 					// update client state
 					_this2._announced = true;
 					// the client has been annouced correctly
 					resolve(_this2);
 					// emit an event
-					_this2.emit('announced', _this2);
+					_this2.emit('app.announced', _this2);
 					// log
 					_this2.log.success('App successfuly announced');
 				});
 
 				// listen for joined room
-				_this2._socket.on('joined-app', function (room) {
+				_this2._socket.on('app.joined', function (room) {
 					_this2.log.success('App successfuly added to the "' + roomId + '" room');
-					_this2.emit('joined', _this2);
+					_this2.emit('app.joined', _this2);
 				});
 
-				_this2._socket.on('receive-from-client', function (data, from) {
+				_this2._socket.on('client.data', function (data, from) {
 					// decompress data if needed
 					if (_this2._settings.compression) {
 						data = JSON.parse(_pako2.default.inflate(data, { to: 'string' }));
 					}
-					_this2.log.success('receive ' + data + ' from client ' + from.id);
-					_this2.emit('receive-from-client', data, from);
+					_this2.log.success('received ' + data + ' from client ' + from.id);
+					_this2.emit('client.data', data, from);
 				});
 
-				_this2._socket.on('client-joined', function (client) {
+				_this2._socket.on('client.joined', function (client) {
 					_this2.log.success('new client ' + client.id);
 					_this2.emit('client.joined', client);
 				});
 
-				_this2._socket.on('client-left', function (client) {
+				_this2._socket.on('client.left', function (client) {
 					_this2.log.success('client ' + client.id + ' has left');
 					_this2.emit('client.left', client);
 				});
 			});
 		}
+
+		/**
+   * Return if the app has been annouced in a room or not
+   * @return 		{Boolean} 			true if announced, false if not
+   */
+
 	}, {
 		key: 'isAnnounced',
 		value: function isAnnounced() {
 			return this._announced;
 		}
+
+		/**
+   * Send something to all or some clients that are connected to this app through a room
+   * @param 		{Object} 		data 		 			The data to send
+   * @param 		{Array|String} 	[clientIds=null] 		The id's of the clients to send the data to
+   */
+
+	}, {
+		key: 'sendToClients',
+		value: function sendToClients(something) {
+			var clientIds = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+			this._socket.emit('app.data', something, clientIds);
+		}
 	}]);
 
 	return App;
 }();
+
+/**
+ * @name  	on
+ * Listen to a particular event
+ * @param 	{String} 		name 		The event name to listen to
+ * @param 	{Function} 		cb 			The callback function to to call
+ */
+
+/**
+ * @name  	once
+ * Listen to a particular event only once
+ * @param 	{String} 		name 		The event name to listen to
+ * @param 	{Function} 		cb 			The callback function to to call
+ */
+
+/**
+ * @name  	off
+ * Remove a particular event listener
+ * @param 	{String} 		name 		The event name to listen to
+ */
 
 // make the room class an emitter capable object
 

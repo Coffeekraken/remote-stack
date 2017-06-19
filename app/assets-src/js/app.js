@@ -1,8 +1,8 @@
 import __socketIo from 'socket.io-client'
 
-import __remoteStackApp from '../../../api/app/index';
+import __remoteStack from '../../../api/index';
 
-const app = new __remoteStackApp.App({
+const app = new __remoteStack.App({
 	name : 'Ultra cool remotely controlled app'
 }, {
 	compression : false
@@ -24,7 +24,7 @@ app.on('client.left', (client) => {
 	clients[client.id].destroy();
 });
 
-app.on('receive-from-client', (data, from) => {
+app.on('client.data', (data, from) => {
 	// console.log('data', data);
 
 	if ( ! clients[from.id]) return;

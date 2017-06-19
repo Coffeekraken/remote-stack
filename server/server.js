@@ -50,7 +50,7 @@ module.exports = function(config) {
 
 	function broadcastNewRoomData(roomId) {
 		// notify all the room clients of new room data
-		io.emit(`new-room-data.${roomId}`, __pako.deflate(JSON.stringify(rooms[roomId]), { to: 'string' }));
+		io.emit(`room.${roomId}.data`, __pako.deflate(JSON.stringify(rooms[roomId]), { to: 'string' }));
 	}
 
 	// function calculateQueuedClientsEstimations(roomId) {
@@ -119,7 +119,7 @@ module.exports = function(config) {
 		room.pickedQueue.push(nextClientId);
 
 		// tell the client that he has bein picked
-		nextClientSocket.emit(`picked-room-${roomId}`, room);
+		nextClientSocket.emit(`room.${roomId}.picked`, room);
 
 		// // make the user join the room
 		// nextClientSocket.join(roomId, (response) => {
@@ -154,13 +154,13 @@ module.exports = function(config) {
 		// };
 
 		// notify the app of a new client
-		socket.broadcast.to(rooms[roomId].app).emit('client-joined', clients[socket.id]);
+		socket.broadcast.to(rooms[roomId].app).emit('client.joined', clients[socket.id]);
 
 		// calculate times estimations for queued users
 		// calculateQueuedClientsEstimations(roomId);
 
 		// callback fn
-		socket.emit(`joined-room-${roomId}`, room);
+		socket.emit(`room.${roomId}.joined`, room);
 
 		// notify clients of new room data
 		broadcastNewRoomData(roomId);
@@ -234,12 +234,12 @@ module.exports = function(config) {
 
 		// callback fn
 		if (wasClientPartOfTheRoom) {
-			socket.emit(`left-room-${roomId}`, room);
+			socket.emit(`room.${roomId}.left`, room);
 		}
 
 		// notify the app that the client has left the room
 		if (wasClientActiveInTheRoom) {
-			socket.broadcast.to(rooms[roomId].app).emit('client-left', clients[socket.id]);
+			socket.broadcast.to(rooms[roomId].app).emit('client.left', clients[socket.id]);
 		}
 	}
 
@@ -303,7 +303,7 @@ module.exports = function(config) {
 		});
 
 		// announce a client
-		socket.on('announce', (data, fn) => {
+		socket.on('client.announce', (data, fn) => {
 			console.log(`Remote stack server : Announce new client "${JSON.stringify(data)}"`);
 
 			// check if not already registered the client
@@ -320,7 +320,7 @@ module.exports = function(config) {
 
 			// client announced
 			fn && fn(data);
-			socket.emit('announced', data);
+			socket.emit('client.announced', data);
 
 			// emit available rooms
 			socket.emit('available-rooms', rooms);
@@ -328,7 +328,7 @@ module.exports = function(config) {
 		});
 
 		// announce an app
-		socket.on('announce-app', (data, roomId) => {
+		socket.on('app.announce', (data, roomId) => {
 			console.log(`Remote stack server : Announce new app "${JSON.stringify(data)}"`);
 
 			// allow only 1 app by room
@@ -358,15 +358,15 @@ module.exports = function(config) {
 
 			// add the app to his room
 			socket.join(roomId, (response) => {
-				socket.emit('joined-app', data);
+				socket.emit('app.joined', data);
 			});
 
 			// client announced
-			socket.emit('announced-app', data);
+			socket.emit('app.announced', data);
 		});
 
 		// join a room
-		socket.on('join', function(roomId) {
+		socket.on('client.join', function(roomId) {
 
 			// check if the user that ask to join the room is part of the pickedQueue
 			if (rooms[roomId].pickedQueue.indexOf(socket.id) !== -1) {
@@ -408,7 +408,7 @@ module.exports = function(config) {
 				console.log(`Remote stack server : client "${socket.id}" has joined the queue of the room "${roomId}"`);
 
 				// tell the user that he has been queued
-				socket.emit(`queued-room-${roomId}`, room);
+				socket.emit(`room.${roomId}.queued`, room);
 
 				// notify clients of new room data
 				broadcastNewRoomData(roomId);
@@ -423,21 +423,21 @@ module.exports = function(config) {
 			});
 		});
 
-		socket.on('send-to-clients', function(roomId, something) {
+		socket.on('client.to.clients', function(roomId, something) {
 			// console.log(`Remote stack server : client "${socket.id}" send "${JSON.stringify(something)}" to the room (${something._roomId}) clients`);
 			if (something._roomId) {
-				socket.broadcast.to(something._roomId).emit(`received-from-client-${roomId}`, something);
+				socket.broadcast.to(something._roomId).emit(`room.${roomId}.client.data`, something);
 			}
 		});
 
-		socket.on('send-to-app', function(roomId, something) {
+		socket.on('client.to.app', function(roomId, something) {
 			// console.log(`Remote stack server : client "${socket.id}" send "${something}" to the room (${roomId}) app`);
 			if (roomId) {
-				socket.broadcast.to(rooms[roomId].app).emit('received-from-client', something, clients[socket.id]);
+				socket.broadcast.to(rooms[roomId].app).emit('client.data', something, clients[socket.id]);
 			}
 		});
 
-		socket.on('app-send-to-clients', (something, clientIds = null) => {
+		socket.on('app.data', (something, clientIds = null) => {
 
 			// process clientIds if not an array
 			if (clientIds) {
@@ -452,17 +452,18 @@ module.exports = function(config) {
 			if (clientIds) {
 				clientIds.forEach((clientId) => {
 					const clientSocket = io.sockets.connected[clientId];
-					if ( ! clientSocket) continue;
-					clientSocket.emit(`received-from-app-${toRoomId}`, something);
+					if (clientSocket) {
+						clientSocket.emit(`room.${toRoomId}.app.data`, something);
+					}
 				});
 			} else {
 				// send to all the room clients
-				io.broadcast.to(toRoomId).emit(`received-from-app-${toRoomId}`, something);
+				io.broadcast.to(toRoomId).emit(`room.${toRoomId}.app.data`, something);
 			}
 		});
 
 		// leave a room
-		socket.on('leave', function(roomId) {
+		socket.on('client.leave', function(roomId) {
 			console.log(`Remote stack server : client "${socket.id}" has asked to leave the room "${roomId}"`);
 
 			// check if the room exist

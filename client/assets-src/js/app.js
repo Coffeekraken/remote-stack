@@ -1,4 +1,4 @@
-import __remoteStack from '../../../api/client/index';
+import __remoteStack from '../../../api/index';
 import __Vue from 'vue/dist/vue';
 
 import nipplejs from 'nipplejs';
@@ -13,7 +13,6 @@ var app = new __Vue({
 	delimiters: ["<%","%>"],
 	data: {
 		color : '#ff0000',
-		pickedQueueTimeout : 0,
 		missedTurn : false,
 		client : {},
 		toPeer : null,
@@ -40,7 +39,7 @@ var app = new __Vue({
 				_this.availableRooms = rooms;
 			});
 
-			client.on('room.missed-turn', (room) => {
+			client.on('client.missed-turn', (room) => {
 				console.log('missed-turn', room);
 				this.missedTurn = true;
 				setTimeout(() => {
@@ -59,13 +58,8 @@ var app = new __Vue({
 			client.join(room.id).then((room) => {
 				console.log('joinded the room', room.id);
 
-				setInterval(() => {
-					console.log('queue clients', room.queuedClients);
-				}, 2000);
-
 				setTimeout(() => {
 					const joystickElm = document.querySelector(`.joystick[for="${room.id}"]`);
-
 
 					joystickManager = nipplejs.create({
 						zone: joystickElm,

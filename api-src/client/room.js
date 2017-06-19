@@ -1,11 +1,18 @@
 import __socketIo from 'socket.io-client'
-import __settings from './settings'
 import __uniqid from 'uniqid'
 import _merge from 'lodash/merge'
 import _size from 'lodash/size'
 import __pako from 'pako'
 
 import __eventEmitter from 'event-emitter';
+
+/**
+ * @name 		Room
+ * Room class that represent a room getted from the socket.io server
+ * This class is usually instanciated by the Client one
+ *
+ * @author  	Olivier Bossel <olivier.bossel@gmail.com>
+ */
 
 class Room {
 
@@ -26,17 +33,14 @@ class Room {
 	_joinPromiseResolve = null;
 	_joinPromiseReject = null;
 
-	_settings = {};
-
 	_socket = null;
 
-	constructor(data, socket, settings = {}) {
-
-		// extend settings
-		this._settings = {
-			...__settings,
-			...settings
-		};
+	/**
+	 * @constructor
+	 * @param 	{Object} 		data 		The room data object
+	 * @param 	{SocketIo} 		socket 		The socket instance used to communicate with the server
+	 */
+	constructor(data, socket) {
 
 		// save the socket
 		this._socket = socket;
@@ -44,62 +48,58 @@ class Room {
 		this.updateData(data);
 
 		// listen for new room data
-		this._socket.on(`new-room-data.${data.id}`, (data) => {
+		this._socket.on(`room.${data.id}.data`, (data) => {
 			data = JSON.parse(__pako.inflate(data, { to: 'string' }));
 			// new room data
 			this.updateData(data);
 		});
 
-		this._socket.on(`left-room-${data.id}`, () => {
+		this._socket.on(`room.${data.id}.left`, () => {
 			if ( ! this.id) return;
 			// resolve the promise
 			this._leavePromiseResolve(this);
 			// let the app know that we have left the room
-			this.emit('left', this);
+			this.emit('client.left', this);
 		});
 
-		this._socket.on(`queued-room-${data.id}`, () => {
+		this._socket.on(`room.${data.id}.queued`, () => {
 			if ( ! this.id) return;
-			this.emit('queued', this);
+			this.emit('client.queued', this);
 		});
 
-		this._socket.on(`picked-room-${data.id}`, () => {
+		this._socket.on(`room.${data.id}.picked`, () => {
 			console.log('PICKED', this);
 			if ( ! this.id) return;
-			this.emit('picked', this);
+			this.emit('client.picked', this);
 
 			// start timer of the picked queue
 			this._startPickedQueueTimeout();
 
 		});
 
-		this._socket.on(`joined-room-${data.id}`, () => {
+		this._socket.on(`room.${data.id}.joined`, () => {
 			if ( ! this.id) return;
 			// resolve the promise
 			this._joinPromiseResolve(this);
 			// let the app know that we have left the room
-			this.emit('joined', this);
+			this.emit('client.joined', this);
 		});
 
-		this._socket.on(`received-from-app-${data.id}`, (something) => {
-			if (this._settings.compression) {
-				something = JSON.parse(__pako.inflate(something, { to: 'string' }));
-			}
+		this._socket.on(`room.${data.id}.app.data`, (something) => {
 			// let the app know that we have received something from the app
-			this.emit('reveived-from-app', something);
+			this.emit('app.data', something);
 		});
 
-		this._socket.on(`received-from-client-${data.id}`, (something) => {
-			// decompress data if needed
-			if (this._settings.compression) {
-				something = JSON.parse(__pako.inflate(something, { to: 'string' }));
-			}
+		this._socket.on(`room.${this.id}.client.data`, (something) => {
 			// let the app know that we have received something from another client
-			this.emit('received-from-client', something);
+			this.emit('client.data', something);
 		});
 
 	}
 
+	/**
+	 * Start the picked timeout
+	 */
 	_startPickedQueueTimeout() {
 		// save the initial time
 		this._pickedQueueRemainingTimeout = this._pickedQueueTimeout;
@@ -121,7 +121,7 @@ class Room {
 				clearInterval(this._pickedQueueTimeoutInterval);
 
 				// emit a missed-turn event
-				this.emit('missed-turn', this);
+				this.emit('client.missed-turn', this);
 
 				// leave the room unfortunately...
 				this.leave();
@@ -129,32 +129,46 @@ class Room {
 		}, 1000);
 	}
 
+	/**
+	 * Send data to the other room clients
+	 * @param 	{Object} 		data 		THe data to send
+	 * @example 	js
+	 * room.sendToClients({
+	 * 	something : 'cool'
+	 * });
+	 */
 	sendToClients(something) {
 		if ( ! this.hasJoined()) {
 			throw(`You cannot send something to client in the room "${this.id}" cause you don't has joined it yet...`);
 			return;
 		}
 
-		if (this._settings.compression) {
-			something = __pako.deflate(JSON.stringify(something), { to: 'string' });
-		}
-
-		this._socket.emit('send-to-clients', this.id, something);
+		this._socket.emit('client.to.clients', this.id, something);
 	}
 
+	/**
+	 * Send data to the room application
+	 * @param 	{Object} 		data 		THe data to send
+	 * @example 	js
+	 * room.sendToApp({
+	 * 	something : 'cool'
+	 * });
+	 */
 	sendToApp(something) {
 		if ( ! this.hasJoined()) {
 			throw(`You cannot send something to app in the room "${this.id}" cause you don't has joined it yet...`);
 			return;
 		}
-		if (this._settings.compression) {
-			something = __pako.deflate(JSON.stringify(something), { to: 'string' });
-		}
-		this._socket.emit('send-to-app', this.id, something);
+		this._socket.emit('client.to.app', this.id, something);
 	}
 
 	/**
 	 * Leave this room
+	 * @return 	{Promise} 		A promise resolved when the client has successfuly left the room
+	 * @example 	js
+	 * room.leave().then(() => {
+	 * 	// do something here...
+	 * });
 	 */
 	leave() {
 		return new Promise((resolve, reject) => {
@@ -167,11 +181,18 @@ class Room {
 
 			this._leavePromiseReject = reject;
 			this._leavePromiseResolve = resolve;
-			this._socket.off('received-from-client');
-			this._socket.emit('leave', this.id);
+			this._socket.off('client.to.clients');
+			this._socket.emit('client.leave', this.id);
 		});
 	}
 
+	/**
+	 * Ask to join the room
+	 * This request can lead to a "client.queued" event if this room is full. You will need to
+	 * call this method again when you receive the "client.picked" event
+	 *
+ 	 * @return  {Promise} 					A promise that will be resolved only if the client is accepted directly in the room
+	 */
 	join() {
 		return new Promise((resolve, reject) => {
 
@@ -191,13 +212,22 @@ class Room {
 			this._joinPromiseReject = reject;
 			this._joinPromiseResolve = resolve;
 
-			this._socket.emit('join', this.id);
+			this._socket.emit('client.join', this.id);
 		});
 	}
 
+	/**
+	 * Destroy this room instance locally
+	 */
 	destroy() {
 		// stop listening for this room datas
-		this._socket.off(`new-room-data.${this.id}`);
+		this._socket.off(`room.${this.id}.data`);
+		this._socket.off(`room.${this.id}.joined`);
+		this._socket.off(`room.${this.id}.left`);
+		this._socket.off(`room.${this.id}.picked`);
+		this._socket.off(`room.${this.id}.queued`);
+		this._socket.off(`room.${this.id}.app.data`);
+		this._socket.off(`room.${this.id}.client.data`);
 		// remove some datas to clean memory
 		delete this._name;
 		delete this._id;
@@ -214,7 +244,11 @@ class Room {
 		delete this._pickedQueueTimeoutInterval;
 	}
 
-
+	/**
+	 * Update the room data with new ones
+	 * @param 	{Object} 		data 		The new room data
+	 * @return 	{Room} 						The instance itself to maintain chainability
+	 */
 	updateData(data) {
 		this._id = data.id;
 		this._name = data.name;
@@ -228,22 +262,23 @@ class Room {
 		this._queue = data.queue;
 		this._pickedQueue = data.pickedQueue;
 		this._places = data.simultaneous;
+		return this;
 	}
 
 	_onJoined(data = {}) {
 		console.log('joined', data);
 		// emit an event
-		this.emit('joined', data);
+		this.emit('client.joined', data);
 	}
 
 	_onQueued(data = {}) {
 		console.log('queued', data);
-		this.emit('queued', data);
+		this.emit('client.queued', data);
 	}
 
 	_onPicked(data = {}) {
 		console.log('picked', data);
-		this.emit('picked', data);
+		this.emit('client.picked', data);
 	}
 
 	/**
@@ -304,7 +339,6 @@ class Room {
 		this.queue.forEach((clientId) => {
 			queuedClients[clientId] = this.clients[clientId];
 		});
-		console.log('queuedClients', queuedClients);
 		return queuedClients;
 	}
 
@@ -312,7 +346,7 @@ class Room {
 	 * Get the picked clients
 	 * @type 		{Object<Object>}
 	 */
-	get pickedQueueClients() {
+	get pickedClients() {
 		// construct the queuedClients object
 		const pickedClients = {};
 		this._pickedQueue.forEach((clientId) => {
@@ -401,6 +435,26 @@ class Room {
 		return this.activeClients[this._socket.id] != null;
 	}
 }
+
+/**
+ * @name  	on
+ * Listen to a particular event
+ * @param 	{String} 		name 		The event name to listen to
+ * @param 	{Function} 		cb 			The callback function to to call
+ */
+
+/**
+ * @name  	once
+ * Listen to a particular event only once
+ * @param 	{String} 		name 		The event name to listen to
+ * @param 	{Function} 		cb 			The callback function to to call
+ */
+
+/**
+ * @name  	off
+ * Remove a particular event listener
+ * @param 	{String} 		name 		The event name to listen to
+ */
 
 // make the room class an emitter capable object
 __eventEmitter(Room.prototype);
