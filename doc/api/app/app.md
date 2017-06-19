@@ -10,7 +10,15 @@ const app = new __remoteStack.App({
 });
 app.announce('my-cool-room').then(() => {
  	// listen for some events, etc...
- 	app.on('')
+ 	app.on('client.data', (data, client) => {
+ 		// do something with the data from the client
+ 	});
+ 	app.on('client.joined', (client) => {
+ 		// handle new client
+ 	});
+ 	app.on('client.left', (client) => {
+ 		// handle the left client
+ 	});
 });
 ```
 Author : Olivier Bossel <olivier.bossel@gmail.com>

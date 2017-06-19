@@ -59,42 +59,42 @@ Type : **{ Integer }**
 
 ### queue
 
-Get the queue
+Get the queued clients ids
 
 Type : **{ [Array](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Array) }**
 
 
 ### queuedClients
 
-Get the queued clients
+Get the queued clients objects
 
 Type : **{ Object<Object> }**
 
 
 ### pickedClients
 
-Get the picked clients
+Get the picked clients objects
 
 Type : **{ Object<Object> }**
 
 
 ### places
 
-The places number
+The number of places available for this room
 
 Type : **{ Integer }**
 
 
 ### placeInQueue
 
-The place in the queue
+The place in the queue of the current client
 
 Type : **{ Integer }**
 
 
 ### waitTimeEstimation
 
-The estimation time in which it's our turn
+The estimation time in which it's the current client turn
 
 Type : **{ [Number](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Number) }**
 
@@ -106,14 +106,14 @@ The estimation of each sessions in the room
 Type : **{ [Number](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Number) }**
 
 
-### pickedQueueTimeout
+### pickedTimeout
 
 The picked timeout if has been picked in the room
 
 Type : **{ [Number](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Number) }**
 
 
-### pickedQueueRemainingTimeout
+### pickedRemainingTimeout
 
 The picked queue remaining timeout
 
