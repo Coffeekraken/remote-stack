@@ -322,7 +322,7 @@ class Room {
 	}
 
 	/**
-	 * Get the queue
+	 * Get the queued clients ids
 	 * @type 	{Array}
 	 */
 	get queue() {
@@ -330,7 +330,7 @@ class Room {
 	}
 
 	/**
-	 * Get the queued clients
+	 * Get the queued clients objects
 	 * @type 		{Object<Object>}
 	 */
 	get queuedClients() {
@@ -343,7 +343,7 @@ class Room {
 	}
 
 	/**
-	 * Get the picked clients
+	 * Get the picked clients objects
 	 * @type 		{Object<Object>}
 	 */
 	get pickedClients() {
@@ -356,7 +356,7 @@ class Room {
 	}
 
 	/**
-	 * The places number
+	 * The number of places available for this room
 	 * @type 		{Integer}
 	 */
 	get places() {
@@ -364,7 +364,7 @@ class Room {
 	}
 
 	/**
-	 * The place in the queue
+	 * The place in the queue of the current client
 	 * @type 		{Integer}
 	 */
 	get placeInQueue() {
@@ -372,7 +372,7 @@ class Room {
 	}
 
 	/**
-	 * The estimation time in which it's our turn
+	 * The estimation time in which it's the current client turn
 	 * @type 	{Number}
 	 */
 	get waitTimeEstimation() {
@@ -399,7 +399,7 @@ class Room {
 	 * The picked timeout if has been picked in the room
 	 * @type 		{Number}
 	 */
-	get pickedQueueTimeout() {
+	get pickedTimeout() {
 		return this._pickedQueueTimeout;
 	}
 
@@ -407,7 +407,7 @@ class Room {
 	 * The picked queue remaining timeout
 	 * @type  		{Number}
 	 */
-	get pickedQueueRemainingTimeout() {
+	get pickedRemainingTimeout() {
 		return this._pickedQueueRemainingTimeout;
 	}
 

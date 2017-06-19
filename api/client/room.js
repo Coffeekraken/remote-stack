@@ -437,7 +437,7 @@ var Room = function () {
 		}
 
 		/**
-   * Get the queue
+   * Get the queued clients ids
    * @type 	{Array}
    */
 
@@ -448,7 +448,7 @@ var Room = function () {
 		}
 
 		/**
-   * Get the queued clients
+   * Get the queued clients objects
    * @type 		{Object<Object>}
    */
 
@@ -466,7 +466,7 @@ var Room = function () {
 		}
 
 		/**
-   * Get the picked clients
+   * Get the picked clients objects
    * @type 		{Object<Object>}
    */
 
@@ -484,7 +484,7 @@ var Room = function () {
 		}
 
 		/**
-   * The places number
+   * The number of places available for this room
    * @type 		{Integer}
    */
 
@@ -495,7 +495,7 @@ var Room = function () {
 		}
 
 		/**
-   * The place in the queue
+   * The place in the queue of the current client
    * @type 		{Integer}
    */
 
@@ -506,7 +506,7 @@ var Room = function () {
 		}
 
 		/**
-   * The estimation time in which it's our turn
+   * The estimation time in which it's the current client turn
    * @type 	{Number}
    */
 
@@ -541,7 +541,7 @@ var Room = function () {
    */
 
 	}, {
-		key: 'pickedQueueTimeout',
+		key: 'pickedTimeout',
 		get: function get() {
 			return this._pickedQueueTimeout;
 		}
@@ -552,7 +552,7 @@ var Room = function () {
    */
 
 	}, {
-		key: 'pickedQueueRemainingTimeout',
+		key: 'pickedRemainingTimeout',
 		get: function get() {
 			return this._pickedQueueRemainingTimeout;
 		}
