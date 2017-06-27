@@ -51,14 +51,14 @@ settings  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/R
 
 All the rooms available to join
 
-Type : **{ Object<Room> }**
+Type : **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**
 
 
 ### joinedRooms
 
 All the rooms in which the client is in
 
-Type : **{ Object<Room> }**
+Type : **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**
 
 
 ## Methods

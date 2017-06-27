@@ -500,7 +500,7 @@ class Room {
 
 	/**
 	 * The clients in the room
-	 * @type  	{Array<Client>}
+	 * @type  	{Array}
 	 */
 	get clients() {
 		return this._clients;
@@ -508,7 +508,7 @@ class Room {
 
 	/**
 	 * The active clients
-	 * @type  	{Array<Client>}
+	 * @type  	{Array}
 	 */
 	get activeClients() {
 		return this._activeClients;
@@ -532,7 +532,7 @@ class Room {
 
 	/**
 	 * Get the queued clients objects
-	 * @type 		{Object<Object>}
+	 * @type 		{Object}
 	 */
 	get queuedClients() {
 		// construct the queuedClients object
@@ -545,7 +545,7 @@ class Room {
 
 	/**
 	 * Get the picked clients objects
-	 * @type 		{Object<Object>}
+	 * @type 		{Object}
 	 */
 	get pickedClients() {
 		// construct the queuedClients object

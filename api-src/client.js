@@ -349,7 +349,7 @@ class Client {
 
 	/**
 	 * All the rooms available to join
-	 * @type 		{Object<Room>}
+	 * @type 		{Object}
 	 */
 	get availableRooms() {
 		return this._availableRooms;
@@ -357,7 +357,7 @@ class Client {
 
 	/**
 	 * All the rooms in which the client is in
-	 * @type 		{Object<Room>}
+	 * @type 		{Object}
 	 */
 	get joinedRooms() {
 		return this._joinedRooms;

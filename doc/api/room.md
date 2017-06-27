@@ -40,14 +40,14 @@ Type : **{ [String](https://developer.mozilla.org/fr/docs/Web/JavaScript/Referen
 
 The clients in the room
 
-Type : **{ Array<Client> }**
+Type : **{ [Array](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Array) }**
 
 
 ### activeClients
 
 The active clients
 
-Type : **{ Array<Client> }**
+Type : **{ [Array](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Array) }**
 
 
 ### activeClientsCount
@@ -68,14 +68,14 @@ Type : **{ [Array](https://developer.mozilla.org/fr/docs/Web/JavaScript/Referenc
 
 Get the queued clients objects
 
-Type : **{ Object<Object> }**
+Type : **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**
 
 
 ### pickedClients
 
 Get the picked clients objects
 
-Type : **{ Object<Object> }**
+Type : **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**
 
 
 ### maxClients
