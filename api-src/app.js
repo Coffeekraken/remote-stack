@@ -55,8 +55,8 @@ import __pako from 'pako';
  * @event
  * @name  client.data
  * Notify that the app has received some data from a client
+ * @param 	{Object} 	client 		The client object that has sent the data
  * @param 	{Object} 	data 		The data sent by the client
- * @param 	{Object} 	from 		The client object that has sent the data
  *
  * @example 	js
  * myApp.on('client.data', (data, from) => {
@@ -68,7 +68,7 @@ import __pako from 'pako';
  * @event
  * @name  client.joined
  * Notify that a client has joined the app
- * @param 	{Object} 	from 		The client object that has sent the data
+ * @param 	{Object} 	client 		The client object that has sent the data
  *
  * @example 	js
  * myApp.on('client.joined', (client) => {
@@ -80,7 +80,7 @@ import __pako from 'pako';
  * @event
  * @name  client.left
  * Notify that a client has left the app
- * @param 	{Object} 	from 		The client object that has sent the data
+ * @param 	{Object} 	client 		The client object that has sent the data
  *
  * @example 	js
  * myApp.on('client.left', (client) => {
@@ -147,13 +147,13 @@ class App {
 				this.emit('joined', this);
 			});
 
-			this._socket.on('client.data', (from, data) => {
+			this._socket.on('client.data', (client, data) => {
 				// decompress data if needed
 				if (this._settings.compression) {
 					data = JSON.parse(__pako.inflate(data, { to: 'string' }));
 				}
-				this.log.success(`received ${data} from client ${from.id}`);
-				this.emit('client.data', from, data);
+				this.log.success(`received ${data} from client ${client.id}`);
+				this.emit('client.data', client, data);
 			});
 
 			this._socket.on('client.joined', (client) => {
