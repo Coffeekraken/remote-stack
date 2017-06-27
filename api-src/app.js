@@ -59,7 +59,7 @@ import __pako from 'pako';
  * @param 	{Object} 	data 		The data sent by the client
  *
  * @example 	js
- * myApp.on('client.data', (data, from) => {
+ * myApp.on('client.data', (client, data) => {
  * 	// do something here...
  * });
  */

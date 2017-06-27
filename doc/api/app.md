@@ -142,7 +142,7 @@ data  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Refer
 
 #### Example
 ```js
-	myApp.on('client.data', (data, from) => {
+	myApp.on('client.data', (client, data) => {
 	// do something here...
 });
 ```
