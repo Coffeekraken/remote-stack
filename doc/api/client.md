@@ -17,15 +17,15 @@ client.announce().then(() => {
 });
 
 // listen for some events
-client.on('client.queued', (room) => {
+client.on('queued', (room) => {
 	// client has been queued in the passed room after client.join('cool-room') call...
 });
-client.on('client.picked', (room) => {
+client.on('picked', (room) => {
  // client has been picked in the passed room...
  // you can at this point be confident that the client.join('cool-room') will succeed
  // but you need to call it again yourself...
 });
-client.on('client.picked-timeout', (room, remainingTimeout) => {
+client.on('picked-timeout', (room, remainingTimeout) => {
 	// do something on each tick of the picked timeout...
 });
 ```
