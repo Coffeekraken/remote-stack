@@ -15,6 +15,7 @@ const _size = require('lodash/size');
 const __server = require("http").createServer();
 const __socketIoP2p = require('socket.io-p2p-server');
 const __socketIoP2pServer = __socketIoP2p.Server;
+const __socketIoStream = require('socket.io-stream');
 
 const __pako = require('pako');
 
@@ -37,8 +38,8 @@ module.exports = function(config) {
 		room.clients = {};
 		room.activeClients = {};
 		room.queue = [];
-		room.pickedQueue = [];
-		room.queuedClientsEstimations = {};
+		room.pickedClients = [];
+		// room.queuedClientsEstimations = {};
 	});
 
 	// start demo server
@@ -116,10 +117,13 @@ module.exports = function(config) {
 			return;
 		}
 
-		room.pickedQueue.push(nextClientId);
+		room.pickedClients.push(nextClientId);
 
 		// tell the client that he has bein picked
 		nextClientSocket.emit(`room.${roomId}.picked`, room);
+
+		// notify all the users that a new client has been picked
+		socket.broadcast.to(roomId).emit(`room.${roomId}.client.picked`, room, clients[nextClientSocket.id]);
 
 		// // make the user join the room
 		// nextClientSocket.join(roomId, (response) => {
@@ -141,9 +145,9 @@ module.exports = function(config) {
 		}
 
 		// remove the client from the picked queue id needed
-		const pickedQueueClientIdx = room.pickedQueue.indexOf(socket.id);
-		if (pickedQueueClientIdx !== -1) {
-			room.pickedQueue.splice(pickedQueueClientIdx, 1);
+		const pickedClientsClientIdx = room.pickedClients.indexOf(socket.id);
+		if (pickedClientsClientIdx !== -1) {
+			room.pickedClients.splice(pickedClientsClientIdx, 1);
 		}
 
 		// stack store the start timestamp of this user in this room
@@ -161,6 +165,9 @@ module.exports = function(config) {
 
 		// callback fn
 		socket.emit(`room.${roomId}.joined`, room);
+
+		// notify all the room users that a new client has joined
+		socket.broadcast.to(roomId).emit(`room.${roomId}.client.joined`, room, clients[socket.id]);
 
 		// notify clients of new room data
 		broadcastNewRoomData(roomId);
@@ -188,7 +195,7 @@ module.exports = function(config) {
 		let wasClientActiveInTheRoom = room.activeClients[socket.id];
 
 		// check if the client was part of the room
-		let needToPickNextClientInQueue = room.activeClients[socket.id] || room.pickedQueue.indexOf(socket.id) !== -1;
+		let needToPickNextClientInQueue = room.activeClients[socket.id] || room.pickedClients.indexOf(socket.id) !== -1;
 
 		// keep track if need to broadcast new room data
 		let isRoomUpdated = false;
@@ -202,10 +209,10 @@ module.exports = function(config) {
 			delete room.activeClients[socket.id];
 			isRoomUpdated = true;
 		}
-		if (room.queuedClientsEstimations[socket.id]) {
-			delete room.queuedClientsEstimations[socket.id];
-			isRoomUpdated = true;
-		}
+		// if (room.queuedClientsEstimations[socket.id]) {
+		// 	delete room.queuedClientsEstimations[socket.id];
+		// 	isRoomUpdated = true;
+		// }
 
 		// remove the client from the queue if needed
 		const queueIdx = room.queue.indexOf(socket.id);
@@ -215,9 +222,9 @@ module.exports = function(config) {
 		}
 
 		// remove the client from the picked queue id needed
-		const pickedQueueClientIdx = room.pickedQueue.indexOf(socket.id);
-		if (pickedQueueClientIdx !== -1) {
-			room.pickedQueue.splice(pickedQueueClientIdx, 1);
+		const pickedClientsClientIdx = room.pickedClients.indexOf(socket.id);
+		if (pickedClientsClientIdx !== -1) {
+			room.pickedClients.splice(pickedClientsClientIdx, 1);
 			isRoomUpdated = true;
 		}
 
@@ -235,6 +242,10 @@ module.exports = function(config) {
 		// callback fn
 		if (wasClientPartOfTheRoom) {
 			socket.emit(`room.${roomId}.left`, room);
+
+			// notify all the users that a client has left the room
+			socket.broadcast.to(roomId).emit(`room.${roomId}.client.left`, room, clients[socket.id]);
+
 		}
 
 		// notify the app that the client has left the room
@@ -281,9 +292,9 @@ module.exports = function(config) {
 				// 	isRoomUpdated = true;
 				// }
 				// // remove the client from the picked queue id needed
-				// const pickedQueueClientIdx = room.pickedQueue.indexOf(socket.id);
-				// if (pickedQueueClientIdx !== -1) {
-				// 	room.pickedQueue.splice(pickedQueueClientIdx, 1);
+				// const pickedClientsClientIdx = room.pickedClients.indexOf(socket.id);
+				// if (pickedClientsClientIdx !== -1) {
+				// 	room.pickedClients.splice(pickedClientsClientIdx, 1);
 				// 	isRoomUpdated = true;
 
 				// 	// we need to pick the next client in the room
@@ -321,6 +332,9 @@ module.exports = function(config) {
 			// client announced
 			fn && fn(data);
 			socket.emit('client.announced', data);
+
+			// notify all the clients that a new once has been announced
+			// io.broadcast.emit(`client.client.announced`, data);
 
 			// emit available rooms
 			socket.emit('available-rooms', rooms);
@@ -368,8 +382,8 @@ module.exports = function(config) {
 		// join a room
 		socket.on('client.join', function(roomId) {
 
-			// check if the user that ask to join the room is part of the pickedQueue
-			if (rooms[roomId].pickedQueue.indexOf(socket.id) !== -1) {
+			// check if the user that ask to join the room is part of the pickedClients
+			if (rooms[roomId].pickedClients.indexOf(socket.id) !== -1) {
 				// join the room
 				socket.join(roomId, () => {
 					onJoinedRoom(socket, roomId);
@@ -383,9 +397,9 @@ module.exports = function(config) {
 
 			// check if the room exist
 			if ( ! rooms[roomId]) {
-				socket.emit('rejected', {
-					room : roomId
-				})
+				// socket.emit('rejected', {
+				// 	room : roomId
+				// })
 				return
 			}
 
@@ -395,8 +409,8 @@ module.exports = function(config) {
 			}
 
 			// check if can join the room now or need to wait for in the queue
-			const simultaneous = rooms[roomId].simultaneous;
-			if (simultaneous && _size(rooms[roomId].activeClients) >= simultaneous || rooms[roomId].pickedQueue.length) {
+			const maxClients = rooms[roomId].maxClients;
+			if (maxClients && _size(rooms[roomId].activeClients) >= maxClients || rooms[roomId].pickedClients.length) {
 
 				// add the user in queue
 				if (room.queue.indexOf(socket.id) !== -1) return;
@@ -409,6 +423,9 @@ module.exports = function(config) {
 
 				// tell the user that he has been queued
 				socket.emit(`room.${roomId}.queued`, room);
+
+				// notify all the users that a new client has been queued
+				socket.broadcast.to(roomId).emit(`room.${roomId}.client.queued`, room, clients[socket.id]);
 
 				// notify clients of new room data
 				broadcastNewRoomData(roomId);
@@ -426,14 +443,14 @@ module.exports = function(config) {
 		socket.on('client.to.clients', function(roomId, something) {
 			// console.log(`Remote stack server : client "${socket.id}" send "${JSON.stringify(something)}" to the room (${something._roomId}) clients`);
 			if (something._roomId) {
-				socket.broadcast.to(something._roomId).emit(`room.${roomId}.client.data`, something);
+				socket.broadcast.to(something._roomId).emit(`room.${roomId}.client.data`, clients[socket.id], something);
 			}
 		});
 
 		socket.on('client.to.app', function(roomId, something) {
 			// console.log(`Remote stack server : client "${socket.id}" send "${something}" to the room (${roomId}) app`);
 			if (roomId) {
-				socket.broadcast.to(rooms[roomId].app).emit('client.data', something, clients[socket.id]);
+				socket.broadcast.to(rooms[roomId].app).emit('client.data', clients[socket.id], something);
 			}
 		});
 

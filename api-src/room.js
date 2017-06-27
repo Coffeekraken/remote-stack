@@ -1,8 +1,10 @@
 import __socketIo from 'socket.io-client'
+import __socketIoStream from 'socket.io-stream'
 import __uniqid from 'uniqid'
 import _merge from 'lodash/merge'
 import _size from 'lodash/size'
 import __pako from 'pako'
+import __settings from './settings'
 
 import __eventEmitter from 'event-emitter';
 
@@ -14,6 +16,169 @@ import __eventEmitter from 'event-emitter';
  * @author  	Olivier Bossel <olivier.bossel@gmail.com>
  */
 
+/**
+ * @event
+ * @name  	joined
+ * Notify that the client has successfuly joined a room
+ *
+ * @param 	{Room} 		room 		The joined room object
+ *
+ * @example 	js
+ * myRoom.on('joined', (room) => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name  	client.joined
+ * Notify that another client has successfuly joined a room
+ *
+ * @param 	{Room} 		room 		The joined room object
+ * @param 	{Object} 	client 		The joined client object
+ *
+ * @example 	js
+ * myRoom.on('client.joined', (room, client) => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name  	left
+ * Notify that the client has successfuly left a room
+ *
+ * @param 	{Room} 		room 		The left room object
+ *
+ * @example 	js
+ * myRoom.on('left', (room) => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name  	client.left
+ * Notify that another client has successfuly left a room
+ *
+ * @param 	{Room} 		room 		The left room object
+ * @param 	{Object} 	client 		The left client object
+ *
+ * @example 	js
+ * myRoom.on('client.left', (room, client) => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name  	queued
+ * Notify that the client has been queued in a particular room
+ *
+ * @param 	{Room} 		room 		The room object
+ *
+ * @example 	js
+ * myRoom.on('queued', (room) => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name  	client.queued
+ * Notify that another client has been queued in a particular room
+ *
+ * @param 	{Room} 		room 		The room object
+ * @param 	{Object} 	client 		The queued client object
+ *
+ * @example 	js
+ * myRoom.on('client.queued', (room, client) => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name  	picked
+ * Notify that the client has been picked in a particular room
+ *
+ * @param 	{Room} 		room 		The room object
+ *
+ * @example 	js
+ * myRoom.on('picked', (room) => {
+ * 	// try to join the room again here...
+ * 	// you can be confident that the join will be a success until the picked-timeout is not finished...
+ * });
+ */
+
+/**
+ * @event
+ * @name  	client.picked
+ * Notify that another client has been picked in a particular room
+ *
+ * @param 	{Room} 		room 		The room object
+ * @param 	{Object} 	client 		The picked client object
+ *
+ * @example 	js
+ * myRoom.on('client.picked', (room) => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name  	picked-timeout
+ * Notify each second of the remaining timeout left to join the room when the client has been picked
+ *
+ * @param 	{Room} 		room 					The room object
+ * @param 	{Integer} 	remainingTimeout 		The timeout left before the client is being kicked of the picked queue
+ *
+ * @example 	js
+ * myRoom.on('picked-timeout', (room, remainingTimeout) => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name  	missed-turn
+ * Notify that the client has missed his turn after being picked
+ *
+ * @param 	{Room} 		room 		The room object
+ *
+ * @example 	js
+ * myRoom.on('missed-turn', (room) => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name 	client.data
+ * Notify that a client has send some data to the room
+ *
+ * @paeam 	{Object} 		client 		The client object
+ * @param 	{Object} 		data 		The data sent by the client
+ *
+ * @example 	js
+ * myRoom.on('client.data', (client, data) => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name 	app.data
+ * Notify that the room app has send some data
+ *
+ * @param 	{Object} 		data 		The data sent by the app
+ *
+ * @example 	js
+ * myRoom.on('app.data', (data) => {
+ * 	// do something here...
+ * });
+ */
+
 class Room {
 
 	_id = null;
@@ -21,12 +186,12 @@ class Room {
 	_clients = {};
 	_activeClients = {};
 	_queue = [];
-	_pickedQueue = [];
-	_pickedQueueTimeout = null;
-	_pickedQueueRemainingTimeout = null;
-	_simultaneous = 0;
+	_pickedClients = [];
+	_pickedTimeout = null;
+	_pickedRemainingTimeout = null;
+	_maxClients = 0;
 	// _queuedClientsEstimations = {};
-	_places = 0;
+	_maxClients = 0;
 	_averageSessionDuration = 0;
 	_leavePromiseResolve = null;
 	_leavePromiseReject = null;
@@ -40,7 +205,13 @@ class Room {
 	 * @param 	{Object} 		data 		The room data object
 	 * @param 	{SocketIo} 		socket 		The socket instance used to communicate with the server
 	 */
-	constructor(data, socket) {
+	constructor(data, socket, settings = {}) {
+
+		// extend settings
+		this._settings = {
+			...__settings,
+			...settings
+		}
 
 		// save the socket
 		this._socket = socket;
@@ -50,49 +221,93 @@ class Room {
 		// listen for new room data
 		this._socket.on(`room.${data.id}.data`, (data) => {
 			data = JSON.parse(__pako.inflate(data, { to: 'string' }));
+
+			this.log.success(`New room data : ${data}`);
+
 			// new room data
 			this.updateData(data);
 		});
 
 		this._socket.on(`room.${data.id}.left`, () => {
 			if ( ! this.id) return;
+
+			this.log.success(`Left ${this.id}`);
+
 			// resolve the promise
 			this._leavePromiseResolve(this);
 			// let the app know that we have left the room
-			this.emit('client.left', this);
+			this.emit('left', this);
+		});
+
+		this._socket.on(`room.${this.id}.client.left`, (room, client) => {
+			if ( ! this.id) return;
+			this.log.success(`The client ${client} has left the room ${this.id}`);
+			this.emit('client.left', this, client);
 		});
 
 		this._socket.on(`room.${data.id}.queued`, () => {
 			if ( ! this.id) return;
-			this.emit('client.queued', this);
+
+			this.log.success(`Queued in ${this.id}`);
+
+			this.emit('queued', this);
+		});
+
+		this._socket.on(`room.${this.id}.client.queued`, (room, client) => {
+			if ( ! this.id) return;
+			this.log.success(`The client ${client} has been queued in the room ${this.id}`);
+			this.emit('client.queued', this, client);
 		});
 
 		this._socket.on(`room.${data.id}.picked`, () => {
-			console.log('PICKED', this);
 			if ( ! this.id) return;
-			this.emit('client.picked', this);
+
+			this.log.success(`Picked in ${this.id}`);
+
+			this.emit('picked', this);
 
 			// start timer of the picked queue
-			this._startPickedQueueTimeout();
+			this._startPickedClientsTimeout();
 
+		});
+
+		this._socket.on(`room.${this.id}.client.picked`, (room, client) => {
+			if ( ! this.id) return;
+			this.log.success(`The client ${client} has been picked in the room ${this.id}`);
+			this.emit('client.picked', this, client);
 		});
 
 		this._socket.on(`room.${data.id}.joined`, () => {
 			if ( ! this.id) return;
+
+			this.log.success(`Joined ${this.id}`);
+
 			// resolve the promise
 			this._joinPromiseResolve(this);
 			// let the app know that we have left the room
-			this.emit('client.joined', this);
+			this.emit('joined', this);
+		});
+
+		this._socket.on(`room.${this.id}.client.joined`, (room, client) => {
+			if ( ! this.id) return;
+			this.log.success(`The client ${client} has joined the room ${this.id}`);
+			this.emit('client.joined', this, client);
 		});
 
 		this._socket.on(`room.${data.id}.app.data`, (something) => {
+
+			this.log.success(`Received some data from the app : ${something}`);
+
 			// let the app know that we have received something from the app
 			this.emit('app.data', something);
 		});
 
-		this._socket.on(`room.${this.id}.client.data`, (something) => {
+		this._socket.on(`room.${this.id}.client.data`, (client, something) => {
+
+			this.log.success(`Received some data from the another client : ${something} ${client}`);
+
 			// let the app know that we have received something from another client
-			this.emit('client.data', something);
+			this.emit('client.data', client, something);
 		});
 
 	}
@@ -100,28 +315,30 @@ class Room {
 	/**
 	 * Start the picked timeout
 	 */
-	_startPickedQueueTimeout() {
+	_startPickedClientsTimeout() {
 		// save the initial time
-		this._pickedQueueRemainingTimeout = this._pickedQueueTimeout;
+		this._pickedRemainingTimeout = this._pickedTimeout;
 
 		// emit a picked queue timeout event
-		this.emit('picked-queue-timeout', this, this._pickedQueueRemainingTimeout);
+		this.emit('picked-timeout', this, this._pickedRemainingTimeout);
 
 		// create the timeout
-		this._pickedQueueTimeoutInterval = setInterval(() => {
-			this._pickedQueueRemainingTimeout = this._pickedQueueRemainingTimeout - 1000;
-			console.log('new picked queue current time', this._pickedQueueRemainingTimeout);
+		this._pickedTimeoutInterval = setInterval(() => {
+			this._pickedRemainingTimeout = this._pickedRemainingTimeout - 1000;
+
+			this.log.success('picked timeout', this._pickedRemainingTimeout);
 
 			// emit a picked queue timeout event
-			this.emit('picked-queue-timeout', this, this._pickedQueueRemainingTimeout);
+			this.emit('picked-timeout', this, this._pickedRemainingTimeout);
 
-			if (this._pickedQueueRemainingTimeout <= 0) {
+			if (this._pickedRemainingTimeout <= 0) {
 				// end of time
-				console.log('end of picked queue...');
-				clearInterval(this._pickedQueueTimeoutInterval);
+				clearInterval(this._pickedTimeoutInterval);
+
+				this.log.success('end of picked queue...');
 
 				// emit a missed-turn event
-				this.emit('client.missed-turn', this);
+				this.emit('missed-turn', this);
 
 				// leave the room unfortunately...
 				this.leave();
@@ -199,8 +416,8 @@ class Room {
 			// if the user has bein picked and has clicked on the "join" again,
 			// we stop the picked queue timeout
 			if (this.isPicked()) {
-				this._pickedQueueRemainingTimeout = null;
-				clearInterval(this._pickedQueueTimeoutInterval);
+				this._pickedRemainingTimeout = null;
+				clearInterval(this._pickedTimeoutInterval);
 			}
 
 			// check that we have joined the room before
@@ -234,14 +451,14 @@ class Room {
 		delete this._clients;
 		delete this._queue;
 		delete this._activeClients;
-		delete this._simultaneous;
+		delete this._maxClients;
 		// delete this._queuedClientsEstimations;
-		delete this._pickedQueueTimeout;
-		delete this._pickedQueueRemainingTimeout;
-		delete this._pickedQueue;
-		delete this._places;
-		clearInterval(this._pickedQueueTimeoutInterval);
-		delete this._pickedQueueTimeoutInterval;
+		delete this._pickedTimeout;
+		delete this._pickedRemainingTimeout;
+		delete this._pickedClients;
+		delete this._maxClients;
+		clearInterval(this._pickedTimeoutInterval);
+		delete this._pickedTimeoutInterval;
 	}
 
 	/**
@@ -255,30 +472,14 @@ class Room {
 		// _merge(this._clients, data.clients);
 		this._clients = data.clients;
 		this._activeClients = data.activeClients;
-		this._simultaneous = data.simultaneous;
+		this._maxClients = data.maxClients;
 		// this._queuedClientsEstimations = data.queuedClientsEstimations;
-		this._pickedQueueTimeout = data.pickedQueueTimeout;
+		this._pickedTimeout = data.pickedTimeout;
 		this._averageSessionDuration = data.averageSessionDuration;
 		this._queue = data.queue;
-		this._pickedQueue = data.pickedQueue;
-		this._places = data.simultaneous;
+		this._pickedClients = data.pickedClients;
+		this._maxClients = data.maxClients;
 		return this;
-	}
-
-	_onJoined(data = {}) {
-		console.log('joined', data);
-		// emit an event
-		this.emit('client.joined', data);
-	}
-
-	_onQueued(data = {}) {
-		console.log('queued', data);
-		this.emit('client.queued', data);
-	}
-
-	_onPicked(data = {}) {
-		console.log('picked', data);
-		this.emit('client.picked', data);
 	}
 
 	/**
@@ -349,18 +550,18 @@ class Room {
 	get pickedClients() {
 		// construct the queuedClients object
 		const pickedClients = {};
-		this._pickedQueue.forEach((clientId) => {
+		this._pickedClients.forEach((clientId) => {
 			pickedClients[clientId] = this.clients[clientId];
 		});
 		return pickedClients;
 	}
 
 	/**
-	 * The number of places available for this room
+	 * The number of clients available for this room
 	 * @type 		{Integer}
 	 */
-	get places() {
-		return this._places;
+	get maxClients() {
+		return this._maxClients;
 	}
 
 	/**
@@ -377,12 +578,12 @@ class Room {
 	 */
 	get waitTimeEstimation() {
 		if (this.isQueued()) {
-			const countActiveClients = (this._simultaneous - _size(this.activeClients) - this._pickedQueue.length <= 0) ? 1 : 0;
+			const countActiveClients = (this._maxClients - _size(this.activeClients) - this._pickedClients.length <= 0) ? 1 : 0;
 			return (this.placeInQueue +  + countActiveClients) * this.averageSessionDuration;
 		} else if (this.isPicked()) {
 			return 0;
 		} else {
-			const countActiveClients = (this._simultaneous - _size(this.activeClients) - this._pickedQueue.length <= 0) ? 1 : 0;
+			const countActiveClients = (this._maxClients - _size(this.activeClients) - this._pickedClients.length <= 0) ? 1 : 0;
 			return (this.queue.length + countActiveClients) * this.averageSessionDuration;
 		}
 	}
@@ -400,7 +601,7 @@ class Room {
 	 * @type 		{Number}
 	 */
 	get pickedTimeout() {
-		return this._pickedQueueTimeout;
+		return this._pickedTimeout;
 	}
 
 	/**
@@ -408,7 +609,7 @@ class Room {
 	 * @type  		{Number}
 	 */
 	get pickedRemainingTimeout() {
-		return this._pickedQueueRemainingTimeout;
+		return this._pickedRemainingTimeout;
 	}
 
 	/**
@@ -424,7 +625,7 @@ class Room {
 	 * @return 		{Boolean} 		true if the client has bein picked, false if not
 	 */
 	isPicked() {
-		return this._pickedQueue.indexOf(this._socket.id) !== -1;
+		return this._pickedClients.indexOf(this._socket.id) !== -1;
 	}
 
 	/**
@@ -433,6 +634,17 @@ class Room {
 	 */
 	hasJoined() {
 		return this.activeClients[this._socket.id] != null;
+	}
+
+	log = {
+		success : (message) => {
+			if ( ! this._settings.debug) return;
+			console.log(`%c Remote stack room : ${message}`, 'color: green');
+		},
+		error : (message) => {
+			if ( ! this._settings.debug) return;
+			console.log(`%c Remote stack room : ${message}`, 'color: red');
+		}
 	}
 }
 

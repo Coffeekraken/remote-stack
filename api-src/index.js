@@ -1,9 +1,7 @@
-import App from './app/app';
-import Client from './client/client';
-import Room from './client/room';
+import App from './app';
+import Client from './client';
 
 export default {
 	App,
-	Client,
-	Room
+	Client
 };

@@ -1,6 +1,6 @@
 {
   "name": "coffeekraken-remote-stack",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Provide a nice and simple way to handle remote connections from any devices (phones, tablets, etc...)",
   "main": "api/index.js",
   "bin": {
@@ -31,7 +31,7 @@
     "app.js": "webpack",
     "app.css": "node-sass app/assets-src/sass/style.scss app/assets/css/style.css --include-path node_modules --output-style compact",
     "doc": "npm run doc.api",
-    "doc.api": "coffeekraken-docblock-to-markdown -f 'api-src/**/*.js' -d doc/api --remove-path api-src",
+    "doc.api": "rm -rf doc/api && coffeekraken-docblock-to-markdown -f 'api-src/**/*.js' -d doc/api --remove-path api-src",
     "test": "coffeekraken-testing-stack",
     "watch": "npm-watch",
     "start": "npm run watch",
@@ -85,6 +85,7 @@
     "socket.io": "^2.0.2",
     "socket.io-p2p": "^2.2.0",
     "socket.io-p2p-server": "^1.2.0",
+    "socket.io-stream": "^0.9.1",
     "uniqid": "^4.1.1",
     "urldecode": "^1.0.1",
     "vue": "2.3.0"

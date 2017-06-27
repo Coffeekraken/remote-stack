@@ -78,9 +78,9 @@ Get the picked clients objects
 Type : **{ Object<Object> }**
 
 
-### places
+### maxClients
 
-The number of places available for this room
+The number of clients available for this room
 
 Type : **{ Integer }**
 
@@ -246,3 +246,217 @@ Remove a particular event listener
 Name  |  Type  |  Description  |  Status  |  Default
 ------------  |  ------------  |  ------------  |  ------------  |  ------------
 name  |  **{ [String](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/String) }**  |  The event name to listen to  |  required  |
+
+
+## Events
+
+
+### joined
+
+Notify that the client has successfuly joined a room
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+room  |  **{ Room }**  |  The joined room object  |  required  |
+
+#### Example
+```js
+	myRoom.on('joined', (room) => {
+	// do something here...
+});
+```
+
+### client.joined
+
+Notify that another client has successfuly joined a room
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+room  |  **{ Room }**  |  The joined room object  |  required  |
+client  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The joined client object  |  required  |
+
+#### Example
+```js
+	myRoom.on('client.joined', (room, client) => {
+	// do something here...
+});
+```
+
+### left
+
+Notify that the client has successfuly left a room
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+room  |  **{ Room }**  |  The left room object  |  required  |
+
+#### Example
+```js
+	myRoom.on('left', (room) => {
+	// do something here...
+});
+```
+
+### client.left
+
+Notify that another client has successfuly left a room
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+room  |  **{ Room }**  |  The left room object  |  required  |
+client  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The left client object  |  required  |
+
+#### Example
+```js
+	myRoom.on('client.left', (room, client) => {
+	// do something here...
+});
+```
+
+### queued
+
+Notify that the client has been queued in a particular room
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+room  |  **{ Room }**  |  The room object  |  required  |
+
+#### Example
+```js
+	myRoom.on('queued', (room) => {
+	// do something here...
+});
+```
+
+### client.queued
+
+Notify that another client has been queued in a particular room
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+room  |  **{ Room }**  |  The room object  |  required  |
+client  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The queued client object  |  required  |
+
+#### Example
+```js
+	myRoom.on('client.queued', (room, client) => {
+	// do something here...
+});
+```
+
+### picked
+
+Notify that the client has been picked in a particular room
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+room  |  **{ Room }**  |  The room object  |  required  |
+
+#### Example
+```js
+	myRoom.on('picked', (room) => {
+	// try to join the room again here...
+	// you can be confident that the join will be a success until the picked-timeout is not finished...
+});
+```
+
+### client.picked
+
+Notify that another client has been picked in a particular room
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+room  |  **{ Room }**  |  The room object  |  required  |
+client  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The picked client object  |  required  |
+
+#### Example
+```js
+	myRoom.on('client.picked', (room) => {
+	// do something here...
+});
+```
+
+### picked-timeout
+
+Notify each second of the remaining timeout left to join the room when the client has been picked
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+room  |  **{ Room }**  |  The room object  |  required  |
+remainingTimeout  |  **{ Integer }**  |  The timeout left before the client is being kicked of the picked queue  |  required  |
+
+#### Example
+```js
+	myRoom.on('picked-timeout', (room, remainingTimeout) => {
+	// do something here...
+});
+```
+
+### missed-turn
+
+Notify that the client has missed his turn after being picked
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+room  |  **{ Room }**  |  The room object  |  required  |
+
+#### Example
+```js
+	myRoom.on('missed-turn', (room) => {
+	// do something here...
+});
+```
+
+### client.data
+
+Notify that a client has send some data to the room
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+data  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The data sent by the client  |  required  |
+
+#### Example
+```js
+	myRoom.on('client.data', (client, data) => {
+	// do something here...
+});
+```
+
+### app.data
+
+Notify that the room app has send some data
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+data  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The data sent by the app  |  required  |
+
+#### Example
+```js
+	myRoom.on('app.data', (data) => {
+	// do something here...
+});
+```

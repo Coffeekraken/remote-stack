@@ -9,6 +9,10 @@ const app = new __remoteStack.App({
 	// host : 'jerome.olivierbossel.com'
 });
 
+app.announce('tv').then(() => {
+	// console.log('app has been announced', app);
+});
+
 const clients = {};
 
 app.on('client.joined', (client) => {
@@ -24,19 +28,14 @@ app.on('client.left', (client) => {
 	clients[client.id].destroy();
 });
 
-app.on('client.data', (data, from) => {
-	// console.log('data', data);
+app.on('client.data', (from, data) => {
+	console.log('data', data);
 
 	if ( ! clients[from.id]) return;
 
 	clients[from.id].move(data.x, data.y);
 
 });
-
-app.announce('tv').then(() => {
-	// console.log('app has been announced', app);
-});
-
 
 class Player {
 	_elm = null;

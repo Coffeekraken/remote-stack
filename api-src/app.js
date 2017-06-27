@@ -147,13 +147,13 @@ class App {
 				this.emit('app.joined', this);
 			});
 
-			this._socket.on('client.data', (data, from) => {
+			this._socket.on('client.data', (from, data) => {
 				// decompress data if needed
 				if (this._settings.compression) {
 					data = JSON.parse(__pako.inflate(data, { to: 'string' }));
 				}
 				this.log.success(`received ${data} from client ${from.id}`);
-				this.emit('client.data', data, from);
+				this.emit('client.data', from, data);
 			});
 
 			this._socket.on('client.joined', (client) => {

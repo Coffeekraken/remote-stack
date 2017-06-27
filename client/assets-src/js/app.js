@@ -3,6 +3,11 @@ import __Vue from 'vue/dist/vue';
 
 import nipplejs from 'nipplejs';
 
+navigator.getUserMedia  = navigator.getUserMedia ||
+                          navigator.webkitGetUserMedia ||
+                          navigator.mozGetUserMedia ||
+                          navigator.msGetUserMedia;
+
 __Vue.config.delimiters = ['<%', '%>']
 
 let client;
@@ -30,7 +35,8 @@ var app = new __Vue({
 				username : this.username,
 				color : this.color
 			}, {
-				compression : false
+				compression : false,
+				debug : true
 				// host : 'jerome.olivierbossel.com'
 			});
 
@@ -39,7 +45,7 @@ var app = new __Vue({
 				_this.availableRooms = rooms;
 			});
 
-			client.on('client.missed-turn', (room) => {
+			client.on('missed-turn', (room) => {
 				console.log('missed-turn', room);
 				this.missedTurn = true;
 				setTimeout(() => {

@@ -140,19 +140,19 @@ name  |  **{ [String](https://developer.mozilla.org/fr/docs/Web/JavaScript/Refer
 ## Events
 
 
-### client.announced
+### announced
 
 Notify that the client has been announced to the server
 
 
 #### Example
 ```js
-	myClient.on('client.annouced', () => {
+	myClient.on('annouced', () => {
 	// do something here...
 });
 ```
 
-### client.joined
+### joined
 
 Notify that the client has successfuly joined a room
 
@@ -164,12 +164,30 @@ room  |  **{ Room }**  |  The joined room object  |  required  |
 
 #### Example
 ```js
-	myClient.on('client.joined', (room) => {
+	myClient.on('joined', (room) => {
 	// do something here...
 });
 ```
 
-### client.left
+### client.joined
+
+Notify that another client has successfuly joined a room
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+room  |  **{ Room }**  |  The joined room object  |  required  |
+client  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The joined client object  |  required  |
+
+#### Example
+```js
+	myClient.on('client.joined', (room, client) => {
+	// do something here...
+});
+```
+
+### left
 
 Notify that the client has successfuly left a room
 
@@ -181,12 +199,30 @@ room  |  **{ Room }**  |  The left room object  |  required  |
 
 #### Example
 ```js
-	myClient.on('client.left', (room) => {
+	myClient.on('left', (room) => {
 	// do something here...
 });
 ```
 
-### client.queued
+### client.left
+
+Notify that another client has successfuly left a room
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+room  |  **{ Room }**  |  The left room object  |  required  |
+client  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The left client object  |  required  |
+
+#### Example
+```js
+	myClient.on('client.left', (room, client) => {
+	// do something here...
+});
+```
+
+### queued
 
 Notify that the client has been queued in a particular room
 
@@ -198,12 +234,30 @@ room  |  **{ Room }**  |  The room object  |  required  |
 
 #### Example
 ```js
-	myClient.on('client.queued', (room) => {
+	myClient.on('queued', (room) => {
 	// do something here...
 });
 ```
 
-### client.picked
+### client.queued
+
+Notify that another client has been queued in a particular room
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+room  |  **{ Room }**  |  The room object  |  required  |
+client  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The queued client object  |  required  |
+
+#### Example
+```js
+	myClient.on('client.queued', (room, client) => {
+	// do something here...
+});
+```
+
+### picked
 
 Notify that the client has been picked in a particular room
 
@@ -215,13 +269,31 @@ room  |  **{ Room }**  |  The room object  |  required  |
 
 #### Example
 ```js
-	myClient.on('client.picked', (room) => {
+	myClient.on('picked', (room) => {
 	// try to join the room again here...
 	// you can be confident that the join will be a success until the picked-timeout is not finished...
 });
 ```
 
-### client.picked-timeout
+### client.picked
+
+Notify that another client has been picked in a particular room
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+room  |  **{ Room }**  |  The room object  |  required  |
+client  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The picked client object  |  required  |
+
+#### Example
+```js
+	myClient.on('client.picked', (room) => {
+	// do something here...
+});
+```
+
+### picked-timeout
 
 Notify each second of the remaining timeout left to join the room when the client has been picked
 
@@ -234,12 +306,12 @@ remainingTimeout  |  **{ Integer }**  |  The timeout left before the client is b
 
 #### Example
 ```js
-	myClient.on('client.picked-timeout', (room, remainingTimeout) => {
+	myClient.on('picked-timeout', (room, remainingTimeout) => {
 	// do something here...
 });
 ```
 
-### client.missed-turn
+### missed-turn
 
 Notify that the client has missed his turn after being picked
 
@@ -251,7 +323,24 @@ room  |  **{ Room }**  |  The room object  |  required  |
 
 #### Example
 ```js
-	myClient.on('client.missed-turn', (room) => {
+	myClient.on('missed-turn', (room) => {
+	// do something here...
+});
+```
+
+### available-rooms
+
+Notify that the server has sent the available room you can join
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+rooms  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The available rooms object  |  required  |
+
+#### Example
+```js
+	myClient.on('available-rooms', (rooms) => {
 	// do something here...
 });
 ```
