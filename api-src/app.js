@@ -31,22 +31,22 @@ import __pako from 'pako';
 
 /**
  * @event
- * @name  app.announced
+ * @name  announced
  * Notify that the app has been announced inside his room
  *
  * @example 	js
- * myApp.on('app.annouced', () => {
+ * myApp.on('annouced', () => {
  * 	// do something here...
  * });
  */
 
 /**
  * @event
- * @name  app.joined
+ * @name  joined
  * Notify that the app has joined his room
  *
  * @example 	js
- * myApp.on('app.joined', () => {
+ * myApp.on('joined', () => {
  * 	// do something here...
  * });
  */
@@ -136,7 +136,7 @@ class App {
 				// the client has been annouced correctly
 				resolve(this);
 				// emit an event
-				this.emit('app.announced', this);
+				this.emit('announced', this);
 				// log
 				this.log.success('App successfuly announced');
 			});
@@ -144,7 +144,7 @@ class App {
 			// listen for joined room
 			this._socket.on('app.joined', (room) => {
 				this.log.success(`App successfuly added to the "${roomId}" room`);
-				this.emit('app.joined', this);
+				this.emit('joined', this);
 			});
 
 			this._socket.on('client.data', (from, data) => {

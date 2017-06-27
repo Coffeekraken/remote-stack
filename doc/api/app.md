@@ -106,26 +106,26 @@ name  |  **{ [String](https://developer.mozilla.org/fr/docs/Web/JavaScript/Refer
 ## Events
 
 
-### app.announced
+### announced
 
 Notify that the app has been announced inside his room
 
 
 #### Example
 ```js
-	myApp.on('app.annouced', () => {
+	myApp.on('annouced', () => {
 	// do something here...
 });
 ```
 
-### app.joined
+### joined
 
 Notify that the app has joined his room
 
 
 #### Example
 ```js
-	myApp.on('app.joined', () => {
+	myApp.on('joined', () => {
 	// do something here...
 });
 ```
