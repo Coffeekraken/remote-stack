@@ -82,6 +82,13 @@ myClient.announce().then(() => {
 		someValue : 'Somehting...'
 	});
 });
+// listen for some events
+myClient.on('joined', (room) => {
+	// do something here...
+})
+myClient.on('picked', (room) => {
+	// do something here...
+})
 ```
 
 <a name="readme-app-api"></a>
@@ -159,8 +166,8 @@ coffeekraken-remote-stack-server [options]
 
 #### Arguments
 
-- ```-p --port``` : The port on which the server will run. Default **8181**
-- ```-c --config``` : A path to a config file to load. Default **./remote-stack.config.js**
+- ```-p --port``` : The port on which the server will run. Default **3030**
+- ```-c --config``` : A path to a config file to load. Default **./remote-stack-server.config.js**
 
 <a id="readme-contribute"></a>
 ## Contribute
