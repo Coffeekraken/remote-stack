@@ -121,7 +121,7 @@ myApp.on('client.data', (data, client) => {
 
 For the server, you will need a `remote-stack-server.config.js` file at the root of your project.
 
-[doc/remote-stack-server.config.js.md](See the remote-stack-server.config.js file reference)
+[See the remote-stack-server.config.js file reference](doc/remote-stack-server.config.js.md)
 
 ```js
 module.exports = {
