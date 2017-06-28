@@ -18,7 +18,7 @@ module.exports = {
 		name : 'Television',
 
 		// specify the maximum clients that can connect to this room simultaneously
-		simultaneous : 2,
+		maxClients : 2,
 
 		// specify the time frame between the client picked event and the missed-turn one
 		pickedTimeout : 10000,
