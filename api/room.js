@@ -614,7 +614,7 @@ var Room = function () {
 
 		/**
    * The clients in the room
-   * @type  	{Array<Client>}
+   * @type  	{Array}
    */
 
 	}, {
@@ -625,7 +625,7 @@ var Room = function () {
 
 		/**
    * The active clients
-   * @type  	{Array<Client>}
+   * @type  	{Array}
    */
 
 	}, {
@@ -658,7 +658,7 @@ var Room = function () {
 
 		/**
    * Get the queued clients objects
-   * @type 		{Object<Object>}
+   * @type 		{Object}
    */
 
 	}, {
@@ -676,7 +676,7 @@ var Room = function () {
 
 		/**
    * Get the picked clients objects
-   * @type 		{Object<Object>}
+   * @type 		{Object}
    */
 
 	}, {

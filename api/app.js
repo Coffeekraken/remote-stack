@@ -62,22 +62,22 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * @event
- * @name  app.announced
+ * @name  announced
  * Notify that the app has been announced inside his room
  *
  * @example 	js
- * myApp.on('app.annouced', () => {
+ * myApp.on('annouced', () => {
  * 	// do something here...
  * });
  */
 
 /**
  * @event
- * @name  app.joined
+ * @name  joined
  * Notify that the app has joined his room
  *
  * @example 	js
- * myApp.on('app.joined', () => {
+ * myApp.on('joined', () => {
  * 	// do something here...
  * });
  */
@@ -86,11 +86,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @event
  * @name  client.data
  * Notify that the app has received some data from a client
+ * @param 	{Object} 	client 		The client object that has sent the data
  * @param 	{Object} 	data 		The data sent by the client
- * @param 	{Object} 	from 		The client object that has sent the data
  *
  * @example 	js
- * myApp.on('client.data', (data, from) => {
+ * myApp.on('client.data', (client, data) => {
  * 	// do something here...
  * });
  */
@@ -99,7 +99,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @event
  * @name  client.joined
  * Notify that a client has joined the app
- * @param 	{Object} 	from 		The client object that has sent the data
+ * @param 	{Object} 	client 		The client object that has sent the data
  *
  * @example 	js
  * myApp.on('client.joined', (client) => {
@@ -111,7 +111,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @event
  * @name  client.left
  * Notify that a client has left the app
- * @param 	{Object} 	from 		The client object that has sent the data
+ * @param 	{Object} 	client 		The client object that has sent the data
  *
  * @example 	js
  * myApp.on('client.left', (client) => {
@@ -187,7 +187,7 @@ var App = function () {
 					// the client has been annouced correctly
 					resolve(_this2);
 					// emit an event
-					_this2.emit('app.announced', _this2);
+					_this2.emit('announced', _this2);
 					// log
 					_this2.log.success('App successfuly announced');
 				});
@@ -195,16 +195,16 @@ var App = function () {
 				// listen for joined room
 				_this2._socket.on('app.joined', function (room) {
 					_this2.log.success('App successfuly added to the "' + roomId + '" room');
-					_this2.emit('app.joined', _this2);
+					_this2.emit('joined', _this2);
 				});
 
-				_this2._socket.on('client.data', function (from, data) {
+				_this2._socket.on('client.data', function (client, data) {
 					// decompress data if needed
 					if (_this2._settings.compression) {
 						data = JSON.parse(_pako2.default.inflate(data, { to: 'string' }));
 					}
-					_this2.log.success('received ' + data + ' from client ' + from.id);
-					_this2.emit('client.data', from, data);
+					_this2.log.success('received ' + data + ' from client ' + client.id);
+					_this2.emit('client.data', client, data);
 				});
 
 				_this2._socket.on('client.joined', function (client) {
