@@ -14,7 +14,7 @@ module.exports = {
 
 	// allow of not to override some of the default room settings
 	// when create one from the front app side
-	allowSettingsOverride : ['sessionDuration'],
+	allowSettingsOverride : true,
 
 	// specify a room id pattern to follow (optional)
 	newRoomIdPattern : null,
