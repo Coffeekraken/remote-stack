@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+	value: true
 });
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -31,6 +31,10 @@ var _room2 = _interopRequireDefault(_room);
 var _merge2 = require('lodash/merge');
 
 var _merge3 = _interopRequireDefault(_merge2);
+
+var _union2 = require('lodash/union');
+
+var _union3 = _interopRequireDefault(_union2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -81,362 +85,301 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * @event
- * @name  	joined
+ * @name  	room.joined
  * Notify that the client has successfuly joined a room
  *
  * @param 	{Room} 		room 		The joined room object
  *
  * @example 	js
- * myClient.on('joined', (room) => {
+ * myClient.on('room.joined', (room) => {
  * 	// do something here...
  * });
  */
 
 /**
  * @event
- * @name  	client.joined
- * Notify that another client has successfuly joined a room
- *
- * @param 	{Room} 		room 		The joined room object
- * @param 	{Object} 	client 		The joined client object
- *
- * @example 	js
- * myClient.on('client.joined', (room, client) => {
- * 	// do something here...
- * });
- */
-
-/**
- * @event
- * @name  	left
+ * @name  	room.left
  * Notify that the client has successfuly left a room
  *
  * @param 	{Room} 		room 		The left room object
  *
  * @example 	js
- * myClient.on('left', (room) => {
+ * myClient.on('room.left', (room) => {
  * 	// do something here...
  * });
  */
 
 /**
  * @event
- * @name  	client.left
- * Notify that another client has successfuly left a room
+ * @name  	room.closed
+ * Notify that the a room that the client has joined has been closed
  *
  * @param 	{Room} 		room 		The left room object
- * @param 	{Object} 	client 		The left client object
  *
  * @example 	js
- * myClient.on('client.left', (room, client) => {
+ * myClient.on('room.closed', (room) => {
  * 	// do something here...
  * });
  */
 
 /**
  * @event
- * @name  	queued
+ * @name  	room.queued
  * Notify that the client has been queued in a particular room
  *
  * @param 	{Room} 		room 		The room object
  *
  * @example 	js
- * myClient.on('queued', (room) => {
+ * myClient.on('room.queued', (room) => {
  * 	// do something here...
  * });
  */
 
 /**
  * @event
- * @name  	client.queued
- * Notify that another client has been queued in a particular room
- *
- * @param 	{Room} 		room 		The room object
- * @param 	{Object} 	client 		The queued client object
- *
- * @example 	js
- * myClient.on('client.queued', (room, client) => {
- * 	// do something here...
- * });
- */
-
-/**
- * @event
- * @name  	picked
+ * @name  	room.picked
  * Notify that the client has been picked in a particular room
  *
  * @param 	{Room} 		room 		The room object
  *
  * @example 	js
- * myClient.on('picked', (room) => {
+ * myClient.on('room.picked', (room) => {
  * 	// try to join the room again here...
- * 	// you can be confident that the join will be a success until the picked-timeout is not finished...
+ * 	// you can be confident that the join will be a success until the picked-remaining-timeout is not finished...
  * });
  */
 
 /**
  * @event
- * @name  	client.picked
- * Notify that another client has been picked in a particular room
- *
- * @param 	{Room} 		room 		The room object
- * @param 	{Object} 	client 		The picked client object
- *
- * @example 	js
- * myClient.on('client.picked', (room) => {
- * 	// do something here...
- * });
- */
-
-/**
- * @event
- * @name  	picked-timeout
- * Notify each second of the remaining timeout left to join the room when the client has been picked
- *
- * @param 	{Room} 		room 					The room object
- * @param 	{Integer} 	remainingTimeout 		The timeout left before the client is being kicked of the picked queue
- *
- * @example 	js
- * myClient.on('picked-timeout', (room, remainingTimeout) => {
- * 	// do something here...
- * });
- */
-
-/**
- * @event
- * @name  	missed-turn
+ * @name  	room.missed-turn
  * Notify that the client has missed his turn after being picked
  *
  * @param 	{Room} 		room 		The room object
  *
  * @example 	js
- * myClient.on('missed-turn', (room) => {
+ * myClient.on('room.missed-turn', (room) => {
  * 	// do something here...
  * });
  */
 
 /**
  * @event
- * @name  	available-rooms
- * Notify that the server has sent the available room you can join
+ * @name  	error
+ * Notify that an error has occured with his details
  *
- * @param 		{Object} 		rooms 		The available rooms object
+ * @param 	{Object} 		error 		The object that describe the error
  *
  * @example 	js
- * myClient.on('available-rooms', (rooms) => {
+ * myClient.on('error', (error) => {
  * 	// do something here...
  * });
  */
 
 var Client = function () {
 
-  /**
-   * @constructor
-   * @param  		{Object} 		[data={}] 		The data you want to assign to the client
-   * @param 		{Object} 		[settings={}] 	Configure the app socket through this settings
+	/**
+  * @constructor
+  * @param  		{Object} 		[data={}] 		The data you want to assign to the client
+  * @param 		{Object} 		[settings={}] 	Configure the app socket through this settings
+  */
+	function Client() {
+		var _this = this;
+
+		var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+		var settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+		_classCallCheck(this, Client);
+
+		this.data = {};
+		this._socket = null;
+		this._id = null;
+		this._joinedRooms = {};
+		this._knownedRooms = {};
+		this._announced = false;
+		this.log = {
+			success: function success(message) {
+				if (!_this._settings.debug) return;
+				console.log('%c Remote stack client : ' + message, 'color: green');
+			},
+			error: function error(message) {
+				if (!_this._settings.debug) return;
+				console.log('%c Remote stack client : ' + message, 'color: red');
+			}
+		};
+
+		// save the user data
+		this.data = data;
+
+		// extend settings
+		this._settings = _extends({}, _settings2.default, settings);
+	}
+
+	/**
+  * Announce the client to the socket.io server.
+  * @return 		{Promise} 					A promise
+  */
+
+
+	_createClass(Client, [{
+		key: 'announce',
+		value: function announce() {
+			var _this2 = this;
+
+			return new Promise(function (resolve) {
+				var socketUrl = _this2._settings.host;
+				if (_this2._settings.port) {
+					socketUrl += ':' + _this2._settings.port;
+				}
+
+				_this2._socket = (0, _socket4.default)(socketUrl);
+				_this2._socket.on('connect', function () {
+					// save the client id
+					_this2._id = _this2._socket.id;
+
+					// announce the client
+					_this2._socket.emit('client.announce', _this2.data);
+				});
+				_this2._socket.on('_error', function (errorObj) {
+					if (_this2._settings.debug) console.error('Remote stack client', errorObj);
+					_this2.emit('error', errorObj);
+				});
+				_this2._socket.on('room.joined', function (roomData) {
+					_this2._joinedRooms[roomData.id] = _this2._knownedRooms[roomData.id];
+					_this2.emit('room.joined', _this2._knownedRooms[roomData.id]);
+				});
+				_this2._socket.on('room.left', function (roomData) {
+					_this2._socket.off('room.' + roomData.id + '.metas');
+					_this2.emit('room.left', _this2._knownedRooms[roomData.id]);
+					delete _this2._joinedRooms[roomData.id];
+				});
+				_this2._socket.on('room.closed', function (roomData) {
+					_this2._socket.off('room.' + roomData.id + '.metas');
+					_this2.emit('room.closed', _this2._knownedRooms[roomData.id]);
+					delete _this2._joinedRooms[roomData.id];
+				});
+				_this2._socket.on('room.queued', function (roomData) {
+					_this2.emit('room.queued', _this2._knownedRooms[roomData.id]);
+				});
+				_this2._socket.on('room.picked', function (roomData) {
+					_this2.emit('room.picked', _this2._knownedRooms[roomData.id]);
+				});
+				_this2._socket.on('room.missed-turn', function (roomData) {
+					_this2.emit('room.missed-turn', _this2._knownedRooms[roomData.id]);
+				});
+
+				_this2._socket.on('client.announced', function (data) {
+					// update client state
+					_this2._announced = true;
+					// the client has been annouced correctly
+					resolve(_this2);
+					// emit an event
+					_this2.emit('announced', _this2);
+					// log
+					_this2.log.success('Successfuly announced');
+				});
+			});
+		}
+
+		/**
+   * Ask to join a room
+   * This request can lead to a "client.queued" event if the requested room is full. You will need to
+   * call this method again when you receive the "client.picked" event
+   *
+  	 * @param 	{String} 		roomId 		The room id you want the client to join
+  	 * @return  {Promise} 					A promise that will be resolved only if the client is accepted directly in the room
    */
-  function Client() {
-    var _this = this;
 
-    var data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var settings = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	}, {
+		key: 'join',
+		value: function join(roomId) {
+			var _this3 = this;
 
-    _classCallCheck(this, Client);
+			return new Promise(function (resolve, reject) {
 
-    this.data = {};
-    this._socket = null;
-    this._id = null;
-    this._joinedRooms = {};
-    this._availableRooms = {};
-    this._announced = false;
-    this.log = {
-      success: function success(message) {
-        if (!_this._settings.debug) return;
-        console.log('%c Remote stack client : ' + message, 'color: green');
-      },
-      error: function error(message) {
-        if (!_this._settings.debug) return;
-        console.log('%c Remote stack client : ' + message, 'color: red');
-      }
-    };
+				// join a room
+				if (_this3._joinedRooms[roomId] && _this3._joinedRooms[roomId].hasJoined()) {
+					reject('You cannot join the room "' + roomId + '" cause this client has already joined it...');
+					return;
+				}
 
-    // save the user data
-    this.data = data;
+				// if not annouced
+				if (!_this3.isAnnounced()) {
+					reject('You need to announce the client first with the "Client.announce" method...');
+					return;
+				}
 
-    // extend settings
-    this._settings = _extends({}, _settings2.default, settings);
-  }
+				// listen when we get the room datas
+				_this3._socket.on('room.' + roomId + '.metas', function (room) {
+					console.log('room metas', room);
+					if (!_this3._knownedRooms[room.id]) {
+						_this3._knownedRooms[room.id] = new _room2.default(room, _this3._socket, _this3._settings);
+					} else {
+						_this3._knownedRooms[room.id].updateData(room);
+					}
+					// correctly joined the room
+					resolve(_this3._knownedRooms[room.id]);
+				});
 
-  /**
-   * Announce the client to the socket.io server.
-   * @return 		{Promise} 					A promise
+				// try to join a room
+				_this3._socket.emit('client.join', roomId);
+			});
+		}
+
+		/**
+   * Destroy the client
    */
 
+	}, {
+		key: 'destroy',
+		value: function destroy() {
+			this._socket.off('room.joined');
+			this._socket.off('room.left');
+			this._socket.off('room.queued');
+			this._socket.off('room.picked');
+			this._socket.off('room.missed-turn');
+			this._socket.off('_error');
+			this._socket.off('client.announced');
+			delete this._joinedRooms;
+			delete this._knownedRooms;
+			this._socket.disconnect();
+			delete this._socket;
+		}
 
-  _createClass(Client, [{
-    key: 'announce',
-    value: function announce() {
-      var _this2 = this;
+		/**
+   * All the rooms known rooms that the client has already try to join or joined
+   * @type 		{Object}
+   */
 
-      return new Promise(function (resolve) {
-        var socketUrl = _this2._settings.host;
-        if (_this2._settings.port) {
-          socketUrl += ':' + _this2._settings.port;
-        }
-        _this2._socket = (0, _socket4.default)(socketUrl);
-        _this2._socket.on('connect', function () {
-          // save the client id
-          _this2._id = _this2._socket.id;
-
-          // announce the client
-          _this2._socket.emit('client.announce', _this2.data);
-        });
-        _this2._socket.on('client.announced', function (data) {
-          // update client state
-          _this2._announced = true;
-          // the client has been annouced correctly
-          resolve(_this2);
-          // emit an event
-          _this2.emit('announced', _this2);
-          // log
-          _this2.log.success('Successfuly announced');
-        });
-        // listen for rooms
-        _this2._socket.on('available-rooms', function (rooms) {
-
-          // remove the rooms that have dissapeard
-          Object.keys(_this2._availableRooms).forEach(function (roomId) {
-            if (!rooms[roomId]) {
-              _this2._availableRooms[roomId] && _this2._availableRooms[roomId].destroy();
-              delete _this2._availableRooms[roomId];
-            }
-          });
-
-          // save the rooms
-          Object.keys(rooms).forEach(function (roomId) {
-            if (_this2._availableRooms[roomId]) {
-              _this2._availableRooms[roomId].updateData(rooms[roomId]);
-            } else {
-              _this2._availableRooms[roomId] = new _room2.default(rooms[roomId], _this2._socket, _this2._settings);
-              // listen when the room has been left
-              _this2._availableRooms[roomId].on('left', function (room) {
-                delete _this2._joinedRooms[room.id];
-                _this2.emit('left', room);
-              });
-              _this2._availableRooms[roomId].on('client.left', function (room, client) {
-                _this2.emit('client.left', room, client);
-              });
-              _this2._availableRooms[roomId].on('joined', function (room) {
-                _this2._joinedRooms[room.id] = _this2._availableRooms[room.id];
-                _this2.emit('joined', room);
-              });
-              _this2._availableRooms[roomId].on('client.joined', function (room, client) {
-                _this2.emit('client.joined', room, client);
-              });
-              _this2._availableRooms[roomId].on('picked', function (room) {
-                _this2.emit('picked', room);
-              });
-              _this2._availableRooms[roomId].on('client.picked', function (room, client) {
-                _this2.emit('client.picked', room, client);
-              });
-              _this2._availableRooms[roomId].on('queued', function (room) {
-                _this2.emit('queued', room);
-              });
-              _this2._availableRooms[roomId].on('client.queued', function (room, client) {
-                _this2.emit('client.queued', room, client);
-              });
-              _this2._availableRooms[roomId].on('picked-timeout', function (room, remainingTime) {
-                _this2.emit('picked-timeout', room, remainingTime);
-              });
-              _this2._availableRooms[roomId].on('missed-turn', function (room) {
-                _this2.emit('missed-turn', room);
-              });
-            }
-          });
-
-          _this2.log.success('Available rooms : ' + _this2._availableRooms);
-
-          // emit new rooms
-          _this2.emit('available-rooms', _this2._availableRooms);
-        });
-      });
-    }
-
-    /**
-     * Ask to join a room
-     * This request can lead to a "client.queued" event if the requested room is full. You will need to
-     * call this method again when you receive the "client.picked" event
-     *
-    	 * @param 	{String} 		roomId 		The room id you want the client to join
-    	 * @return  {Promise} 					A promise that will be resolved only if the client is accepted directly in the room
-     */
-
-  }, {
-    key: 'join',
-    value: function join(roomId) {
-      // join a room
-      if (this._joinedRooms[roomId]) {
-        reject('You cannot join the room "' + roomId + '" cause this client has already joined it...');
-        return;
-      }
-
-      // if not annouced
-      if (!this.isAnnounced()) {
-        reject('You need to announce the client first with the "Client.announce" method...');
-        return;
-      }
-      // join the room
-      return this._availableRooms[roomId].join();
-    }
-
-    /**
-     * Leave the passed room
-     * @param 	{String} 	roomId 		The room id you want the client to leave
-     * @return 	{Promise} 				A promise that will be resolved when the client has successfuly left the room
-     */
-
-  }, {
-    key: 'leave',
-    value: function leave(roomId) {
-      // left the room
-      return this._joinedRooms[roomId].leave();
-    }
-
-    /**
-     * All the rooms available to join
-     * @type 		{Object}
-     */
-
-  }, {
-    key: 'isAnnounced',
+	}, {
+		key: 'isAnnounced',
 
 
-    /**
-     * Return if the client has been annouced to the server
-     * @return 		{Boolean} 			true if announced, false if not
-     */
-    value: function isAnnounced() {
-      return this._announced;
-    }
-  }, {
-    key: 'availableRooms',
-    get: function get() {
-      return this._availableRooms;
-    }
+		/**
+   * Return if the client has been annouced to the server
+   * @return 		{Boolean} 			true if announced, false if not
+   */
+		value: function isAnnounced() {
+			return this._announced;
+		}
+	}, {
+		key: 'knownedRooms',
+		get: function get() {
+			return this._knownedRooms;
+		}
 
-    /**
-     * All the rooms in which the client is in
-     * @type 		{Object}
-     */
+		/**
+   * All the rooms in which the client is in
+   * @type 		{Object}
+   */
 
-  }, {
-    key: 'joinedRooms',
-    get: function get() {
-      return this._joinedRooms;
-    }
-  }]);
+	}, {
+		key: 'joinedRooms',
+		get: function get() {
+			return this._joinedRooms;
+		}
+	}]);
 
-  return Client;
+	return Client;
 }();
 
 /**

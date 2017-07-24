@@ -1,11 +1,19 @@
 <div id="testsApp">
 
-	<div v-if="Object.keys(availableRooms).length">
-		<section class="tests__room m-b" v-for="(room, key) in availableRooms">
+	<div v-if="client && ! room">
+		<form name="join" v-on:submit="join">
+			<input type="text" name="roomId" placeholder="coco" v-model="roomId" />
+			<input type="submit" value="Join!" />
+		</form>
+	</div>
+
+	<div v-if="room">
+
+		<section class="tests__room m-b">
 			<h1 class="h2">
 				<% room.name %> <small v-if=" ! room.hasJoined() && ! room.isPicked()">(wait time ~<% room.waitTimeEstimation / 1000 %>s)</small>
 				<div v-if=" ! missedTurn && ! room.isPicked()">
-					<button v-if=" ! room.hasJoined() && ! room.isQueued()" v-on:click="join(room)">Join</button>
+					<button v-if=" ! room.hasJoined() && ! room.isQueued()" v-on:click="join()">Join</button>
 					<button v-if="room.hasJoined() || room.isQueued()" v-on:click="leave(room)">Leave</button>
 					<!-- <button v-on:click="hi(room)">Say hi to clients</button>
 					<button v-on:click="hiApp(room)">Say hi to app</button> -->
@@ -21,13 +29,13 @@
 
 			<p v-if="room.isPicked()">
 				It's you turn!!!
-				<button v-on:click="join(room)">Play!</button>
+				<button v-on:click="join()">Play!</button>
 			</p>
 			<p v-if="room.pickedQueueRemainingTimeout > 0">
 				You have <% room.pickedQueueRemainingTimeout / 1000 %> second(s) remaining to join the party...
 			</p>
 
-			<div class="joystick" v-if="room.hasJoined() && ! room.isQueued()" v-bind:for="key"></div>
+			<div class="joystick" v-if="room.hasJoined() && ! room.isQueued()" v-bind:for="roomId"></div>
 
 			<!-- <ul class="tests__room-clients">
 				<li class="tests__room-client" v-for="(client, key) in room.clients" v-on:click="click(room, client)">
@@ -39,7 +47,7 @@
 
 	</div>
 
-	<div v-if=" ! Object.keys(availableRooms).length">
+	<div v-if=" ! client">
 		<section id="announce">
 			<form name="announce" v-on:submit="announce">
 				<input type="color" name="color" v-model="color" />

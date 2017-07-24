@@ -73,11 +73,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * @event
- * @name  joined
+ * @name  room.joined
  * Notify that the app has joined his room
  *
  * @example 	js
- * myApp.on('joined', () => {
+ * myApp.on('room.joined', () => {
  * 	// do something here...
  * });
  */
@@ -115,6 +115,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  *
  * @example 	js
  * myApp.on('client.left', (client) => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name  	error
+ * Notify that an error has occured with his details
+ *
+ * @param 	{Object} 		error 		The object that describe the error
+ *
+ * @example 	js
+ * myClient.on('error', (error) => {
  * 	// do something here...
  * });
  */
@@ -179,7 +192,11 @@ var App = function () {
 					// save the client id
 					_this2._id = _this2._socket.id;
 					// announce the client
-					_this2._socket.emit('app.announce', _this2.data, roomId);
+					_this2._socket.emit('app.announce', _this2.data, roomId, _this2._settings);
+				});
+				_this2._socket.on('_error', function (errorObj) {
+					if (_this2._settings.debug) console.error('Remote stack app', errorObj);
+					_this2.emit('error', errorObj);
 				});
 				_this2._socket.on('app.announced', function (data) {
 					// update client state
@@ -195,7 +212,7 @@ var App = function () {
 				// listen for joined room
 				_this2._socket.on('app.joined', function (room) {
 					_this2.log.success('App successfuly added to the "' + roomId + '" room');
-					_this2.emit('joined', _this2);
+					_this2.emit('room.joined', _this2);
 				});
 
 				_this2._socket.on('client.data', function (client, data) {

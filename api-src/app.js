@@ -42,11 +42,11 @@ import __pako from 'pako';
 
 /**
  * @event
- * @name  joined
+ * @name  room.joined
  * Notify that the app has joined his room
  *
  * @example 	js
- * myApp.on('joined', () => {
+ * myApp.on('room.joined', () => {
  * 	// do something here...
  * });
  */
@@ -84,6 +84,19 @@ import __pako from 'pako';
  *
  * @example 	js
  * myApp.on('client.left', (client) => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name  	error
+ * Notify that an error has occured with his details
+ *
+ * @param 	{Object} 		error 		The object that describe the error
+ *
+ * @example 	js
+ * myClient.on('error', (error) => {
  * 	// do something here...
  * });
  */
@@ -128,7 +141,11 @@ class App {
 				// save the client id
 				this._id = this._socket.id;
 				// announce the client
-				this._socket.emit('app.announce', this.data, roomId);
+				this._socket.emit('app.announce', this.data, roomId, this._settings);
+			});
+			this._socket.on('_error', (errorObj) => {
+				if (this._settings.debug) console.error('Remote stack app', errorObj);
+				this.emit('error', errorObj);
 			});
 			this._socket.on('app.announced', (data) => {
 				// update client state
@@ -144,7 +161,7 @@ class App {
 			// listen for joined room
 			this._socket.on('app.joined', (room) => {
 				this.log.success(`App successfuly added to the "${roomId}" room`);
-				this.emit('joined', this);
+				this.emit('room.joined', this);
 			});
 
 			this._socket.on('client.data', (client, data) => {

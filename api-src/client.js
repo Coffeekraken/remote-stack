@@ -4,6 +4,7 @@ import __settings from './settings'
 import __eventEmitter from 'event-emitter';
 import __Room from './room';
 import _merge from 'lodash/merge';
+import _union from 'lodash/union';
 
 /**
  * @name 		Client
@@ -50,153 +51,95 @@ import _merge from 'lodash/merge';
 
 /**
  * @event
- * @name  	joined
+ * @name  	room.joined
  * Notify that the client has successfuly joined a room
  *
  * @param 	{Room} 		room 		The joined room object
  *
  * @example 	js
- * myClient.on('joined', (room) => {
+ * myClient.on('room.joined', (room) => {
  * 	// do something here...
  * });
  */
 
 /**
  * @event
- * @name  	client.joined
- * Notify that another client has successfuly joined a room
- *
- * @param 	{Room} 		room 		The joined room object
- * @param 	{Object} 	client 		The joined client object
- *
- * @example 	js
- * myClient.on('client.joined', (room, client) => {
- * 	// do something here...
- * });
- */
-
-/**
- * @event
- * @name  	left
+ * @name  	room.left
  * Notify that the client has successfuly left a room
  *
  * @param 	{Room} 		room 		The left room object
  *
  * @example 	js
- * myClient.on('left', (room) => {
+ * myClient.on('room.left', (room) => {
  * 	// do something here...
  * });
  */
 
 /**
  * @event
- * @name  	client.left
- * Notify that another client has successfuly left a room
+ * @name  	room.closed
+ * Notify that the a room that the client has joined has been closed
  *
  * @param 	{Room} 		room 		The left room object
- * @param 	{Object} 	client 		The left client object
  *
  * @example 	js
- * myClient.on('client.left', (room, client) => {
+ * myClient.on('room.closed', (room) => {
  * 	// do something here...
  * });
  */
 
 /**
  * @event
- * @name  	queued
+ * @name  	room.queued
  * Notify that the client has been queued in a particular room
  *
  * @param 	{Room} 		room 		The room object
  *
  * @example 	js
- * myClient.on('queued', (room) => {
+ * myClient.on('room.queued', (room) => {
  * 	// do something here...
  * });
  */
 
 /**
  * @event
- * @name  	client.queued
- * Notify that another client has been queued in a particular room
- *
- * @param 	{Room} 		room 		The room object
- * @param 	{Object} 	client 		The queued client object
- *
- * @example 	js
- * myClient.on('client.queued', (room, client) => {
- * 	// do something here...
- * });
- */
-
-/**
- * @event
- * @name  	picked
+ * @name  	room.picked
  * Notify that the client has been picked in a particular room
  *
  * @param 	{Room} 		room 		The room object
  *
  * @example 	js
- * myClient.on('picked', (room) => {
+ * myClient.on('room.picked', (room) => {
  * 	// try to join the room again here...
- * 	// you can be confident that the join will be a success until the picked-timeout is not finished...
+ * 	// you can be confident that the join will be a success until the picked-remaining-timeout is not finished...
  * });
  */
 
 /**
  * @event
- * @name  	client.picked
- * Notify that another client has been picked in a particular room
- *
- * @param 	{Room} 		room 		The room object
- * @param 	{Object} 	client 		The picked client object
- *
- * @example 	js
- * myClient.on('client.picked', (room) => {
- * 	// do something here...
- * });
- */
-
-/**
- * @event
- * @name  	picked-timeout
- * Notify each second of the remaining timeout left to join the room when the client has been picked
- *
- * @param 	{Room} 		room 					The room object
- * @param 	{Integer} 	remainingTimeout 		The timeout left before the client is being kicked of the picked queue
- *
- * @example 	js
- * myClient.on('picked-timeout', (room, remainingTimeout) => {
- * 	// do something here...
- * });
- */
-
-/**
- * @event
- * @name  	missed-turn
+ * @name  	room.missed-turn
  * Notify that the client has missed his turn after being picked
  *
  * @param 	{Room} 		room 		The room object
  *
  * @example 	js
- * myClient.on('missed-turn', (room) => {
+ * myClient.on('room.missed-turn', (room) => {
  * 	// do something here...
  * });
  */
 
 /**
  * @event
- * @name  	available-rooms
- * Notify that the server has sent the available room you can join
+ * @name  	error
+ * Notify that an error has occured with his details
  *
- * @param 		{Object} 		rooms 		The available rooms object
+ * @param 	{Object} 		error 		The object that describe the error
  *
  * @example 	js
- * myClient.on('available-rooms', (rooms) => {
+ * myClient.on('error', (error) => {
  * 	// do something here...
  * });
  */
-
 
 class Client {
 
@@ -205,7 +148,7 @@ class Client {
 	_socket = null;
 	_id = null;
 	_joinedRooms = {};
-	_availableRooms = {};
+	_knownedRooms = {};
 	_announced = false;
 
 	/**
@@ -234,6 +177,7 @@ class Client {
 			if (this._settings.port) {
 				socketUrl += `:${this._settings.port}`;
 			}
+
 			this._socket = __socketIo(socketUrl);
 			this._socket.on('connect', () => {
 				// save the client id
@@ -242,6 +186,34 @@ class Client {
 				// announce the client
 				this._socket.emit('client.announce', this.data);
 			});
+			this._socket.on('_error', (errorObj) => {
+				if (this._settings.debug) console.error('Remote stack client', errorObj);
+				this.emit('error', errorObj);
+			});
+			this._socket.on('room.joined', (roomData) => {
+				this._joinedRooms[roomData.id] = this._knownedRooms[roomData.id];
+				this.emit('room.joined', this._knownedRooms[roomData.id]);
+			});
+			this._socket.on('room.left', (roomData) => {
+				this._socket.off(`room.${roomData.id}.metas`);
+				this.emit('room.left', this._knownedRooms[roomData.id]);
+				delete this._joinedRooms[roomData.id];
+			});
+			this._socket.on('room.closed', (roomData) => {
+				this._socket.off(`room.${roomData.id}.metas`);
+				this.emit('room.closed', this._knownedRooms[roomData.id]);
+				delete this._joinedRooms[roomData.id];
+			});
+			this._socket.on('room.queued', (roomData) => {
+				this.emit('room.queued', this._knownedRooms[roomData.id]);
+			});
+			this._socket.on('room.picked', (roomData) => {
+				this.emit('room.picked', this._knownedRooms[roomData.id]);
+			});
+			this._socket.on('room.missed-turn', (roomData) => {
+				this.emit('room.missed-turn', this._knownedRooms[roomData.id]);
+			});
+
 			this._socket.on('client.announced', (data) => {
 				// update client state
 				this._announced = true;
@@ -251,64 +223,6 @@ class Client {
 				this.emit('announced', this);
 				// log
 				this.log.success('Successfuly announced');
-			});
-			// listen for rooms
-			this._socket.on('available-rooms', (rooms) => {
-
-				// remove the rooms that have dissapeard
-				Object.keys(this._availableRooms).forEach((roomId) => {
-					if ( ! rooms[roomId]) {
-						this._availableRooms[roomId] && this._availableRooms[roomId].destroy();
-						delete this._availableRooms[roomId];
-					}
-				});
-
-				// save the rooms
-				Object.keys(rooms).forEach((roomId) => {
-					if (this._availableRooms[roomId]) {
-						this._availableRooms[roomId].updateData(rooms[roomId]);
-					} else {
-						this._availableRooms[roomId] = new __Room(rooms[roomId], this._socket, this._settings);
-						// listen when the room has been left
-						this._availableRooms[roomId].on('left', (room) => {
-							delete this._joinedRooms[room.id];
-							this.emit('left', room);
-						});
-						this._availableRooms[roomId].on('client.left', (room, client) => {
-							this.emit('client.left', room, client);
-						});
-						this._availableRooms[roomId].on('joined', (room) => {
-							this._joinedRooms[room.id] = this._availableRooms[room.id];
-							this.emit('joined', room);
-						});
-						this._availableRooms[roomId].on('client.joined', (room, client) => {
-							this.emit('client.joined', room, client);
-						});
-						this._availableRooms[roomId].on('picked', (room) => {
-							this.emit('picked', room);
-						});
-						this._availableRooms[roomId].on('client.picked', (room, client) => {
-							this.emit('client.picked', room, client);
-						});
-						this._availableRooms[roomId].on('queued', (room) => {
-							this.emit('queued', room);
-						});
-						this._availableRooms[roomId].on('client.queued', (room, client) => {
-							this.emit('client.queued', room, client);
-						});
-						this._availableRooms[roomId].on('picked-timeout', (room, remainingTime) => {
-							this.emit('picked-timeout', room, remainingTime);
-						});
-						this._availableRooms[roomId].on('missed-turn', (room) => {
-							this.emit('missed-turn', room);
-						});
-					}
-				});
-
-				this.log.success(`Available rooms : ${this._availableRooms}`);
-
-				// emit new rooms
-				this.emit('available-rooms', this._availableRooms);
 			});
 		});
 	}
@@ -322,37 +236,61 @@ class Client {
  	 * @return  {Promise} 					A promise that will be resolved only if the client is accepted directly in the room
 	 */
 	join(roomId) {
-		// join a room
-		if (this._joinedRooms[roomId]) {
-			reject(`You cannot join the room "${roomId}" cause this client has already joined it...`);
-			return;
-		}
 
-		// if not annouced
-		if ( ! this.isAnnounced()) {
-			reject(`You need to announce the client first with the "Client.announce" method...`);
-			return;
-		}
-		// join the room
-		return this._availableRooms[roomId].join();
+		return new Promise((resolve, reject) => {
+
+			// join a room
+			if (this._joinedRooms[roomId] && this._joinedRooms[roomId].hasJoined()) {
+				reject(`You cannot join the room "${roomId}" cause this client has already joined it...`);
+				return;
+			}
+
+			// if not annouced
+			if ( ! this.isAnnounced()) {
+				reject(`You need to announce the client first with the "Client.announce" method...`);
+				return;
+			}
+
+			// listen when we get the room datas
+			this._socket.on(`room.${roomId}.metas`, (room) => {
+				console.log('room metas', room);
+				if ( ! this._knownedRooms[room.id]) {
+					this._knownedRooms[room.id] = new __Room(room, this._socket, this._settings);
+				} else {
+					this._knownedRooms[room.id].updateData(room);
+				}
+				// correctly joined the room
+				resolve(this._knownedRooms[room.id]);
+			});
+
+			// try to join a room
+			this._socket.emit('client.join', roomId);
+		});
 	}
 
 	/**
-	 * Leave the passed room
-	 * @param 	{String} 	roomId 		The room id you want the client to leave
-	 * @return 	{Promise} 				A promise that will be resolved when the client has successfuly left the room
+	 * Destroy the client
 	 */
-	leave(roomId) {
-		// left the room
-		return this._joinedRooms[roomId].leave();
+	destroy() {
+		this._socket.off('room.joined');
+		this._socket.off('room.left');
+		this._socket.off('room.queued');
+		this._socket.off('room.picked');
+		this._socket.off('room.missed-turn');
+		this._socket.off('_error');
+		this._socket.off('client.announced');
+		delete this._joinedRooms;
+		delete this._knownedRooms;
+		this._socket.disconnect();
+		delete this._socket;
 	}
 
 	/**
-	 * All the rooms available to join
+	 * All the rooms known rooms that the client has already try to join or joined
 	 * @type 		{Object}
 	 */
-	get availableRooms() {
-		return this._availableRooms;
+	get knownedRooms() {
+		return this._knownedRooms;
 	}
 
 	/**

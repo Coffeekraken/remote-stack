@@ -118,14 +118,14 @@ Notify that the app has been announced inside his room
 });
 ```
 
-### joined
+### room.joined
 
 Notify that the app has joined his room
 
 
 #### Example
 ```js
-	myApp.on('joined', () => {
+	myApp.on('room.joined', () => {
 	// do something here...
 });
 ```
@@ -175,6 +175,23 @@ client  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Ref
 #### Example
 ```js
 	myApp.on('client.left', (client) => {
+	// do something here...
+});
+```
+
+### error
+
+Notify that an error has occured with his details
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+error  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The object that describe the error  |  required  |
+
+#### Example
+```js
+	myClient.on('error', (error) => {
 	// do something here...
 });
 ```

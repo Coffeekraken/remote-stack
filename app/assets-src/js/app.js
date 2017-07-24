@@ -5,11 +5,16 @@ import __remoteStack from '../../../api/index';
 const app = new __remoteStack.App({
 	name : 'Ultra cool remotely controlled app'
 }, {
-	compression : false
+	sessionDuration : 20000,
+	compression : false,
+	debug : true
 	// host : 'jerome.olivierbossel.com'
 });
 
-app.announce('tv').then(() => {
+// random id
+const roomId = window.prompt('Please, enter a room id to use');
+
+app.announce(roomId).then(() => {
 	// console.log('app has been announced', app);
 });
 
@@ -29,10 +34,7 @@ app.on('client.left', (client) => {
 });
 
 app.on('client.data', (from, data) => {
-	console.log('data', data);
-
 	if ( ! clients[from.id]) return;
-
 	clients[from.id].move(data.x, data.y);
 
 });

@@ -55,7 +55,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /**
  * @event
  * @name  	joined
- * Notify that the client has successfuly joined a room
+ * Notify that the client has successfuly joined the room
  *
  * @param 	{Room} 		room 		The joined room object
  *
@@ -68,7 +68,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /**
  * @event
  * @name  	client.joined
- * Notify that another client has successfuly joined a room
+ * Notify that another client has successfuly joined the room
  *
  * @param 	{Room} 		room 		The joined room object
  * @param 	{Object} 	client 		The joined client object
@@ -82,7 +82,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /**
  * @event
  * @name  	left
- * Notify that the client has successfuly left a room
+ * Notify that the client has successfuly left the room
  *
  * @param 	{Room} 		room 		The left room object
  *
@@ -95,13 +95,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 /**
  * @event
  * @name  	client.left
- * Notify that another client has successfuly left a room
+ * Notify that another client has successfuly left the room
  *
  * @param 	{Room} 		room 		The left room object
  * @param 	{Object} 	client 		The left client object
  *
  * @example 	js
  * myRoom.on('client.left', (room, client) => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name  	closed
+ * Notify that the room has been closed
+ *
+ * @param 	{Room} 		room 		The closed room object
+ *
+ * @example 	js
+ * myRoom.on('closed', (room) => {
  * 	// do something here...
  * });
  */
@@ -143,7 +156,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * @example 	js
  * myRoom.on('picked', (room) => {
  * 	// try to join the room again here...
- * 	// you can be confident that the join will be a success until the picked-timeout is not finished...
+ * 	// you can be confident that the join will be a success until the picked-remaining-timeout is not finished...
  * });
  */
 
@@ -163,14 +176,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 /**
  * @event
- * @name  	picked-timeout
+ * @name  	picked-remaining-timeout
  * Notify each second of the remaining timeout left to join the room when the client has been picked
  *
  * @param 	{Room} 		room 					The room object
- * @param 	{Integer} 	remainingTimeout 		The timeout left before the client is being kicked of the picked queue
+ * @param 	{Integer} 	remainingTimeout 		The timeout left before the client is being kicked out of the picked queue
  *
  * @example 	js
- * myRoom.on('picked-timeout', (room, remainingTimeout) => {
+ * myRoom.on('picked-remaining-timeout', (room, remainingTimeout) => {
  * 	// do something here...
  * });
  */
@@ -184,6 +197,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  *
  * @example 	js
  * myRoom.on('missed-turn', (room) => {
+ * 	// do something here...
+ * });
+ */
+
+/**
+ * @event
+ * @name  	session-remaining-timeout
+ * Notify each second of the remaining session timeout left. This will be fired during the "endSessionNotificationTimeout" setting in the server configuration
+ *
+ * @param 	{Room} 		room 				The room object
+ * @param 	{Integer} 	remainingTimeout 	The timeout left before the client is being kicked out of the room
+ *
+ * @example 	js
+ * myRoom.on('session-remaing-timeout', (room, remainingTimeout) => {
  * 	// do something here...
  * });
  */
@@ -215,6 +242,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
  * });
  */
 
+/**
+ * @event
+ * @name  	error
+ * Notify that an error has occured with his details
+ *
+ * @param 	{Object} 		error 		The object that describe the error
+ *
+ * @example 	js
+ * myClient.on('error', (error) => {
+ * 	// do something here...
+ * });
+ */
+
 var Room = function () {
 
 	/**
@@ -237,13 +277,12 @@ var Room = function () {
 		this._pickedClients = [];
 		this._pickedTimeout = null;
 		this._pickedRemainingTimeout = null;
-		this._maxClients = 0;
+		this._sessionDuration = -1;
+		this._sessionRemainingTimeout = 0;
+		this._endSessionNotificationTimeout = 0;
+		this._endSessionNotificationInterval = null;
 		this._maxClients = 0;
 		this._averageSessionDuration = 0;
-		this._leavePromiseResolve = null;
-		this._leavePromiseReject = null;
-		this._joinPromiseResolve = null;
-		this._joinPromiseReject = null;
 		this._socket = null;
 		this.log = {
 			success: function success(message) {
@@ -275,39 +314,54 @@ var Room = function () {
 			_this.updateData(data);
 		});
 
-		this._socket.on('room.' + data.id + '.left', function () {
+		this._socket.on('_error', function (errorObj) {
+			if (_this._settings.debug) console.error('Remote stack room', errorObj);
+			_this.emit('error', errorObj);
+		});
+
+		// listen to know id the room is closed
+		this._socket.on('room.closed', function (room) {
+			if (room.id !== _this.id) return;
+			_this.log.success('Room ' + _this.id + ' has been closed');
+			_this.emit('closed', _this);
+		});
+
+		this._socket.on('room.left', function (room) {
 			if (!_this.id) return;
+			if (room.id !== _this.id) return;
 
-			_this.log.success('Left ' + _this.id);
+			_this.log.success('Left room "' + _this.id + '"');
 
-			// resolve the promise
-			_this._leavePromiseResolve(_this);
 			// let the app know that we have left the room
 			_this.emit('left', _this);
 		});
 
-		this._socket.on('room.' + this.id + '.client.left', function (room, client) {
+		this._socket.on('room.client.left', function (room, client) {
 			if (!_this.id) return;
+			if (room.id !== _this.id) return;
 			_this.log.success('The client ' + client + ' has left the room ' + _this.id);
 			_this.emit('client.left', _this, client);
 		});
 
-		this._socket.on('room.' + data.id + '.queued', function () {
+		this._socket.on('room.queued', function (room) {
 			if (!_this.id) return;
+			if (room.id !== _this.id) return;
 
 			_this.log.success('Queued in ' + _this.id);
 
 			_this.emit('queued', _this);
 		});
 
-		this._socket.on('room.' + this.id + '.client.queued', function (room, client) {
+		this._socket.on('room.client.queued', function (room, client) {
 			if (!_this.id) return;
+			if (room.id !== _this.id) return;
 			_this.log.success('The client ' + client + ' has been queued in the room ' + _this.id);
 			_this.emit('client.queued', _this, client);
 		});
 
-		this._socket.on('room.' + data.id + '.picked', function () {
+		this._socket.on('room.picked', function (room) {
 			if (!_this.id) return;
+			if (room.id !== _this.id) return;
 
 			_this.log.success('Picked in ' + _this.id);
 
@@ -317,37 +371,50 @@ var Room = function () {
 			_this._startPickedClientsTimeout();
 		});
 
-		this._socket.on('room.' + this.id + '.client.picked', function (room, client) {
+		// another client has been picked inside this room
+		this._socket.on('room.client.picked', function (room, client) {
 			if (!_this.id) return;
+			if (room.id !== _this.id) return;
 			_this.log.success('The client ' + client + ' has been picked in the room ' + _this.id);
 			_this.emit('client.picked', _this, client);
 		});
 
-		this._socket.on('room.' + data.id + '.joined', function () {
+		// joined the room
+		this._socket.on('room.joined', function (room) {
 			if (!_this.id) return;
+			if (room.id !== _this.id) return;
 
 			_this.log.success('Joined ' + _this.id);
 
-			// resolve the promise
-			_this._joinPromiseResolve(_this);
+			// check if has a session duration
+			if (_this.sessionDuration > 0) {
+				// start the end session timeout
+				_this._startEndSessionDurationTimeout();
+			}
+
 			// let the app know that we have left the room
 			_this.emit('joined', _this);
 		});
 
-		this._socket.on('room.' + this.id + '.client.joined', function (room, client) {
+		// another client has joined the room
+		this._socket.on('room.client.joined', function (room, client) {
 			if (!_this.id) return;
+			if (room.id !== _this.id) return;
 			_this.log.success('The client ' + client + ' has joined the room ' + _this.id);
 			_this.emit('client.joined', _this, client);
 		});
 
-		this._socket.on('room.' + data.id + '.app.data', function (something) {
+		// data from the app
+		this._socket.on('room.' + this.id + '.app.data', function (data) {
+			if (room.id !== _this.id) return;
 
-			_this.log.success('Received some data from the app : ' + something);
+			_this.log.success('Received some data from the app : ' + data);
 
 			// let the app know that we have received something from the app
-			_this.emit('app.data', something);
+			_this.emit('app.data', data);
 		});
 
+		// data from another room client
 		this._socket.on('room.' + this.id + '.client.data', function (client, something) {
 
 			_this.log.success('Received some data from the another client : ' + something + ' ' + client);
@@ -360,8 +427,8 @@ var Room = function () {
 	/**
   * Start the picked timeout
   */
-
-	// _queuedClientsEstimations = {};
+	// store the setInterval if for the end session duration event fireing
+	// store the setInterval id for the picked timeout event fireing
 
 
 	_createClass(Room, [{
@@ -373,16 +440,17 @@ var Room = function () {
 			this._pickedRemainingTimeout = this._pickedTimeout;
 
 			// emit a picked queue timeout event
-			this.emit('picked-timeout', this, this._pickedRemainingTimeout);
+			this.emit('picked-remaining-timeout', this, this._pickedRemainingTimeout);
 
 			// create the timeout
+			clearInterval(this._pickedTimeoutInterval);
 			this._pickedTimeoutInterval = setInterval(function () {
 				_this2._pickedRemainingTimeout = _this2._pickedRemainingTimeout - 1000;
 
 				_this2.log.success('picked timeout', _this2._pickedRemainingTimeout);
 
 				// emit a picked queue timeout event
-				_this2.emit('picked-timeout', _this2, _this2._pickedRemainingTimeout);
+				_this2.emit('picked-remaining-timeout', _this2, _this2._pickedRemainingTimeout);
 
 				if (_this2._pickedRemainingTimeout <= 0) {
 					// end of time
@@ -395,6 +463,44 @@ var Room = function () {
 
 					// leave the room unfortunately...
 					_this2.leave();
+				}
+			}, 1000);
+		}
+
+		/**
+   * Start the session duration timeout
+   */
+
+	}, {
+		key: '_startEndSessionDurationTimeout',
+		value: function _startEndSessionDurationTimeout() {
+			var _this3 = this;
+
+			// save the initial time
+			this._sessionRemainingTimeout = this.sessionDuration;
+
+			// emit a picked queue timeout event
+			this.emit('end-session-timeout', this, this._sessionRemainingTimeout);
+
+			// create the timeout
+			clearInterval(this._endSessionNotificationInterval);
+			this._endSessionNotificationInterval = setInterval(function () {
+				_this3._sessionRemainingTimeout = _this3._sessionRemainingTimeout - 1000;
+
+				if (_this3._sessionRemainingTimeout <= _this3.endSessionNotificationTimeout) {
+					_this3.log.success('end session timeout : ' + _this3._sessionRemainingTimeout);
+					// emit a picked queue timeout event
+					_this3.emit('end-session-timeout', _this3, _this3._sessionRemainingTimeout);
+				}
+
+				if (_this3._sessionRemainingTimeout <= 0) {
+					// end of time
+					clearInterval(_this3._endSessionNotificationInterval);
+
+					_this3.log.success('end of end session notification timeout...');
+
+					// leave the room unfortunately...
+					_this3.leave();
 				}
 			}, 1000);
 		}
@@ -450,55 +556,24 @@ var Room = function () {
 	}, {
 		key: 'leave',
 		value: function leave() {
-			var _this3 = this;
-
-			return new Promise(function (resolve, reject) {
-
-				// check that we have joined the room before
-				if (!_this3.hasJoined() && !_this3.isQueued() && !_this3.isPicked()) {
-					reject('You cannot leave a the room "' + _this3.id + '" cause you have not joined it yet...');
-					return;
-				}
-
-				_this3._leavePromiseReject = reject;
-				_this3._leavePromiseResolve = resolve;
-				_this3._socket.off('client.to.clients');
-				_this3._socket.emit('client.leave', _this3.id);
-			});
-		}
-
-		/**
-   * Ask to join the room
-   * This request can lead to a "client.queued" event if this room is full. You will need to
-   * call this method again when you receive the "client.picked" event
-   *
-  	 * @return  {Promise} 					A promise that will be resolved only if the client is accepted directly in the room
-   */
-
-	}, {
-		key: 'join',
-		value: function join() {
 			var _this4 = this;
 
 			return new Promise(function (resolve, reject) {
 
-				// if the user has bein picked and has clicked on the "join" again,
-				// we stop the picked queue timeout
-				if (_this4.isPicked()) {
-					_this4._pickedRemainingTimeout = null;
-					clearInterval(_this4._pickedTimeoutInterval);
-				}
-
 				// check that we have joined the room before
-				if (_this4.hasJoined()) {
-					reject('You cannot join a the room "' + _this4.id + '" cause you have already joined it...');
+				if (!_this4.hasJoined() && !_this4.isQueued() && !_this4.isPicked()) {
+					reject('You cannot leave a the room "' + _this4.id + '" cause you have not joined it yet...');
 					return;
 				}
 
-				_this4._joinPromiseReject = reject;
-				_this4._joinPromiseResolve = resolve;
+				// clear some timeout, interval, etc...
+				clearInterval(_this4._pickedTimeoutInterval);
+				clearInterval(_this4._endSessionNotificationInterval);
 
-				_this4._socket.emit('client.join', _this4.id);
+				// this._leavePromiseReject = reject;
+				// this._leavePromiseResolve = resolve;
+				_this4._socket.off('client.to.clients');
+				_this4._socket.emit('client.leave', _this4.id);
 			});
 		}
 
@@ -510,13 +585,13 @@ var Room = function () {
 		key: 'destroy',
 		value: function destroy() {
 			// stop listening for this room datas
-			this._socket.off('room.' + this.id + '.data');
-			this._socket.off('room.' + this.id + '.joined');
-			this._socket.off('room.' + this.id + '.left');
-			this._socket.off('room.' + this.id + '.picked');
-			this._socket.off('room.' + this.id + '.queued');
-			this._socket.off('room.' + this.id + '.app.data');
-			this._socket.off('room.' + this.id + '.client.data');
+			// this._socket.off(`room.${this.id}.data`);
+			// this._socket.off(`room.${this.id}.joined`);
+			// this._socket.off(`room.${this.id}.left`);
+			// this._socket.off(`room.${this.id}.picked`);
+			// this._socket.off(`room.${this.id}.queued`);
+			// this._socket.off(`room.${this.id}.app.data`);
+			// this._socket.off(`room.${this.id}.client.data`);
 			// remove some datas to clean memory
 			delete this._name;
 			delete this._id;
@@ -524,13 +599,16 @@ var Room = function () {
 			delete this._queue;
 			delete this._activeClients;
 			delete this._maxClients;
-			// delete this._queuedClientsEstimations;
+			delete this._sessionDuration;
+			delete this._endSessionNotificationTimeout;
 			delete this._pickedTimeout;
 			delete this._pickedRemainingTimeout;
 			delete this._pickedClients;
 			delete this._maxClients;
 			clearInterval(this._pickedTimeoutInterval);
+			clearInterval(this._endSessionNotificationInterval);
 			delete this._pickedTimeoutInterval;
+			delete this._endSessionNotificationInterval;
 		}
 
 		/**
@@ -544,12 +622,12 @@ var Room = function () {
 		value: function updateData(data) {
 			this._id = data.id;
 			this._name = data.name;
-			// _merge(this._clients, data.clients);
 			this._clients = data.clients;
 			this._activeClients = data.activeClients;
 			this._maxClients = data.maxClients;
-			// this._queuedClientsEstimations = data.queuedClientsEstimations;
 			this._pickedTimeout = data.pickedTimeout;
+			this._sessionDuration = data.sessionDuration;
+			this._endSessionNotificationTimeout = data.endSessionNotificationTimeout;
 			this._averageSessionDuration = data.averageSessionDuration;
 			this._queue = data.queue;
 			this._pickedClients = data.pickedClients;
@@ -722,6 +800,7 @@ var Room = function () {
 	}, {
 		key: 'waitTimeEstimation',
 		get: function get() {
+
 			if (this.isQueued()) {
 				var countActiveClients = this._maxClients - (0, _size3.default)(this.activeClients) - this._pickedClients.length <= 0 ? 1 : 0;
 				return (this.placeInQueue + +countActiveClients) * this.averageSessionDuration;
@@ -764,6 +843,39 @@ var Room = function () {
 		key: 'pickedRemainingTimeout',
 		get: function get() {
 			return this._pickedRemainingTimeout;
+		}
+
+		/**
+   * The session duration authorized in this room
+   * @type 		{Number}
+   */
+
+	}, {
+		key: 'sessionDuration',
+		get: function get() {
+			return this._sessionDuration;
+		}
+
+		/**
+   * The end session remaining timeout
+   * @type 		{Number}
+   */
+
+	}, {
+		key: 'sessionRemainingTimeout',
+		get: function get() {
+			return this._sessionRemainingTimeout;
+		}
+
+		/**
+   * The end session notification timeout duration
+   * @type 		{Number}
+   */
+
+	}, {
+		key: 'endSessionNotificationTimeout',
+		get: function get() {
+			return this._endSessionNotificationTimeout;
 		}
 	}]);
 

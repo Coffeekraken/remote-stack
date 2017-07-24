@@ -47,9 +47,9 @@ settings  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/R
 ## Properties
 
 
-### availableRooms
+### knownedRooms
 
-All the rooms available to join
+All the rooms known rooms that the client has already try to join or joined
 
 Type : **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**
 
@@ -86,16 +86,9 @@ roomId  |  **{ [String](https://developer.mozilla.org/fr/docs/Web/JavaScript/Ref
 Return **{ [Promise](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Promise) }** A promise that will be resolved only if the client is accepted directly in the room
 
 
-### leave
+### destroy
 
-Leave the passed room
-
-
-Name  |  Type  |  Description  |  Status  |  Default
-------------  |  ------------  |  ------------  |  ------------  |  ------------
-roomId  |  **{ [String](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/String) }**  |  The room id you want the client to leave  |  required  |
-
-Return **{ [Promise](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Promise) }** A promise that will be resolved when the client has successfuly left the room
+Destroy the client
 
 
 ### isAnnounced
@@ -152,7 +145,7 @@ Notify that the client has been announced to the server
 });
 ```
 
-### joined
+### room.joined
 
 Notify that the client has successfuly joined a room
 
@@ -164,30 +157,12 @@ room  |  **{ Room }**  |  The joined room object  |  required  |
 
 #### Example
 ```js
-	myClient.on('joined', (room) => {
+	myClient.on('room.joined', (room) => {
 	// do something here...
 });
 ```
 
-### client.joined
-
-Notify that another client has successfuly joined a room
-
-
-
-Name  |  Type  |  Description  |  Status  |  Default
-------------  |  ------------  |  ------------  |  ------------  |  ------------
-room  |  **{ Room }**  |  The joined room object  |  required  |
-client  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The joined client object  |  required  |
-
-#### Example
-```js
-	myClient.on('client.joined', (room, client) => {
-	// do something here...
-});
-```
-
-### left
+### room.left
 
 Notify that the client has successfuly left a room
 
@@ -199,30 +174,29 @@ room  |  **{ Room }**  |  The left room object  |  required  |
 
 #### Example
 ```js
-	myClient.on('left', (room) => {
+	myClient.on('room.left', (room) => {
 	// do something here...
 });
 ```
 
-### client.left
+### room.closed
 
-Notify that another client has successfuly left a room
+Notify that the a room that the client has joined has been closed
 
 
 
 Name  |  Type  |  Description  |  Status  |  Default
 ------------  |  ------------  |  ------------  |  ------------  |  ------------
 room  |  **{ Room }**  |  The left room object  |  required  |
-client  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The left client object  |  required  |
 
 #### Example
 ```js
-	myClient.on('client.left', (room, client) => {
+	myClient.on('room.closed', (room) => {
 	// do something here...
 });
 ```
 
-### queued
+### room.queued
 
 Notify that the client has been queued in a particular room
 
@@ -234,30 +208,12 @@ room  |  **{ Room }**  |  The room object  |  required  |
 
 #### Example
 ```js
-	myClient.on('queued', (room) => {
+	myClient.on('room.queued', (room) => {
 	// do something here...
 });
 ```
 
-### client.queued
-
-Notify that another client has been queued in a particular room
-
-
-
-Name  |  Type  |  Description  |  Status  |  Default
-------------  |  ------------  |  ------------  |  ------------  |  ------------
-room  |  **{ Room }**  |  The room object  |  required  |
-client  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The queued client object  |  required  |
-
-#### Example
-```js
-	myClient.on('client.queued', (room, client) => {
-	// do something here...
-});
-```
-
-### picked
+### room.picked
 
 Notify that the client has been picked in a particular room
 
@@ -269,49 +225,13 @@ room  |  **{ Room }**  |  The room object  |  required  |
 
 #### Example
 ```js
-	myClient.on('picked', (room) => {
+	myClient.on('room.picked', (room) => {
 	// try to join the room again here...
-	// you can be confident that the join will be a success until the picked-timeout is not finished...
+	// you can be confident that the join will be a success until the picked-remaining-timeout is not finished...
 });
 ```
 
-### client.picked
-
-Notify that another client has been picked in a particular room
-
-
-
-Name  |  Type  |  Description  |  Status  |  Default
-------------  |  ------------  |  ------------  |  ------------  |  ------------
-room  |  **{ Room }**  |  The room object  |  required  |
-client  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The picked client object  |  required  |
-
-#### Example
-```js
-	myClient.on('client.picked', (room) => {
-	// do something here...
-});
-```
-
-### picked-timeout
-
-Notify each second of the remaining timeout left to join the room when the client has been picked
-
-
-
-Name  |  Type  |  Description  |  Status  |  Default
-------------  |  ------------  |  ------------  |  ------------  |  ------------
-room  |  **{ Room }**  |  The room object  |  required  |
-remainingTimeout  |  **{ Integer }**  |  The timeout left before the client is being kicked of the picked queue  |  required  |
-
-#### Example
-```js
-	myClient.on('picked-timeout', (room, remainingTimeout) => {
-	// do something here...
-});
-```
-
-### missed-turn
+### room.missed-turn
 
 Notify that the client has missed his turn after being picked
 
@@ -323,24 +243,24 @@ room  |  **{ Room }**  |  The room object  |  required  |
 
 #### Example
 ```js
-	myClient.on('missed-turn', (room) => {
+	myClient.on('room.missed-turn', (room) => {
 	// do something here...
 });
 ```
 
-### available-rooms
+### error
 
-Notify that the server has sent the available room you can join
+Notify that an error has occured with his details
 
 
 
 Name  |  Type  |  Description  |  Status  |  Default
 ------------  |  ------------  |  ------------  |  ------------  |  ------------
-rooms  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The available rooms object  |  required  |
+error  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The object that describe the error  |  required  |
 
 #### Example
 ```js
-	myClient.on('available-rooms', (rooms) => {
+	myClient.on('error', (error) => {
 	// do something here...
 });
 ```

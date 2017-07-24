@@ -19,10 +19,10 @@ var app = new __Vue({
 	data: {
 		color : '#ff0000',
 		missedTurn : false,
-		client : {},
-		toPeer : null,
+		room : null,
+		client : null,
+		roomId : null,
 		username : '',
-		availableRooms : []
 	},
 	methods : {
 		announce : function(e) {
@@ -30,6 +30,7 @@ var app = new __Vue({
 
 			e.preventDefault();
 			if ( ! this.username) return;
+
 			// create new client and announce it
 			client = new __remoteStack.Client({
 				username : this.username,
@@ -40,13 +41,7 @@ var app = new __Vue({
 				// host : 'jerome.olivierbossel.com'
 			});
 
-			// listen for rooms
-			client.on('available-rooms', (rooms) => {
-				_this.availableRooms = rooms;
-			});
-
 			client.on('missed-turn', (room) => {
-				console.log('missed-turn', room);
 				this.missedTurn = true;
 				setTimeout(() => {
 					this.missedTurn = false;
@@ -55,17 +50,26 @@ var app = new __Vue({
 
 			client.announce().then(() => {
 				console.log('client has been announced', client);
+				this.client = client
 			});
 		},
-		join : function(room) {
+		join : function(e = null) {
 
-			console.log('join room', room);
+			if (e) e.preventDefault();
 
-			client.join(room.id).then((room) => {
-				console.log('joinded the room', room.id);
+			client.join(this.roomId).then((room) => {
+
+				this.room = room;
+
+				room.on('closed', (room) => {
+					this.room = null
+					this.roomId = null
+				})
 
 				setTimeout(() => {
-					const joystickElm = document.querySelector(`.joystick[for="${room.id}"]`);
+					const joystickElm = document.querySelector(`.joystick[for="${this.roomId}"]`);
+
+					console.log('joystickElm', joystickElm)
 
 					joystickManager = nipplejs.create({
 						zone: joystickElm,
@@ -84,21 +88,13 @@ var app = new __Vue({
 					joystickManager.on('start', (e, data) => {
 
 						joystick = data;
-
-						// console.log('start', e, data);
-						// start.x = data.position.x;
-						// start.y = data.position.y;
-
-
 						sendPositionInterval = setInterval(() => {
-							// console.log(joystick.get(joystick.id));
-							this.availableRooms[room.id].sendToApp({
+							this.room.sendToApp({
 								type : 'move',
 								x : Math.round(joystick.frontPosition.x),
 								y : Math.round(joystick.frontPosition.y)
 							});
 						}, 1000 / 60);
-
 					});
 					joystickManager.on('end', (e, data) => {
 						clearInterval(sendPositionInterval);
@@ -106,12 +102,12 @@ var app = new __Vue({
 
 				}, 100);
 
+			}, (error) => {
+				console.error(error);
 			});
 
 		},
 		leave : function(room) {
-
-			console.log('leave room', room);
 
 			if (joystickManager) {
 				joystickManager.destroy();

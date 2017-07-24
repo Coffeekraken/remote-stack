@@ -120,6 +120,27 @@ The picked queue remaining timeout
 Type : **{ [Number](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Number) }**
 
 
+### sessionDuration
+
+The session duration authorized in this room
+
+Type : **{ [Number](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Number) }**
+
+
+### sessionRemainingTimeout
+
+The end session remaining timeout
+
+Type : **{ [Number](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Number) }**
+
+
+### endSessionNotificationTimeout
+
+The end session notification timeout duration
+
+Type : **{ [Number](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Number) }**
+
+
 ## Methods
 
 
@@ -167,16 +188,6 @@ Return **{ [Promise](https://developer.mozilla.org/fr/docs/Web/JavaScript/Refere
 	// do something here...
 });
 ```
-
-### join
-
-Ask to join the room
-This request can lead to a "client.queued" event if this room is full. You will need to
-call this method again when you receive the "client.picked" event
-
-
-Return **{ [Promise](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Promise) }** A promise that will be resolved only if the client is accepted directly in the room
-
 
 ### destroy
 
@@ -253,7 +264,7 @@ name  |  **{ [String](https://developer.mozilla.org/fr/docs/Web/JavaScript/Refer
 
 ### joined
 
-Notify that the client has successfuly joined a room
+Notify that the client has successfuly joined the room
 
 
 
@@ -270,7 +281,7 @@ room  |  **{ Room }**  |  The joined room object  |  required  |
 
 ### client.joined
 
-Notify that another client has successfuly joined a room
+Notify that another client has successfuly joined the room
 
 
 
@@ -288,7 +299,7 @@ client  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Ref
 
 ### left
 
-Notify that the client has successfuly left a room
+Notify that the client has successfuly left the room
 
 
 
@@ -305,7 +316,7 @@ room  |  **{ Room }**  |  The left room object  |  required  |
 
 ### client.left
 
-Notify that another client has successfuly left a room
+Notify that another client has successfuly left the room
 
 
 
@@ -317,6 +328,23 @@ client  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Ref
 #### Example
 ```js
 	myRoom.on('client.left', (room, client) => {
+	// do something here...
+});
+```
+
+### closed
+
+Notify that the room has been closed
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+room  |  **{ Room }**  |  The closed room object  |  required  |
+
+#### Example
+```js
+	myRoom.on('closed', (room) => {
 	// do something here...
 });
 ```
@@ -370,7 +398,7 @@ room  |  **{ Room }**  |  The room object  |  required  |
 ```js
 	myRoom.on('picked', (room) => {
 	// try to join the room again here...
-	// you can be confident that the join will be a success until the picked-timeout is not finished...
+	// you can be confident that the join will be a success until the picked-remaining-timeout is not finished...
 });
 ```
 
@@ -392,7 +420,7 @@ client  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Ref
 });
 ```
 
-### picked-timeout
+### picked-remaining-timeout
 
 Notify each second of the remaining timeout left to join the room when the client has been picked
 
@@ -401,11 +429,11 @@ Notify each second of the remaining timeout left to join the room when the clien
 Name  |  Type  |  Description  |  Status  |  Default
 ------------  |  ------------  |  ------------  |  ------------  |  ------------
 room  |  **{ Room }**  |  The room object  |  required  |
-remainingTimeout  |  **{ Integer }**  |  The timeout left before the client is being kicked of the picked queue  |  required  |
+remainingTimeout  |  **{ Integer }**  |  The timeout left before the client is being kicked out of the picked queue  |  required  |
 
 #### Example
 ```js
-	myRoom.on('picked-timeout', (room, remainingTimeout) => {
+	myRoom.on('picked-remaining-timeout', (room, remainingTimeout) => {
 	// do something here...
 });
 ```
@@ -423,6 +451,24 @@ room  |  **{ Room }**  |  The room object  |  required  |
 #### Example
 ```js
 	myRoom.on('missed-turn', (room) => {
+	// do something here...
+});
+```
+
+### session-remaining-timeout
+
+Notify each second of the remaining session timeout left. This will be fired during the "endSessionNotificationTimeout" setting in the server configuration
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+room  |  **{ Room }**  |  The room object  |  required  |
+remainingTimeout  |  **{ Integer }**  |  The timeout left before the client is being kicked out of the room  |  required  |
+
+#### Example
+```js
+	myRoom.on('session-remaing-timeout', (room, remainingTimeout) => {
 	// do something here...
 });
 ```
@@ -457,6 +503,23 @@ data  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Refer
 #### Example
 ```js
 	myRoom.on('app.data', (data) => {
+	// do something here...
+});
+```
+
+### error
+
+Notify that an error has occured with his details
+
+
+
+Name  |  Type  |  Description  |  Status  |  Default
+------------  |  ------------  |  ------------  |  ------------  |  ------------
+error  |  **{ [Object](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Object) }**  |  The object that describe the error  |  required  |
+
+#### Example
+```js
+	myClient.on('error', (error) => {
 	// do something here...
 });
 ```
