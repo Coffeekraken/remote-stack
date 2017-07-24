@@ -4,7 +4,7 @@ const __path = require('path');
 const __fs = require('fs');
 const __cors = require('cors');
 const __bodyParser = require('body-parser');
-const __extend = require('lodash/extend');
+const __merge = require('lodash/merge');
 const __exec = require('child_process').spawnSync;
 const __jsdom = require('jsdom');
 const __semver = require('semver');
@@ -339,11 +339,11 @@ module.exports = function(config) {
 					}
 				}
 
-				const roomSettings = __extend({}, config.defaultNewRoomSettings);
+				const roomSettings = __merge({}, config.defaultNewRoomSettings);
 
 				// create the new room object
 				if (config.allowSettingsOverride === true) {
-					__extend(roomSettings, settings);
+					__merge(roomSettings, settings);
 				} else if (config.allowSettingsOverride instanceof Array) {
 					// loop on each passed settings to check if allowed to be overrided
 					for (let key in settings) {
