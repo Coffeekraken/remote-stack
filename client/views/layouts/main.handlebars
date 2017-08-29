@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="en">
 <head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
 	<title>{{title}}</title>
 	{{#if packageJson.description}}
 		<meta name="description" content="{{packageJson.description}}" />
@@ -13,18 +15,11 @@
 	{{/if}}
 	<link rel="stylesheet" href="/assets/css/style.css" />
 </head>
-<body>
-
-	<header class="header">
-
-	</header>
+<body class="tests">
 
 	<main>
 		 {{{body}}}
 	</main>
-
-	<footer class="footer">
-	</footer>
 
 	<script src="/assets/js/app.js"></script>
 

@@ -2,6 +2,7 @@
 process.title = 'coffeekraken-remote-stack-server';
 const __compileServer = require(__dirname + '/../server/server');
 const __fs = require('fs');
+const __path = require('path');
 const __merge = require('lodash/merge');
 const app = require('commander');
 
