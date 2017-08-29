@@ -53,14 +53,12 @@ module.exports = function(config) {
 
 	});
 
-	app.get('/tests', function (req, res) {
+	app.get('/', function (req, res) {
 
 		// options
 		const options = __extend({
 		}, req.body.options || {});
-		res.render('tests', {
-			layout : 'tests'
-		});
+		res.render('remote');
 
 	});
 
