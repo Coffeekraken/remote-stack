@@ -61,6 +61,15 @@ module.exports = {
 
 		// + every setting from the "defaultNewRoomSettings" object...
 
-	}]
+	}],
+
+	// ssl certificate
+	// {
+	// 	key : path-to-key
+	// 	cert : path-to-cert
+	// 	passphrase : 'something'
+	// }
+	sslCertificate : false
+
 }
 ```

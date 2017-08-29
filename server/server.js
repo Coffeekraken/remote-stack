@@ -10,9 +10,10 @@ const __jsdom = require('jsdom');
 const __semver = require('semver');
 const __urldecode = require('urldecode');
 const _size = require('lodash/size');
-const __server = require("http").createServer();
 const __pako = require('pako');
-const io = require('socket.io')(__server);
+const __http = require('http');
+const __https = require('https');
+const __socketIo = require('socket.io');
 
 module.exports = function(config) {
 
@@ -42,6 +43,22 @@ module.exports = function(config) {
 		rooms[room.id] = room;
 		initRoom(room)
 	});
+
+	let __server;
+	if (config.sslCertificate && config.sslCertificate.key && config.sslCertificate.cert) {
+		let sslCertificate = {
+			key : __fs.readFileSync(config.sslCertificate.key),
+			cert : __fs.readFileSync(config.sslCertificate.cert),
+		};
+		if (config.sslCertificate.passphrase) {
+			sslCertificate.passphrase = config.sslCertificate.passphrase;
+		}
+		__server = __https.createServer(sslCertificate);
+	} else {
+		__server = __http.createServer();
+	}
+
+	const io = __socketIo(__server);
 
 	// start demo server
 	__server.listen(config.port, function () {

@@ -160,7 +160,15 @@ module.exports = {
 		simultaneous : 2,
 		pickedTimeout : 10000,
 		averageSessionDuration : 20000
-	}]
+	}],
+
+	// ssl certificate
+	// {
+	// 	key : path-to-key
+	// 	cert : path-to-cert
+	// 	passphrase : 'something'
+	// }
+	sslCertificate : false
 }
 ```
 

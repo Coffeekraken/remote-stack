@@ -29,5 +29,13 @@ module.exports = {
 	},
 
 	// rooms
-	rooms : []
+	rooms : [],
+
+	// ssl certificate
+	// {
+	// 	key : path-to-key
+	// 	cert : path-to-cert
+	// 	passphrase : 'something'
+	// }
+	sslCertificate : false
 }
