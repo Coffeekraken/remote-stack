@@ -358,8 +358,6 @@ class Room {
 
 		// data from the app
 		this._socket.on(`room.${this.id}.app.data`, (data) => {
-			if (room.id !== this.id) return;
-
 			this.log.success(`Received some data from the app : ${data}`);
 
 			// let the app know that we have received something from the app

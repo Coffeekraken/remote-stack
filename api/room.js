@@ -406,8 +406,6 @@ var Room = function () {
 
 		// data from the app
 		this._socket.on('room.' + this.id + '.app.data', function (data) {
-			if (room.id !== _this.id) return;
-
 			_this.log.success('Received some data from the app : ' + data);
 
 			// let the app know that we have received something from the app
