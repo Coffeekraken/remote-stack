@@ -524,7 +524,7 @@ module.exports = function(config) {
 				});
 			} else {
 				// send to all the room clients
-				io.broadcast.to(toRoomId).emit(`room.${toRoomId}.app.data`, something);
+				socket.broadcast.to(toRoomId).emit(`room.${toRoomId}.app.data`, something);
 			}
 		});
 
