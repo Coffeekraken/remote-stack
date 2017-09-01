@@ -14,6 +14,7 @@ const __pako = require('pako');
 const __http = require('http');
 const __https = require('https');
 const __socketIo = require('socket.io');
+const _find = require('lodash/find');
 
 module.exports = function(config) {
 
@@ -70,8 +71,14 @@ module.exports = function(config) {
 		io.emit(`room.${roomId}.data`, __pako.deflate(JSON.stringify(rooms[roomId]), { to: 'string' }));
 	}
 
-	function closeRoom(roomId) {
+	function closeRoomIfNeeded(roomId) {
 		if ( ! rooms[roomId]) return;
+
+		// if the room is actually a registered one from the config, we don't close it
+		if (_find(config.rooms, (room) => {
+			return room.id === roomId
+		})) return;
+
 		for (let clientId in rooms[roomId].clients) {
 			const clientSocket = io.sockets.connected[clientId]
 			if ( ! clientSocket || clientId === rooms[roomId].app) continue
@@ -231,8 +238,10 @@ module.exports = function(config) {
 			Object.keys(rooms).forEach((roomId) => {
 				// check if the removed client is in fact the app to kill the room
 				if (rooms[roomId].app === socket.id && io.sockets.adapter.rooms[roomId]) {
+					// remove the app from the room
+					delete rooms[roomId].app;
 					// close room
-					closeRoom(roomId);
+					closeRoomIfNeeded(roomId);
 				} else {
 					// it's a regular client, so remove it from the room
 					removeClientFromRoom(socket, roomId);
@@ -410,7 +419,7 @@ module.exports = function(config) {
 		socket.on('app.leave', () => {
 			if ( ! apps[socket.id]) return;
 			// close the room
-			closeRoom(apps[socket.id].roomId);
+			closeRoomIfNeeded(apps[socket.id].roomId);
 		});
 
 		// join a room
