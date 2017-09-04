@@ -271,6 +271,7 @@ var Room = function () {
 
 		this._id = null;
 		this._name = null;
+		this._app = null;
 		this._clients = {};
 		this._activeClients = {};
 		this._queue = [];
@@ -593,6 +594,7 @@ var Room = function () {
 			// remove some datas to clean memory
 			delete this._name;
 			delete this._id;
+			delete this._app;
 			delete this._clients;
 			delete this._queue;
 			delete this._activeClients;
@@ -620,6 +622,7 @@ var Room = function () {
 		value: function updateData(data) {
 			this._id = data.id;
 			this._name = data.name;
+			this._app = data.app;
 			this._clients = data.clients;
 			this._activeClients = data.activeClients;
 			this._maxClients = data.maxClients;
@@ -671,6 +674,17 @@ var Room = function () {
 		value: function hasJoined() {
 			return this.activeClients[this._socket.id] != null;
 		}
+
+		/**
+   * Return if the room has an app or not
+   * @return 		{Boolean} 		true if the room has an app, false if not
+   */
+
+	}, {
+		key: 'hasApp',
+		value: function hasApp() {
+			return this.app !== null;
+		}
 	}, {
 		key: 'id',
 		get: function get() {
@@ -686,6 +700,17 @@ var Room = function () {
 		key: 'name',
 		get: function get() {
 			return this._name;
+		}
+
+		/**
+   * The app socket id
+   * @type 		{String}
+   */
+
+	}, {
+		key: 'app',
+		get: function get() {
+			return this._app;
 		}
 
 		/**
