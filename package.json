@@ -1,6 +1,6 @@
 {
   "name": "coffeekraken-remote-stack",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Provide a nice and simple way to handle remote connections from any devices (phones, tablets, etc...)",
   "main": "api/index.js",
   "bin": {
