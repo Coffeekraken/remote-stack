@@ -223,6 +223,7 @@ class Room {
 
 	_id = null;
 	_name = null;
+	_app = null;
 	_clients = {};
 	_activeClients = {};
 	_queue = [];
@@ -519,6 +520,7 @@ class Room {
 		// remove some datas to clean memory
 		delete this._name;
 		delete this._id;
+		delete this._app;
 		delete this._clients;
 		delete this._queue;
 		delete this._activeClients;
@@ -543,6 +545,7 @@ class Room {
 	updateData(data) {
 		this._id = data.id;
 		this._name = data.name;
+		this._app = data.app;
 		this._clients = data.clients;
 		this._activeClients = data.activeClients;
 		this._maxClients = data.maxClients;
@@ -570,6 +573,14 @@ class Room {
 	 */
 	get name() {
 		return this._name;
+	}
+
+	/**
+	 * The app socket id
+	 * @type 		{String}
+	 */
+	get app() {
+		return this._app;
 	}
 
 	/**
@@ -735,6 +746,14 @@ class Room {
 	 */
 	hasJoined() {
 		return this.activeClients[this._socket.id] != null;
+	}
+
+	/**
+	 * Return if the room has an app or not
+	 * @return 		{Boolean} 		true if the room has an app, false if not
+	 */
+	hasApp() {
+		return this.app !== null
 	}
 
 	log = {

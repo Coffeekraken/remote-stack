@@ -36,6 +36,13 @@ The room name
 Type : **{ [String](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/String) }**
 
 
+### app
+
+The app socket id
+
+Type : **{ [String](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/String) }**
+
+
 ### clients
 
 The clients in the room
@@ -225,6 +232,13 @@ Return **{ [Boolean](https://developer.mozilla.org/fr/docs/Web/JavaScript/Refere
 Return if the current client has joined the room or not
 
 Return **{ [Boolean](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Boolean) }** true if the client has joined the room, false if not
+
+
+### hasApp
+
+Return if the room has an app or not
+
+Return **{ [Boolean](https://developer.mozilla.org/fr/docs/Web/JavaScript/Reference/Objets_globaux/Boolean) }** true if the room has an app, false if not
 
 
 ### on
