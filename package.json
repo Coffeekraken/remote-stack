@@ -49,6 +49,13 @@
     "kraken"
   ],
   "author": "Coffeekraken <hello@coffeekraken.io>",
+  "contributors": [
+    {
+      "name": "Olivier Bossel",
+      "email": "olivier.bossel@gmail.com",
+      "url": "http://olivierbossel.com"
+    }
+  ],
   "license": "MIT",
   "devDependencies": {
     "babel-cli": "^6.24.1",
