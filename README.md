@@ -27,7 +27,7 @@
 	</a>
 </p>
 
-Provide a nice and simple way to handle remote connections from any devices (phones, tablets, etc...)
+<p class="lead">Provide a nice and simple way to handle remote connections from any devices (phones, tablets, etc...)</p>
 
 ## Table of content
 
